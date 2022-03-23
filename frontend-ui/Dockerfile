@@ -1,9 +1,18 @@
 FROM node:alpine
 
-RUN npm install vue
-RUN npm install -g @vue/cli
+
+RUN npm install -g http-server
 
 COPY . /app
-WORKDIR /app/voting-app
+WORKDIR /app
 
-RUN npm run serve
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 8080
+CMD ["http-server", "dist"]
