@@ -42,11 +42,11 @@
     }
 
     .green {
-        background: #83bd54;
+        background: #a9f16d;
         
     }
     .purple {
-        background: #c770cf;
+        background: #e75581;
         width: 100px;
         height: 30px;
     }

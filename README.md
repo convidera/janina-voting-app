@@ -2,8 +2,8 @@
 
 ## Project setup
 ```
-Build single image:
-===================
+Build frontend image and run single frontend container:
+=========================================================
 
 docker build -t alonimacaroni/vote-frontend .
 

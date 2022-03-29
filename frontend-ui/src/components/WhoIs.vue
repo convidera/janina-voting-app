@@ -7,7 +7,7 @@
 
 <style>
     #userinput {
-        background: #eb9b50;
+        background: #95d4ff;
         width: 200px;
         height: 20px;
     }
