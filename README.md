@@ -4,6 +4,8 @@
 
 ## Run all containers at once:
 
+Rename .env.example to .env and provide your password before running the up command.
+
 ```bash
 docker-compose up -d
 ```
