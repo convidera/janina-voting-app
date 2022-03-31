@@ -1,15 +1,35 @@
 # progrlang-vote-app
 
-## Project setup
+# Project setup
+
+## Run all containers at once:
+
+Rename .env.example to .env and provide your password before running the up command.
+
+```bash
+docker-compose up -d
 ```
-Build frontend image and run single frontend container:
-=========================================================
 
+
+# Open in browser:
+[localhost:8080](http://localhost:8080/)
+
+
+# Test single containers:
+
+## Build frontend image and run single frontend container:
+
+```bash
 docker build -t alonimacaroni/vote-frontend .
+```
 
+```bash
 docker run -it -p 8080:8080 --rm --name frontend-part alonimacaroni/vote-frontend
+```
 
+## Run single database container:
+MySQL image is pulled automatically if it does not exist.
 
-Open in browser:
-==================
-localhost:8080
+```bash
+docker run --name vote-app-mysql -v mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:8.0
+```

@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  frontend-part:
+    image: alonimacaroni/vote-frontend:latest
+    restart: always
+    ports:
+      - "8080:8080"
+  vote-app-mysql:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}"
+
+volumes:
+  mysql:
+    driver: local
