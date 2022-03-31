@@ -2,23 +2,14 @@
 
 ## Project setup
 ```
-npm install
-```
+Build frontend image and run single frontend container:
+=========================================================
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+docker build -t alonimacaroni/vote-frontend .
 
-### Compiles and minifies for production
-```
-npm run build
-```
+docker run -it -p 8080:8080 --rm --name frontend-part alonimacaroni/vote-frontend
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Open in browser:
+==================
+localhost:8080
