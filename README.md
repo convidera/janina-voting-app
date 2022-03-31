@@ -20,4 +20,4 @@ docker run --name vote-app-mysql -v mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=
 ```
 
 ## Open in browser:
-[localhost:8080](https://localhost:8080)
+[localhost:8080](http://localhost:8080/)
