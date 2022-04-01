@@ -22,7 +22,7 @@
         </div>
         <div class="purple boxes">
             <input type="radio" id="ruby" name="lang" value="ruby">
-            <label for="python">Ruby</label>
+            <label for="ruby">Ruby</label>
         </div>
     </div>
 </template>
