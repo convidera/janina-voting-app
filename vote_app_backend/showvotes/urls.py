@@ -2,7 +2,8 @@ from django.urls import path
 
 from . import views
 
-app_name = 'show-votes'
+app_name = 'showvotes'
 urlpatterns = [
-    path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
+    path('', views.index, name='index'),
+    path('results/', views.results, name='results'),
 ]

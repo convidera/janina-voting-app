@@ -41,6 +41,8 @@ export default {
 
       // Creating a XHR object
       let xhr = new XMLHttpRequest();
+
+      //Django server path
       let url = "http://127.0.0.1:8000/";
   
       // open a connection
