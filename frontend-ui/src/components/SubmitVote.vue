@@ -1,6 +1,6 @@
 <template>
     <div id="subbtn">
-        <button type="submit" id="vote" value="Submit">Vote</button>
+        <button @click ="sendVote" type="submit" id="vote" value="Submit">Vote</button>
     </div>
 </template>
 

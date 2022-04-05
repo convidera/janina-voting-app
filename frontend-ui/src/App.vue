@@ -17,7 +17,39 @@ export default {
     return {
       title: "What is your favourite programming language?"
     }
-  }
+  },
+  methods: {
+    sendVote() {
+      let username = document.querySelector('#userinput');
+      let progrLang = document.querySelector('.langSel[checked="true"]');
+
+
+      // Creating a XHR object
+      let xhr = new XMLHttpRequest();
+      let url = "http://127.0.0.1:8000/";
+  
+      // open a connection
+      xhr.open("POST", url, true);
+
+      // Set the request header i.e. which type of content you are sending
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      // Create a state change callback
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+
+              //Deliver results page from backend response
+
+          }
+      };
+
+      // Converting JSON data to string
+      var data = JSON.stringify({ "username": username.value, "progrLang": progrLang.value });
+
+      // Sending data with the request
+      xhr.send(data);
+    }
+  } 
 }
 </script>
 

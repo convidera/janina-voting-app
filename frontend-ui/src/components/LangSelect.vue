@@ -1,7 +1,7 @@
 <template>
     <div id="selector">
         <div class="green boxes">
-            <input type="radio" id="c" name="lang" value="C" checked>
+            <input type="radio" id="c" class="langSel" name="lang" value="C" checked>
             <label for="c">C</label>
         </div>
         <div class="purple boxes">
