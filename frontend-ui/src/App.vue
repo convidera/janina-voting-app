@@ -1,27 +1,41 @@
 <template>
   <h1>{{ title }}</h1>
-  <WhoIs />
+  <WhoIs @nameChanged="nameChanged" />
   <LangSelect />
-  <SubmitVote />
+
+    <div id="subbtn">
+        <button @click ="sendVote" id="vote">Vote</button>
+    </div>
 </template>
+
 
 <script>
 import WhoIs from './components/WhoIs.vue'
 import LangSelect from './components/LangSelect.vue'
-import SubmitVote from './components/SubmitVote.vue'
+
 
 export default {
   name: 'App',
-  components: { WhoIs, LangSelect, SubmitVote },
+  components: { WhoIs, LangSelect },
   data() {
     return {
-      title: "What is your favourite programming language?"
+      title: "What is your favourite programming language?",
+      username: "",
+      progrLang: "",
     }
   },
   methods: {
+    nameChanged(name) {
+      this.username = name;
+    },
+
+
     sendVote() {
-      let username = document.querySelector('#userinput');
-      let progrLang = document.querySelector('.langSel[checked="true"]');
+      
+      let progrLang = document.querySelector('.langSel[checked="true"]').value;
+
+      console.log(this.username);
+      console.log(progrLang);
 
 
       // Creating a XHR object
@@ -44,7 +58,7 @@ export default {
       };
 
       // Converting JSON data to string
-      var data = JSON.stringify({ "username": username.value, "progrLang": progrLang.value });
+      var data = JSON.stringify({ "username": this.username, "progrLang": progrLang.value });
 
       // Sending data with the request
       xhr.send(data);
@@ -61,5 +75,16 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+#subbtn {
+    margin-top: 100px;
+}
+
+#vote {
+    background:#faa23e;
+    width: 80px;
+    height: 60px;
+    border-radius: 15px;
 }
 </style>

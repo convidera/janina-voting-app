@@ -1,9 +1,26 @@
 <template>
     <div id="who_is">
         <h2>Who are you?</h2>
-        <input type="text" id="userinput" name="name" required>
+        <input v-model="usernamedata" type="text" id="userinput" name="name" @change="addname" required>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+       return {
+            usernamedata: ""
+       } 
+    },
+
+    methods: {
+        addname() {
+            this.$emit('name-changed', this.usernamedata);
+        }
+    }
+}
+</script>
+
 
 <style>
     #userinput {
