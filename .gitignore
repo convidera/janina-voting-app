@@ -22,3 +22,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Custom ignores:
+vote_app_backend/vote_env/
