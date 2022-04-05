@@ -1,7 +1,7 @@
 <template>
     <div id="who_is">
         <h2>Who are you?</h2>
-        <input v-model="usernamedata" type="text" id="userinput" name="name" @change="addname" required>
+        <input @change="addname" v-model="usernamedata" type="text" id="userinput" name="name" required>
     </div>
 </template>
 

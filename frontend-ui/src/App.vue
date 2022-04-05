@@ -1,7 +1,7 @@
 <template>
   <h1>{{ title }}</h1>
   <WhoIs @nameChanged="nameChanged" />
-  <LangSelect />
+  <LangSelect @progrLangChanged="progrLangChanged" />
 
     <div id="subbtn">
         <button @click ="sendVote" id="vote">Vote</button>
@@ -29,14 +29,15 @@ export default {
       this.username = name;
     },
 
+    progrLangChanged(lang) {
+      this.progrLang = lang;
+    },
+
 
     sendVote() {
-      
-      let progrLang = document.querySelector('.langSel[checked="true"]').value;
 
       console.log(this.username);
-      console.log(progrLang);
-
+      console.log(this.progrLang);
 
       // Creating a XHR object
       let xhr = new XMLHttpRequest();
@@ -58,7 +59,7 @@ export default {
       };
 
       // Converting JSON data to string
-      var data = JSON.stringify({ "username": this.username, "progrLang": progrLang.value });
+      var data = JSON.stringify({ "username": this.username, "progrLang": this.progrLang });
 
       // Sending data with the request
       xhr.send(data);
