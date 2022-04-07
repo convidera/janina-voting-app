@@ -13,6 +13,27 @@ services:
       - mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}"
+      - MYSQL_DATABASE="${MYSQL_DATABASE}"
+      - MYSQL_USER="${MYSQL_USER}"
+      - MYSQL_PASSWORD:"${MYSQL_PASSWORD}"
+  backend-part:
+    image: alonimacaroni/vote-backend:latest
+    restart: always
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c 'python vote_app_backend/manage.py makemigrations &&
+             python vote_app_backend/manage.py migrate &&
+             python vote_app_backend/manage.py runserver 8000'
+    environment:
+      - DATABASE_NAME="${MYSQL_DATABASE}"
+      - DATABASE_USER="${MYSQL_USER}"
+      - DATABASE_PASS="${MYSQL_PASSWORD}"
+    depends_on:
+      - vote-app-mysql
+
 
 volumes:
   mysql:

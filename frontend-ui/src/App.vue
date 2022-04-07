@@ -1,11 +1,17 @@
 <template>
-  <h1>{{ title }}</h1>
-  <WhoIs @nameChanged="nameChanged" />
-  <LangSelect @progrLangChanged="progrLangChanged" />
+  <div v-if="showIndex">
+    <h1>{{ title }}</h1>
+    <WhoIs @nameChanged="nameChanged" />
+    <LangSelect @progrLangChanged="progrLangChanged" />
 
     <div id="subbtn">
         <button @click ="sendVote" id="vote">Vote</button>
     </div>
+  </div>
+  <div v-if="showResults">
+    <h1>User {{ username }} voted {{ progrLang }}</h1>
+    <h2>There were {{ votes }} on {{ progrLang }} of all {{ totalVotes }} votes</h2>
+  </div>
 </template>
 
 
@@ -22,6 +28,10 @@ export default {
       title: "What is your favourite programming language?",
       username: "",
       progrLang: "",
+      votes: 0,
+      totalVotes: 0,
+      showIndex: true,
+      showResults: false
     }
   },
   methods: {
@@ -33,17 +43,18 @@ export default {
       this.progrLang = lang;
     },
 
+    toggleResultsVisible() {
+      this.showIndex = false;
+      this.showResults = true;
+    },
 
     sendVote() {
-
-      console.log(this.username);
-      console.log(this.progrLang);
 
       // Creating a XHR object
       let xhr = new XMLHttpRequest();
 
       //Django server path
-      let url = "http://127.0.0.1:8000/";
+      let url = "http://127.0.0.1:8000/api/";
   
       // open a connection
       xhr.open("POST", url, true);
@@ -54,9 +65,13 @@ export default {
       // Create a state change callback
       xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
-
-              //Deliver results page from backend response
-
+            const json_response = xhr.responseText;
+            const responseObj = JSON.parse(json_response);
+            this.username = responseObj.username;
+            this.progrLang = responseObj.progrLang;
+            this.votes = responseObj.votes;
+            this.totalVotes = responseObj.totalVotes;
+            this.toggleResultsVisible();
           }
       };
 

@@ -5,6 +5,7 @@ node_modules
 
 # local env files
 .env
+vote_app_backend/vote_app_backend/.env
 .env.local
 .env.*.local
 
@@ -25,3 +26,6 @@ pnpm-debug.log*
 
 # Custom ignores:
 vote_app_backend/vote_env/
+vote_app_backend/showvotes/__pycache__/
+vote_app_backend/vote_app_backend/__pycache__/
+frontend_ui/node_modules/

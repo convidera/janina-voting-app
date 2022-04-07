@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ShowVotesConfig(AppConfig):
+class ShowvotesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'show_votes'
+    name = 'showvotes'
