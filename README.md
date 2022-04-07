@@ -17,10 +17,11 @@ docker-compose up -d
 
 # Test single containers:
 
-## Build frontend image and run single frontend container:
+## Build frontend and backend images and run single frontend container:
 
 ```bash
 docker build -t alonimacaroni/vote-frontend .
+docker build -t alonimacaroni/vote-backend .
 ```
 
 ```bash
