@@ -29,9 +29,7 @@ services:
     ports:
       - "8000:8000"
     command: >
-      sh -c 'python vote_app_backend/manage.py makemigrations &&
-             python vote_app_backend/manage.py migrate &&
-             python vote_app_backend/manage.py runserver 8000'
+      sh -c 'python vote_app_backend/manage.py runserver 8000'
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
