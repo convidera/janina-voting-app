@@ -29,3 +29,4 @@ vote_app_backend/vote_env/
 vote_app_backend/showvotes/__pycache__/
 vote_app_backend/vote_app_backend/__pycache__/
 frontend_ui/node_modules/
+temp_files

@@ -16,9 +16,9 @@ RUN apk update \
     && apk add --virtual build-deps gcc python3-dev musl-dev \
     && apk add --no-cache mariadb-dev
 
-RUN apk add py3-mysqlclient
-
 
 RUN pip install -r requirements.txt
 
 EXPOSE 8000
+
+VOLUME ["/code/vote_app_backend/mysqldata"]
