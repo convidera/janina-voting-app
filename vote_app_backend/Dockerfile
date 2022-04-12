@@ -21,4 +21,3 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
-VOLUME ["/code/vote_app_backend/mysqldata"]

@@ -10,7 +10,7 @@ services:
     image: mysql:8.0
     restart: always
     volumes:
-      - mysql-shared:/var/lib/mysql
+      - mysql:/var/lib/mysql
     ports:
     - "3302:3306"
     command: >
@@ -25,7 +25,7 @@ services:
     image: alonimacaroni/vote-backend:latest
     restart: always
     volumes:
-      - mysql-shared:/code/vote_app_backend/mysqldata
+      - .:/code/
     ports:
       - "8000:8000"
     command: >
@@ -39,5 +39,5 @@ services:
 
 
 volumes:
-  mysql-shared:
+  mysql:
     driver: local
