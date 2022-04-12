@@ -25,11 +25,11 @@ services:
     image: alonimacaroni/vote-backend:latest
     restart: always
     volumes:
-      - .:/code/
+      - backend-v:/var/www/html:cached
     ports:
       - "8000:8000"
     command: >
-      sh -c 'python vote_app_backend/manage.py runserver 8000'
+      sh -c 'python manage.py runserver 8000'
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
@@ -40,4 +40,6 @@ services:
 
 volumes:
   mysql:
+    driver: local
+  backend-v:
     driver: local
