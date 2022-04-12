@@ -19,5 +19,5 @@ RUN apk update \
 
 RUN pip install -r requirements.txt
 
-EXPOSE 8000
+EXPOSE 8000 3306
 

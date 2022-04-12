@@ -6,21 +6,23 @@ services:
     restart: always
     ports:
       - "8080:8080"
+    networks:
+      - frontend
   vote-app-mysql:
+#    image: mysql:8.0
     image: mysql:8.0
     restart: always
     volumes:
       - mysql:/var/lib/mysql
     ports:
-    - "3302:3306"
-    command: >
-      sh -c 'mysql &&
-             GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;'
+    - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks: 
+      - backend
   backend-part:
     image: alonimacaroni/vote-backend:latest
     restart: always
@@ -34,9 +36,17 @@ services:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
       - DATABASE_PASS=${MYSQL_PASSWORD}
+    networks:
+      - backend
+      - frontend
     depends_on:
       - vote-app-mysql
 
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
 
 volumes:
   mysql:
