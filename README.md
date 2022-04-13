@@ -25,7 +25,7 @@ docker build -t alonimacaroni/vote-backend .
 ```
 
 ```bash
-docker run -it -p 8080:8080 --rm --name frontend-part alonimacaroni/vote-frontend
+docker run -it -p 8080:8080 --name frontend-part alonimacaroni/vote-frontend
 ```
 
 ## Run single database container:
