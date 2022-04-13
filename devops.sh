@@ -1,4 +1,4 @@
-#! /bin/bash -x
+#! /bin/bash
 
 export APP_PORT=${APP_PORT:-80}
 export DB_PORT=${DB_PORT:-3306}
