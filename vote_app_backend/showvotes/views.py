@@ -1,12 +1,12 @@
-from django.http import HttpResponseRedirect
-
+#from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from .models import Username, Choice
 
 
 
 def index(request):
     user = Username.create(username_text=request.POST['username'])
-    user.save();
+    user.save()
     selected_choice = user.choice_set.create(choice_text=request.POST['progrLang'])
     selected_choice.votes += 1
     selected_choice.save()
@@ -15,7 +15,7 @@ def index(request):
     response_data['username'] = user
     response_data['progrLang'] = selected_choice
     response_data['votes'] = selected_choice.votes
-    response_data['totalVotes'] = Choice.objects.all().count()
+    response_data['totalVotes'] = selected_choice.objects.all().count()
 
     return JsonResponse(response_data)
 

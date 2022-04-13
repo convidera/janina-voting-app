@@ -1,0 +1,44 @@
+#! /bin/bash -x
+
+export APP_PORT=${APP_PORT:-80}
+export DB_PORT=${DB_PORT:-3306}
+
+COMPOSE="docker-compose"
+
+if [ $# -gt 0 ]
+then
+  if [ "$1" == "exit" ];then
+    $COMPOSE down
+  elif [ "$1" == "runserver" ];then
+    $COMPOSE run --rm \
+      backend-part \
+      python manage.py runserver
+  elif [ "$1" == "migrate" ];then
+    $COMPOSE run --rm \
+      backend-part \
+      python manage.py migrate
+  elif [ "$1" == "makemigrations" ];then
+    $COMPOSE run --rm \
+      backend-part \
+      python manage.py makemigrations showvotes
+  elif [ "$1" == "npm" ]; then
+    shift 1
+    $COMPOSE run --rm \
+      frontend-part \
+      npm run serve 
+  elif [ "$1" == "push" ];then 
+    if [ $# -gt 1 ];then 
+      shift 1
+      git add * && \
+      git commit -m "$2" && \
+      shift
+      git push -u origin "$3"
+    else
+      git add *
+    fi
+  else
+    $COMPOSE "$@"
+  fi
+else
+  $COMPOSE up
+fi

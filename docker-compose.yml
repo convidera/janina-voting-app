@@ -4,12 +4,13 @@ services:
   frontend-part:
     image: alonimacaroni/vote-frontend:latest
     restart: always
+    volumes:
+    - ./frontend-ui:/app
     ports:
       - "8080:8080"
     networks:
       - frontend
   vote-app-mysql:
-#    image: mysql:8.0
     image: mysql:8.0
     restart: always
     volumes:
@@ -27,7 +28,7 @@ services:
     image: alonimacaroni/vote-backend:latest
     restart: always
     volumes:
-      - backend-v:/var/www/html:cached
+      - ./vote_app_backend:/code
     ports:
       - "8000:8000"
     command: >
@@ -50,6 +51,4 @@ networks:
 
 volumes:
   mysql:
-    driver: local
-  backend-v:
     driver: local
