@@ -1,7 +1,8 @@
 #! /bin/bash
 
-export APP_PORT=${APP_PORT:-80}
+export FE_PORT=${FE_PORT:-8080}
 export DB_PORT=${DB_PORT:-3306}
+export BE_PORT=${BE_PORT:-8000}
 
 COMPOSE="docker-compose"
 
@@ -12,7 +13,7 @@ then
   elif [ "$1" == "runserver" ];then
     $COMPOSE run --rm \
       backend-part \
-      python manage.py runserver
+      python manage.py runserver "$@"
   elif [ "$1" == "migrate" ];then
     $COMPOSE run --rm \
       backend-part \
@@ -25,7 +26,7 @@ then
     shift 1
     $COMPOSE run --rm \
       frontend-part \
-      npm run serve 
+      npm run serve "$@"
   elif [ "$1" == "push" ];then 
     git add * && \
     git commit -m "$2" && \

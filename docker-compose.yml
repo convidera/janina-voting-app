@@ -7,16 +7,18 @@ services:
     volumes:
     - ./frontend-ui:/app
     ports:
-      - "8080:8080"
+      - "${FE_PORT}:8080"
     networks:
       - frontend
+    depends_on:
+      - backend-part
   vote-app-mysql:
     image: mysql:8.0
     restart: always
     volumes:
       - mysql:/var/lib/mysql
     ports:
-    - "3306:3306"
+    - "${DB_PORT}:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -30,9 +32,9 @@ services:
     volumes:
       - ./vote_app_backend:/code
     ports:
-      - "8000:8000"
+      - "${BE_PORT}:8000"
     command: >
-      sh -c 'python manage.py runserver 8000'
+      sh -c 'python manage.py runserver'
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
