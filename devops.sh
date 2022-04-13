@@ -27,13 +27,9 @@ then
       frontend-part \
       npm run serve 
   elif [ "$1" == "push" ];then 
-    if [ $# -gt 1 ];then 
-      git add * && \
-      git commit -m "$2" && \
-      git push -u origin "$3"
-    else
-      git add *
-    fi
+    git add * && \
+    git commit -m "$2" && \
+    git push -u origin "$3"
   else
     $COMPOSE "$@"
   fi
