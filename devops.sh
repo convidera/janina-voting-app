@@ -1,8 +1,5 @@
 #! /bin/bash
 
-export FE_PORT=${FE_PORT:-8080}
-export DB_PORT=${DB_PORT:-3306}
-export BE_PORT=${BE_PORT:-8000}
 
 COMPOSE="docker-compose"
 
