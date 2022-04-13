@@ -28,10 +28,8 @@ then
       npm run serve 
   elif [ "$1" == "push" ];then 
     if [ $# -gt 1 ];then 
-      shift 1
       git add * && \
       git commit -m "$2" && \
-      shift
       git push -u origin "$3"
     else
       git add *
