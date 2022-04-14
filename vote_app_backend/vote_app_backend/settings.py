@@ -117,11 +117,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CORS_ALLOW_METHODS = [
+    'GET',
     'POST',
     'OPTIONS',
 ]
 
 CORS_ALLOW_HEADERS = [
+    #csrf token header
     'content-type',
 ] """
 

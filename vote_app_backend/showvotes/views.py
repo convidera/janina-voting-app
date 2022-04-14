@@ -11,6 +11,7 @@ import environ
 
 
 def handleVotes(request):
+    #decrypt (with SECRET KEY) hashed csrf token sent from FE
     if request.method == 'POST':
         usernameJSON = request.POST.get('username')
         choiceJSON = request.POST.get('progrLang')
