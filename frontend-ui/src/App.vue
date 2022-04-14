@@ -66,6 +66,7 @@ export default {
 
       //const csrftoken = getCookie('csrftoken');
 
+      //add hashed token to post request?
       httpClient.post('http://0.0.0.0:8000/api/', this.dataForAPI)
       //axios.post('https://jsonplaceholder.typicode.com/posts', this.dataForAPI)
         .then(response => console.log(response))
