@@ -5,7 +5,7 @@ services:
     image: alonimacaroni/vote-frontend:latest
     restart: always
     volumes:
-    - ./frontend-ui:/app
+      - ./frontend-ui:/app
     ports:
       - "8080:8080"
     command: >
@@ -18,7 +18,7 @@ services:
     volumes:
       - mysql:/var/lib/mysql
     ports:
-    - "3306:3306"
+      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}

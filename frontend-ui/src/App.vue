@@ -31,21 +31,22 @@ export default {
       dataForAPI: {
         username: '',
         progrLang: '',
-        votes: 0,
-        totalVotes: 0,
       },
       
+      votes: 0,
+      totalVotes: 0,
+
       showIndex: true,
       showResults: false,
     }
   },
   methods: {
     nameChanged(name) {
-      this.username = name;
+      this.dataForAPI.username = name;
     },
 
     progrLangChanged(lang) {
-      this.progrLang = lang;
+      this.dataForAPI.progrLang = lang;
     },
 
     toggleResultsVisible() {
@@ -55,6 +56,7 @@ export default {
 
     sendVote() {
       axios.post('http://127.0.0.1:8000/api', this.dataForAPI)
+      //axios.post('https://jsonplaceholder.typicode.com/posts', this.dataForAPI)
         .then(response => console.log(response))
         .catch(error => console.log(error));
 
