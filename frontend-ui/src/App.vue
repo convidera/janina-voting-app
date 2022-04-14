@@ -55,7 +55,7 @@ export default {
     },
 
     sendVote() {
-      axios.post('http://127.0.0.1:8000/api', this.dataForAPI)
+      axios.post('http://127.0.0.1:8000/api/', this.dataForAPI)
       //axios.post('https://jsonplaceholder.typicode.com/posts', this.dataForAPI)
         .then(response => console.log(response))
         .catch(error => console.log(error));

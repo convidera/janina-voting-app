@@ -34,7 +34,7 @@ services:
     ports:
       - "8000:8000"
     command: >
-      sh -c 'python manage.py runserver'
+      sh -c 'python manage.py runserver 0:8000'
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
