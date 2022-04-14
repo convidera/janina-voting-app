@@ -16,6 +16,7 @@
 
 
 <script>
+import axios from 'axios'
 import WhoIs from './components/WhoIs.vue'
 import LangSelect from './components/LangSelect.vue'
 
@@ -26,12 +27,16 @@ export default {
   data() {
     return {
       title: "What is your favourite programming language?",
-      username: "",
-      progrLang: "",
-      votes: 0,
-      totalVotes: 0,
+      
+      dataForAPI: {
+        username: '',
+        progrLang: '',
+        votes: 0,
+        totalVotes: 0,
+      },
+      
       showIndex: true,
-      showResults: false
+      showResults: false,
     }
   },
   methods: {
@@ -49,37 +54,40 @@ export default {
     },
 
     sendVote() {
+      axios.post('http://127.0.0.1:8000/api', this.dataForAPI)
+        .then(response => console.log(response))
+        .catch(error => console.log(error));
 
-      // Creating a XHR object
-      let xhr = new XMLHttpRequest();
+      // // Creating a XHR object
+      // let xhr = new XMLHttpRequest();
 
-      //Django server path
-      let url = "http://127.0.0.1:8000/api";
+      // //Django server path
+      // let url = "http://127.0.0.1:8000/api";
   
-      // open a connection
-      xhr.open("POST", url, true);
+      // // open a connection
+      // xhr.open("POST", url, true);
 
-      // Set the request header i.e. which type of content you are sending
-      xhr.setRequestHeader("Content-Type", "application/json");
+      // // Set the request header i.e. which type of content you are sending
+      // xhr.setRequestHeader("Content-Type", "application/json");
 
-      // Create a state change callback
-      xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            const json_response = xhr.responseText;
-            const responseObj = JSON.parse(json_response);
-            this.username = responseObj.username;
-            this.progrLang = responseObj.progrLang;
-            this.votes = responseObj.votes;
-            this.totalVotes = responseObj.totalVotes;
-            this.toggleResultsVisible();
-          }
-      };
+      // // Create a state change callback
+      // xhr.onreadystatechange = function () {
+      //     if (xhr.readyState === 4 && xhr.status === 200) {
+      //       const json_response = xhr.responseText;
+      //       const responseObj = JSON.parse(json_response);
+      //       this.username = responseObj.username;
+      //       this.progrLang = responseObj.progrLang;
+      //       this.votes = responseObj.votes;
+      //       this.totalVotes = responseObj.totalVotes;
+      //       this.toggleResultsVisible();
+      //     }
+      // };
 
-      // Converting JSON data to string
-      var data = JSON.stringify({ "username": this.username, "progrLang": this.progrLang });
+      // // Converting JSON data to string
+      // var data = JSON.stringify({ "username": this.username, "progrLang": this.progrLang });
 
-      // Sending data with the request
-      xhr.send(data);
+      // // Sending data with the request
+      // xhr.send(data);
     }
   } 
 }
