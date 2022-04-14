@@ -112,13 +112,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-CORS_ALLOWED_ORIGINS = [
+""" CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:8080",
 ]
 
 CORS_ALLOW_METHODS = [
     'POST',
+    'OPTIONS',
 ]
+
+CORS_ALLOW_HEADERS = [
+    'content-type',
+] """
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -130,6 +135,8 @@ TIME_ZONE = 'Europe/Berlin'
 USE_I18N = True
 
 USE_TZ = True
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Static files (CSS, JavaScript, Images)

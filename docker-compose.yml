@@ -8,6 +8,8 @@ services:
     - ./frontend-ui:/app
     ports:
       - "8080:8080"
+    command: >
+      sh -c 'npm run serve'
     networks:
       - frontend
   vote-app-mysql:
