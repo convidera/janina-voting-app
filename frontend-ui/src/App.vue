@@ -21,7 +21,9 @@ import WhoIs from './components/WhoIs.vue'
 import LangSelect from './components/LangSelect.vue'
 import axios from 'axios'
 
-
+axios.defaults.xsrfHeaderName = 'X-csrftoken';
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.withCredentials = true;
 
 export default {
   name: 'App',
@@ -51,16 +53,7 @@ export default {
   },
   methods: {
     getCSRF() {
-      axios.defaults.xsrfHeaderName = 'x-csrftoken';
-      axios.defaults.xsrfCookieName = 'csrftoken';
-
       axios.get('http://localhost:8000/api/get-csrf')
-      //axios.get('http://localhost:8000/api/ping')
-      //axios.get('https://jsonplaceholder.typicode.com/posts')
-      //  .then(response => console.log(response))
-      //  .catch(error => console.log(error));
-
-      axios.defaults.withCredentials = true
     },
 
     nameChanged(name) {
@@ -78,62 +71,20 @@ export default {
 
     sendVote() {
 
-      //const csrftoken = getCookie('csrftoken');
-
       axios.post('http://localhost:8000/api/', this.dataForAPI)
       //axios.post('https://jsonplaceholder.typicode.com/posts', this.dataForAPI)
-        .then(response => console.log(response))
+        .then(response => {
+          console.log('hello');
+          this.username = response.data.username;
+          this.progrLang = response.data.progrLang;
+          this.votes = response.data.votes;
+          this.totalVotes = response.data.totalVotes;
+          this.toggleResultsVisible();
+        })
         .catch(error => console.log(error));
-
-      // // Creating a XHR object
-      // let xhr = new XMLHttpRequest();
-
-      // //Django server path
-      // let url = "http://127.0.0.1:8000/api";
-  
-      // // open a connection
-      // xhr.open("POST", url, true);
-
-      // // Set the request header i.e. which type of content you are sending
-      // xhr.setRequestHeader("Content-Type", "application/json");
-
-      // // Create a state change callback
-      // xhr.onreadystatechange = function () {
-      //     if (xhr.readyState === 4 && xhr.status === 200) {
-      //       const json_response = xhr.responseText;
-      //       const responseObj = JSON.parse(json_response);
-      //       this.username = responseObj.username;
-      //       this.progrLang = responseObj.progrLang;
-      //       this.votes = responseObj.votes;
-      //       this.totalVotes = responseObj.totalVotes;
-      //       this.toggleResultsVisible();
-      //     }
-      // };
-
-      // // Converting JSON data to string
-      // var data = JSON.stringify({ "username": this.username, "progrLang": this.progrLang });
-
-      // // Sending data with the request
-      // xhr.send(data);
     }
   } 
 }
-
-// function getCookie(name) {
-//     let cookieValue = null;
-//     if (document.cookie && document.cookie !== '') {
-//         const cookies = document.cookie.split(';');
-//         for (let i = 0; i < cookies.length; i++) {
-//             const cookie = cookies[i].trim();
-//             // Does this cookie string begin with the name we want?
-//             if (cookie.substring(0, name.length + 1) === (name + '=')) {
-//                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-//                 break;
-//             }
-//         }
-//     }
-//     return cookieValue;
-// }
 
 
 
