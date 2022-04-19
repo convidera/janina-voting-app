@@ -31,7 +31,6 @@ SECRET_KEY = 'django-insecure-z!)gfy%(e@17ll%3zld1t8&+$2esxvz-me@a74^rmu!an!#s9j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -112,17 +111,30 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+ALLOWED_HOSTS = [
+    '*',
+    '0.0.0.0'
+]
+
+CORS_ORIGIN_ALLOW_ALL = False
+
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8080",
+    "http://localhost:8080",
+    "http://frontend-part",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8080",
+    "http://localhost:8080",
+    "http://frontend-part",
 ]
 
-# CORS_ORIGIN_WHITELIST = [
-#     "http://127.0.0.1:8080",
-# ]
+CORS_ORIGIN_WHITELIST = [
+    "http://127.0.0.1:8080",
+    "http://localhost:8080",
+    "http://frontend-part",
+]
 
 CORS_ALLOW_METHODS = [
     'GET',
@@ -130,12 +142,20 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-# CORS_ALLOW_HEADERS = [
-#     'X-CSRF-Token',
-#     'content-type',
-# ]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'Access-Control-Allow-Origin',
+]
 
-
+CORS_ALLOW_CREDENTIALS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -148,7 +168,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-#CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -162,11 +181,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-ALLOWED_HOSTS = [
-    '127.0.0.2'
-]
 
 #CSRF_COOKIE_SECURE = True
 #SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SAMESITE = 'None'
+#CSRF_COOKIE_SAMESITE = 'None'
+#SESSION_COOKIE_SAMESITE = 'None'

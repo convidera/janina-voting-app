@@ -1,4 +1,5 @@
 <template>
+  <div @onload="getCSRF"></div>
   <div v-if="showIndex">
     <h1>{{ title }}</h1>
     <WhoIs @nameChanged="nameChanged" />
@@ -25,8 +26,12 @@ import axios from 'axios'
 export default {
   name: 'App',
   components: { WhoIs, LangSelect },
-  beforeMount() {
-    this.getCSRF();
+  mounted() {
+    document.onreadystatechange = () => {
+      if(document.readyState == "complete") {
+        this.getCSRF();
+      }
+    }
   },
   data() {
     return {
@@ -46,13 +51,16 @@ export default {
   },
   methods: {
     getCSRF() {
-      axios.defaults.xsrfHeaderName = 'X-CSRF-Token';
+      axios.defaults.xsrfHeaderName = 'x-csrftoken';
       axios.defaults.xsrfCookieName = 'csrftoken';
-      axios.defaults.withCredentials = true;
-      
-      axios.get('http://127.0.0.2:8000/api/get-csrf')
-        .then(response => console.log(response))
-        .catch(error => console.log(error));
+
+      axios.get('http://localhost:8000/api/get-csrf')
+      //axios.get('http://localhost:8000/api/ping')
+      //axios.get('https://jsonplaceholder.typicode.com/posts')
+      //  .then(response => console.log(response))
+      //  .catch(error => console.log(error));
+
+      axios.defaults.withCredentials = true
     },
 
     nameChanged(name) {
@@ -72,7 +80,7 @@ export default {
 
       //const csrftoken = getCookie('csrftoken');
 
-      axios.post('http://127.0.0.2:8000/api/', this.dataForAPI)
+      axios.post('http://localhost:8000/api/', this.dataForAPI)
       //axios.post('https://jsonplaceholder.typicode.com/posts', this.dataForAPI)
         .then(response => console.log(response))
         .catch(error => console.log(error));
