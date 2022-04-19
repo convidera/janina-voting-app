@@ -112,9 +112,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-""" CORS_ORIGIN_WHITELIST = [
+CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8080",
 ]
+
+# CORS_ORIGIN_WHITELIST = [
+#     "http://127.0.0.1:8080",
+# ]
 
 CORS_ALLOW_METHODS = [
     'GET',
@@ -122,10 +126,14 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-CORS_ALLOW_HEADERS = [
-    #csrf token header
-    'content-type',
-] """
+# CORS_ALLOW_HEADERS = [
+#     'X-CSRF-Token',
+#     'content-type',
+# ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8080",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -138,7 +146,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-CORS_ORIGIN_ALLOW_ALL = True
+#CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -152,4 +160,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = [
+    '0.0.0.0'
+]
+
+#CSRF_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'strict'
+SESSION_COOKIE_SAMESITE = 'strict'

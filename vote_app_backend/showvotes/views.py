@@ -1,11 +1,7 @@
 #from django.http import HttpResponseRedirect
 from django.http import JsonResponse, HttpResponse
+from django.middleware.csrf import get_token
 from .models import Username
-import hmac
-import hashlib
-import random
-import string
-import environ
 
 
 
@@ -40,10 +36,6 @@ def handleVotes(request):
 
 def setFECookie(request):
     if request.method == 'GET':
-        env = environ.Env()
-        environ.Env.read_env()
+        token = get_token(request)
         html = HttpResponse('', 204)
-        token = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
-        hash = hmac.new(bytes(env('SECRET_KEY') , 'latin-1'), msg = bytes(token , 'latin-1'), digestmod = hashlib.sha256).hexdigest().upper()
-        html.set_cookie('csrftoken', hash)
         return html

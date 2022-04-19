@@ -16,14 +16,18 @@
 
 
 <script>
-import axios from 'axios'
 import WhoIs from './components/WhoIs.vue'
 import LangSelect from './components/LangSelect.vue'
+import axios from 'axios'
+
 
 
 export default {
   name: 'App',
   components: { WhoIs, LangSelect },
+  beforeMount() {
+    this.getCSRF();
+  },
   data() {
     return {
       title: "What is your favourite programming language?",
@@ -41,6 +45,16 @@ export default {
     }
   },
   methods: {
+    getCSRF() {
+      axios.defaults.xsrfHeaderName = 'X-CSRF-Token';
+      axios.defaults.xsrfCookieName = 'csrftoken';
+      axios.defaults.withCredentials = true;
+      
+      axios.get('http://0.0.0.0:8000/api/get-csrf')
+        .then(response => console.log(response))
+        .catch(error => console.log(error));
+    },
+
     nameChanged(name) {
       this.dataForAPI.username = name;
     },
@@ -55,18 +69,10 @@ export default {
     },
 
     sendVote() {
-      const httpClient = axios.create({ 
-        xsrfHeaderName: 'X-CSRF-Token',
-        xsrfCookieName: 'csrftoken',
-        withCredentials: true
-      });
-
-
-      httpClient.get('http://0.0.0.0:8000/api/get-csrf');
 
       //const csrftoken = getCookie('csrftoken');
 
-      httpClient.post('http://0.0.0.0:8000/api/', this.dataForAPI)
+      axios.post('http://0.0.0.0:8000/api/', this.dataForAPI)
       //axios.post('https://jsonplaceholder.typicode.com/posts', this.dataForAPI)
         .then(response => console.log(response))
         .catch(error => console.log(error));
@@ -105,21 +111,21 @@ export default {
   } 
 }
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+// function getCookie(name) {
+//     let cookieValue = null;
+//     if (document.cookie && document.cookie !== '') {
+//         const cookies = document.cookie.split(';');
+//         for (let i = 0; i < cookies.length; i++) {
+//             const cookie = cookies[i].trim();
+//             // Does this cookie string begin with the name we want?
+//             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+//                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+//                 break;
+//             }
+//         }
+//     }
+//     return cookieValue;
+// }
 
 
 
