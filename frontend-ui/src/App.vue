@@ -50,7 +50,7 @@ export default {
       axios.defaults.xsrfCookieName = 'csrftoken';
       axios.defaults.withCredentials = true;
       
-      axios.get('http://0.0.0.0:8000/api/get-csrf')
+      axios.get('http://127.0.0.2:8000/api/get-csrf')
         .then(response => console.log(response))
         .catch(error => console.log(error));
     },
@@ -72,7 +72,7 @@ export default {
 
       //const csrftoken = getCookie('csrftoken');
 
-      axios.post('http://0.0.0.0:8000/api/', this.dataForAPI)
+      axios.post('http://127.0.0.2:8000/api/', this.dataForAPI)
       //axios.post('https://jsonplaceholder.typicode.com/posts', this.dataForAPI)
         .then(response => console.log(response))
         .catch(error => console.log(error));

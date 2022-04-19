@@ -116,6 +116,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8080",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8080",
+]
+
 # CORS_ORIGIN_WHITELIST = [
 #     "http://127.0.0.1:8080",
 # ]
@@ -131,9 +135,7 @@ CORS_ALLOW_METHODS = [
 #     'content-type',
 # ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:8080",
-]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -161,10 +163,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 ALLOWED_HOSTS = [
-    '0.0.0.0'
+    '127.0.0.2'
 ]
 
 #CSRF_COOKIE_SECURE = True
 #SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = 'strict'
-SESSION_COOKIE_SAMESITE = 'strict'
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
