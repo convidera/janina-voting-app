@@ -13,6 +13,9 @@
     <h1>User {{ username }} voted {{ progrLang }}</h1>
     <h2>There were {{ votes }} on {{ progrLang }} of all {{ totalVotes }} votes</h2>
   </div>
+  <div v-if="showError" id="userexists">
+    <h1>User already exists!</h1>
+  </div>
 </template>
 
 
@@ -49,6 +52,7 @@ export default {
 
       showIndex: true,
       showResults: false,
+      showError: false,
     }
   },
   methods: {
@@ -67,19 +71,28 @@ export default {
     toggleResultsVisible() {
       this.showIndex = false;
       this.showResults = true;
+      this.showError = false;
+    },
+
+    toggleErrorVisible() {
+      this.showIndex = false;
+      this.showResults = false;
+      this.showError = true;
     },
 
     sendVote() {
 
       axios.post('http://localhost:8000/api/', this.dataForAPI)
-      //axios.post('https://jsonplaceholder.typicode.com/posts', this.dataForAPI)
         .then(response => {
-          console.log('hello');
-          this.username = response.data.username;
-          this.progrLang = response.data.progrLang;
-          this.votes = response.data.votes;
-          this.totalVotes = response.data.totalVotes;
-          this.toggleResultsVisible();
+          if (!response.data.error) {
+            this.username = response.data.username;
+            this.progrLang = response.data.progrLang;
+            this.votes = response.data.votes;
+            this.totalVotes = response.data.totalVotes;
+            this.toggleResultsVisible();
+          } else {
+            this.toggleErrorVisible();
+          }
         })
         .catch(error => console.log(error));
     }
@@ -109,5 +122,11 @@ export default {
     width: 80px;
     height: 60px;
     border-radius: 15px;
+}
+
+#userexists {
+  background: #faa23e;
+  width: 500px;
+  height: 300px;
 }
 </style>
