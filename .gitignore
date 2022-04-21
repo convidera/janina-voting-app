@@ -25,7 +25,8 @@ pnpm-debug.log*
 *.sw?
 
 # Custom ignores:
-vote_app_backend/vote_env/
+vote_app_backend/vote_env2/
+vote_app_backend/requirements_env2.txt
 vote_app_backend/showvotes/__pycache__/
 vote_app_backend/vote_app_backend/__pycache__/
 frontend_ui/node_modules/

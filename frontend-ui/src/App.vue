@@ -23,9 +23,12 @@ import LangSelect from './components/LangSelect.vue'
 import ErrorModal from './components/ErrorModal.vue'
 import axios from 'axios'
 
+
+
 axios.defaults.xsrfHeaderName = 'X-csrftoken';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.withCredentials = true;
+
 
 export default {
   name: 'App',
@@ -61,7 +64,8 @@ export default {
   },
   methods: {
     getCSRF() {
-      axios.get('http://localhost:8000/' + process.env.URI_ENTRYP_PATH + process.env.URI_CSRF_PATH)
+      //axios.get('http://localhost:8000/api/get-csrf')
+      axios.get('http://localhost:8000/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH)
     },
 
     nameChanged(name) {
@@ -91,7 +95,7 @@ export default {
         if (this.enableDefaultSel) {
           this.dataForAPI.progrLang = "C";
         }
-        axios.post('http://localhost:8000/' + process.env.URI_ENTRYP_PATH, this.dataForAPI)
+        axios.post('http://localhost:8000/' + process.env.VUE_APP_URI_ENTRYP_PATH, this.dataForAPI)
         .then(response => {
           if (!response.data.error) {
             this.username = response.data.username;

@@ -10,6 +10,9 @@ services:
       - "8080:8080"
     command: >
       sh -c 'npm run serve'
+    environment:
+      - VUE_APP_URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
+      - VUE_APP_URI_CSRF_PATH=${URI_CSRF_PATH}
     networks:
       - frontend
   vote-app-mysql:
@@ -39,6 +42,8 @@ services:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
       - DATABASE_PASS=${MYSQL_PASSWORD}
+      - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
+      - URI_CSRF_PATH=${URI_CSRF_PATH}
     networks:
       - backend
       - frontend

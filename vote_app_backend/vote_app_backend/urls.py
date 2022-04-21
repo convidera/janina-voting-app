@@ -19,14 +19,14 @@ from django.urls import include, path
 
 
 import os
-from dotenv import load_dotenv
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 #BASE_DIR = Path(__file__).resolve().parent.parent
 
 urlpatterns = [
-    path(str(os.getenv('URI_ENTRYP_PATH')), include('showvotes.urls')),
+    path(str(os.environ.get('URI_ENTRYP_PATH')), include('showvotes.urls')),
     #path('api/', include('showvotes.urls')),
     path('admin/', admin.site.urls),
 ]
