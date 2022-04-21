@@ -31,7 +31,7 @@ then
   elif [ "$1" == "push" ];then 
     git add * && \
     git commit -m "$2" && \
-    shift 2
+    shift 
     git push "$@"
   else
     $COMPOSE "$@"
