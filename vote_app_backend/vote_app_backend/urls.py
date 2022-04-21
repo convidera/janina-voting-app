@@ -15,15 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-#from pathlib import Path
-
-
 import os
 
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-#BASE_DIR = Path(__file__).resolve().parent.parent
 
 urlpatterns = [
     path(str(os.environ.get('URI_ENTRYP_PATH')), include('showvotes.urls')),
