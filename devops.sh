@@ -19,6 +19,10 @@ then
     $COMPOSE run --rm \
       backend-part \
       python manage.py makemigrations showvotes
+  elif [ "$1" == "flush" ];then
+    $COMPOSE run --rm \
+      backend-part \
+      python manage.py flush
   elif [ "$1" == "npm" ]; then
     shift 1
     $COMPOSE run --rm \
@@ -27,7 +31,8 @@ then
   elif [ "$1" == "push" ];then 
     git add * && \
     git commit -m "$2" && \
-    git push -u origin "$3"
+    shift 2
+    git push "$@"
   else
     $COMPOSE "$@"
   fi
