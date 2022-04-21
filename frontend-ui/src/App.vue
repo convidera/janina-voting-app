@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     getCSRF() {
-      axios.get('http://localhost:8000/api/get-csrf')
+      axios.get('http://localhost:8000/' + process.env.URI_ENTRYP_PATH + process.env.URI_CSRF_PATH)
     },
 
     nameChanged(name) {
@@ -91,7 +91,7 @@ export default {
         if (this.enableDefaultSel) {
           this.dataForAPI.progrLang = "C";
         }
-        axios.post('http://localhost:8000/api/', this.dataForAPI)
+        axios.post('http://localhost:8000/' + process.env.URI_ENTRYP_PATH, this.dataForAPI)
         .then(response => {
           if (!response.data.error) {
             this.username = response.data.username;

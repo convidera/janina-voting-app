@@ -8,9 +8,7 @@ import json
 
 
 def handleVotes(request):
-    #decrypt (with SECRET KEY) hashed csrf token sent from FE
     if request.method == 'POST':
-        #deserialize request JSON body
         body_unicode = request.body.decode('utf-8') 	
         body = json.loads(body_unicode)
         usernameJSON = body['username']

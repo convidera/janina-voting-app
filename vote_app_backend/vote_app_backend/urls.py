@@ -15,10 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-#from showvotes import views
+#from pathlib import Path
+
+
+import os
+from dotenv import load_dotenv
+
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+#BASE_DIR = Path(__file__).resolve().parent.parent
 
 urlpatterns = [
-    #path('api/', views.handleVotes, name='handleVotes'),
-    path('api/', include('showvotes.urls')),
+    path(str(os.getenv('URI_ENTRYP_PATH')), include('showvotes.urls')),
+    #path('api/', include('showvotes.urls')),
     path('admin/', admin.site.urls),
 ]

@@ -3,7 +3,7 @@ version: "3"
 services:
   frontend-part:
     image: alonimacaroni/vote-frontend:latest
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./frontend-ui:/app
     ports:
@@ -14,7 +14,7 @@ services:
       - frontend
   vote-app-mysql:
     image: mysql:8.0
-    restart: always
+    restart: unless-stopped
     volumes:
       - mysql:/var/lib/mysql
     ports:
@@ -28,7 +28,7 @@ services:
       - backend
   backend-part:
     image: alonimacaroni/vote-backend:latest
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./vote_app_backend:/code
     ports:
@@ -46,9 +46,9 @@ services:
       - vote-app-mysql
   proxy-part:
     image: traefik:v2.7
-    restart: always
-    volumes: 
-      - traefik-data:/...
+    restart: unless-stopped
+    #volumes: 
+    #  - traefik-data:/...
 
 networks:
   backend:
