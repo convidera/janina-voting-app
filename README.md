@@ -69,7 +69,9 @@ Shut down app:
 ./devops exit
 ```
 
-Run server in backend, more options can be appended:
+\
+\
+Run server in backend, more options for original command can be appended:
 
 ```bash
 ./devops runserver
@@ -81,6 +83,7 @@ This is the same as:
 python manage.py runserver
 ```
 
+\
 \
 Apply changes to database:
 
@@ -100,10 +103,24 @@ Reset database:
 ./devops flush
 ```
 
-Run server in frontend:
+\
+\
+Run server in frontend, more options for original command can be appended:
 
 ```bash
 ./devops npm
 ```
 
+This is the same as:
 
+```bash
+npm run serve
+```
+
+\
+\
+Push changes to github:
+
+```bash
+./devops push "<message>"
+```
