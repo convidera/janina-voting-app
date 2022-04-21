@@ -13,15 +13,14 @@
     <h1>User {{ username }} voted {{ progrLang }}</h1>
     <h2>There were {{ votes }} on {{ progrLang }} of all {{ totalVotes }} votes</h2>
   </div>
-  <div v-if="showError" id="userexists">
-    <h1>User already exists!</h1>
-  </div>
+  <ErrorModal :errorMsg="message" v-if="showError" />
 </template>
 
 
 <script>
 import WhoIs from './components/WhoIs.vue'
 import LangSelect from './components/LangSelect.vue'
+import ErrorModal from './components/ErrorModal.vue'
 import axios from 'axios'
 
 axios.defaults.xsrfHeaderName = 'X-csrftoken';
@@ -30,7 +29,7 @@ axios.defaults.withCredentials = true;
 
 export default {
   name: 'App',
-  components: { WhoIs, LangSelect },
+  components: { WhoIs, LangSelect, ErrorModal },
   mounted() {
     document.onreadystatechange = () => {
       if(document.readyState == "complete") {
@@ -53,6 +52,11 @@ export default {
       showIndex: true,
       showResults: false,
       showError: false,
+
+      enableDefaultSel: true,
+      usernameExists: false,
+
+      message: '',
     }
   },
   methods: {
@@ -61,10 +65,12 @@ export default {
     },
 
     nameChanged(name) {
+      this.usernameExists = true;
       this.dataForAPI.username = name;
     },
 
     progrLangChanged(lang) {
+      this.enableDefaultSel = false;
       this.dataForAPI.progrLang = lang;
     },
 
@@ -81,8 +87,11 @@ export default {
     },
 
     sendVote() {
-
-      axios.post('http://localhost:8000/api/', this.dataForAPI)
+      if (this.usernameExists) {
+        if (this.enableDefaultSel) {
+          this.dataForAPI.progrLang = "C";
+        }
+        axios.post('http://localhost:8000/api/', this.dataForAPI)
         .then(response => {
           if (!response.data.error) {
             this.username = response.data.username;
@@ -92,9 +101,14 @@ export default {
             this.toggleResultsVisible();
           } else {
             this.toggleErrorVisible();
+            this.message = response.data.error;
           }
         })
         .catch(error => console.log(error));
+      } else {
+        this.toggleErrorVisible();
+        this.message = 'Username is missing'
+      }
     }
   } 
 }
@@ -122,11 +136,5 @@ export default {
     width: 80px;
     height: 60px;
     border-radius: 15px;
-}
-
-#userexists {
-  background: #faa23e;
-  width: 500px;
-  height: 300px;
 }
 </style>
