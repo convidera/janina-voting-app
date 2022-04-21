@@ -44,6 +44,11 @@ services:
       - frontend
     depends_on:
       - vote-app-mysql
+  proxy-part:
+    image: traefik:v2.7
+    restart: always
+    volumes: 
+      - traefik-data:/...
 
 networks:
   backend:
@@ -53,4 +58,6 @@ networks:
 
 volumes:
   mysql:
+    driver: local
+  traefik-data:
     driver: local
