@@ -1,7 +1,7 @@
 <template>
     <div id="selector">
         <div class="green boxes">
-            <input @change="addProgrLang" v-model="progrlangdata" type="radio" id="c" class="langSel" name="lang" value="C" checked>
+            <input @change="addProgrLang" v-model="progrlangdata" type="radio" id="c" class="langSel" name="lang" value="c" checked>
             <label for="c">C</label>
         </div>
         <div class="purple boxes">
