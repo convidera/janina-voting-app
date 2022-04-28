@@ -27,6 +27,8 @@ import axios from 'axios'
 
 axios.defaults.xsrfHeaderName = 'X-csrftoken';
 axios.defaults.xsrfCookieName = 'csrftoken';
+
+//Axios sends cookies in its requests automatically, force credentials to every Axios requests
 axios.defaults.withCredentials = true;
 
 
@@ -64,7 +66,6 @@ export default {
   },
   methods: {
     getCSRF() {
-      //axios.get('http://localhost:8000/api/get-csrf')
       axios.get('http://localhost:8000/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH)
     },
 
