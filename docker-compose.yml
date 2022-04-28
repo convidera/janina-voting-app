@@ -43,7 +43,6 @@ services:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
       - DATABASE_PASS=${MYSQL_PASSWORD}
-      - DATABASE_PASS_TEST=${MYSQL_PASSWORD_TEST}
       - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
       - URI_CSRF_PATH=${URI_CSRF_PATH}
     networks:
@@ -51,9 +50,9 @@ services:
       - frontend
     depends_on:
       - vote-app-mysql
-  proxy-part:
-    image: traefik:v2.7
-    restart: unless-stopped
+  #proxy-part:
+    #image: traefik:v2.7
+    #restart: unless-stopped
     #volumes: 
     #  - traefik-data:/...
 
