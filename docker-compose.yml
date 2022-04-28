@@ -20,7 +20,6 @@ services:
     restart: unless-stopped
     volumes:
       - mysql:/var/lib/mysql:delegated
-      - ./db_assets:/docker-entrypoint-initdb.d/:delegated
     ports:
       - "3306:3306"
     environment:
