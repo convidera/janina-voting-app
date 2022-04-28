@@ -22,6 +22,5 @@ import os
 
 urlpatterns = [
     path(str(os.environ.get('URI_ENTRYP_PATH')), include('showvotes.urls')),
-    #path('api/', include('showvotes.urls')),
     path('admin/', admin.site.urls),
 ]
