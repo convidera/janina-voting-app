@@ -35,7 +35,7 @@ def handleVotes(request):
 def setFECookie(request):
     if request.method == 'GET':
         token = get_token(request)
-        html = HttpResponse('', 204)
+        html = HttpResponse(status=204)
         return html
 
 def ping(request):
