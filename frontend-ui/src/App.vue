@@ -28,7 +28,7 @@ import axios from 'axios'
 axios.defaults.xsrfHeaderName = 'X-csrftoken';
 axios.defaults.xsrfCookieName = 'csrftoken';
 
-//Axios sends cookies in its requests automatically, force credentials to every Axios requests
+//Axios sends cookies in its requests automatically, force credentials for every Axios request
 axios.defaults.withCredentials = true;
 
 
