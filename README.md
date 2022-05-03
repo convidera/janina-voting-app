@@ -30,7 +30,7 @@ docker build -t alonimacaroni/frontend-part .
 docker build -t alonimacaroni/backend-part .
 ```
 
-## Build node modules:
+## Build node modules in frontend root folder:
 
 ```bash
 npm install
@@ -128,7 +128,6 @@ npm run serve
 \
 \
 Execute tests on backend-part:
-
 
 ```bash
 ./devops test
