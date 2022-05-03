@@ -7,6 +7,7 @@ then
   if [ "$1" == "exit" ];then
     $COMPOSE down
   elif [ "$1" == "runserver" ];then
+    shift 1
     $COMPOSE run --rm \
       backend-part \
       python manage.py runserver "$@"
@@ -27,6 +28,11 @@ then
     $COMPOSE run --rm \
       frontend-part \
       npm run serve "$@"
+  elif [ "$1" == "test" ];then
+    shift 1
+    $COMPOSE run --rm \
+      backend-part \
+      pytest "$@"
   elif [ "$1" == "push" ];then 
     git add * && \
     git commit -m "$2" && \
