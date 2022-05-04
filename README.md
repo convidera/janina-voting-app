@@ -21,20 +21,28 @@ docker-compose run <service> <command>
 [localhost:8080](http://localhost:8080/)
 
 
-# Test single containers:
+# Setup App:
 
-## Build frontend and backend images and run single frontend container:
-
-```bash
-docker build -t alonimacaroni/vote-frontend .
-docker build -t alonimacaroni/vote-backend .
-```
+## Build frontend and backend images:
 
 ```bash
-docker run -it -p 8080:8080 --name frontend-part alonimacaroni/vote-frontend
+docker build -t alonimacaroni/frontend-part .
+docker build -t alonimacaroni/backend-part .
 ```
 
-## Run single database container:
+## Build node modules in frontend root folder:
+
+```bash
+npm install
+```
+
+## Test single containers:
+
+```bash
+docker run -it -p 8080:8080 --name frontend-part alonimacaroni/frontend-part
+```
+
+## Test database container:
 MySQL image is pulled automatically if it does not exist.
 
 ```bash
@@ -115,6 +123,14 @@ This is the same as:
 
 ```bash
 npm run serve
+```
+
+\
+\
+Execute tests on backend-part:
+
+```bash
+./devops test
 ```
 
 \
