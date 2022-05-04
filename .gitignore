@@ -30,5 +30,5 @@ vote_app_backend/requirements_env2.txt
 vote_app_backend/showvotes/__pycache__/
 vote_app_backend/vote_app_backend/__pycache__/
 vote_app_backend/tests/__pycache__/
-
+vote_app_backend/.pytest_cache/
 frontend_ui/node_modules/
