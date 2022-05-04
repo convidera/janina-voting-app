@@ -126,21 +126,24 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8080",
     "http://localhost:8080",
     "http://frontend-part",
-    "http://164.92.154.228",
+    "http://" + str(os.environ.get('DOMAIN_URL')),
+    "http://*." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8080",
     "http://localhost:8080",
     "http://frontend-part",
-    "http://164.92.154.228",
+    "http://" + str(os.environ.get('DOMAIN_URL')),
+    "http://*." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:8080",
     "http://localhost:8080",
     "http://frontend-part",
-    "http://164.92.154.228",
+    "http://" + str(os.environ.get('DOMAIN_URL')),
+    "http://*." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CORS_ALLOW_METHODS = [
