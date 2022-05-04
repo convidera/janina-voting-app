@@ -117,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ALLOWED_HOSTS = [
     '*',
-    '0.0.0.0'
+    '0.0.0.0',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False
@@ -126,18 +126,21 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8080",
     "http://localhost:8080",
     "http://frontend-part",
+    "http://164.92.154.228",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8080",
     "http://localhost:8080",
     "http://frontend-part",
+    "http://164.92.154.228",
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:8080",
     "http://localhost:8080",
     "http://frontend-part",
+    "http://164.92.154.228",
 ]
 
 CORS_ALLOW_METHODS = [
