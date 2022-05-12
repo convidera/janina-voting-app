@@ -3,6 +3,12 @@ version: "3"
 services:
   frontend-part:
     image: alonimacaroni/vote-frontend:latest
+    labels: 
+      - traefik.enable=true
+      - traefik.http.routers.frontend-part.entrypoints=websecure,web
+      - traefik.http.routers.frontend-part.rule=Host(`janina.devcon.team`)
+      - traefik.http.routers.frontend-part.tls=true
+      - treafik.http.routers.frontend-part.tls.certresolver=production
     restart: unless-stopped
     volumes:
       - ./frontend-ui:/app
@@ -16,6 +22,7 @@ services:
       - VUE_APP_DOMAIN_URL=${DOMAIN_URL}
     networks:
       - frontend
+      - proxy
   vote-app-mysql:
     image: mysql:8.0
     restart: unless-stopped
@@ -33,6 +40,12 @@ services:
       - backend
   backend-part:
     image: alonimacaroni/vote-backend:latest
+    labels: 
+      - traefik.enable=true
+      - traefik.http.routers.backend-part.entrypoints=websecure,web
+      - traefik.http.routers.backend-part.rule=Host(`janina.devcon.team/api/*`)
+      - traefik.http.routers.backend-part.tls=true
+      - treafik.http.routers.backend-part.tls.certresolver=production
     restart: unless-stopped
     volumes:
       - ./vote_app_backend:/code
@@ -50,6 +63,7 @@ services:
     networks:
       - backend
       - frontend
+      - proxy
     depends_on:
       - vote-app-mysql
   proxy-part:
@@ -58,17 +72,24 @@ services:
     command: --providers.docker
     ports:
       - 80:80 
+      - 443:443
+    networks: 
+      - proxy
     volumes: 
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/traefik:/etc/traefik
+      - traefik-ssl-certs:/ssl-certs
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
   backend:
     driver: bridge
   frontend:
     driver: bridge
+  proxy:
+    driver: bridge
 
 volumes:
   mysql:
     driver: local
-  #traefik-data:
-  #  driver: local
+  traefik-ssl-certs:
+    driver: local
