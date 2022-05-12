@@ -2,7 +2,7 @@ import pytest
 import json
 from showvotes.models import Choice, Username
 from django.test import Client
-from django.http import JsonResponse
+
 
 
 @pytest.fixture
@@ -30,11 +30,10 @@ def create_test_users():
 def test_csrf_token_exists(csrf_setup):
     c = Client()
     response = c.get(csrf_setup)
-    #print(response.items())
     assert response.status_code == 204
     
 
-#@pytest.mark.skip
+
 @pytest.mark.django_db
 def test_user_can_vote(entryp_setup, create_test_users):
     c = Client()

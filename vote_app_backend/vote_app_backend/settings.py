@@ -147,37 +147,12 @@ CSRF_TRUSTED_ORIGINS = [
     "https://*." + str(os.environ.get('DOMAIN_URL')),
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    "http://127.0.0.1:8080",
-    "http://localhost:8080",
-    "http://frontend-part",
-    "http://" + str(os.environ.get('DOMAIN_URL')),
-    "http://*." + str(os.environ.get('DOMAIN_URL')),
-    "https://127.0.0.1:8080",
-    "https://localhost:8080",
-    "https://frontend-part",
-    "https://" + str(os.environ.get('DOMAIN_URL')),
-    "https://*." + str(os.environ.get('DOMAIN_URL')),
-]
-
 CORS_ALLOW_METHODS = [
     'GET',
     'POST',
     'OPTIONS',
 ]
 
-# CORS_ALLOW_HEADERS = [
-#     'accept',
-#     'accept-encoding',
-#     'authorization',
-#     'content-type',
-#     'dnt',
-#     'origin',
-#     'user-agent',
-#     'x-csrftoken',
-#     'x-requested-with',
-#     'Access-Control-Allow-Origin',
-# ]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -207,7 +182,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-#CSRF_COOKIE_SECURE = True
-#SESSION_COOKIE_SECURE = True
-#CSRF_COOKIE_SAMESITE = 'None'
-#SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_SAMESITE = 'Strict'

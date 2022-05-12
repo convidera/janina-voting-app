@@ -37,6 +37,3 @@ def setFECookie(request):
         token = get_token(request)
         html = HttpResponse(status=204)
         return html
-
-def ping(request):
-    return HttpResponse('helloworld')
