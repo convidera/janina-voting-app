@@ -52,11 +52,14 @@ services:
       - frontend
     depends_on:
       - vote-app-mysql
-  #proxy-part:
-    #image: traefik:v2.7
-    #restart: unless-stopped
-    #volumes: 
-    #  - traefik-data:/...
+  proxy-part:
+    image: traefik:v2.7
+    restart: unless-stopped
+    command: --providers.docker
+    ports:
+      - 80:80 
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
   backend:
