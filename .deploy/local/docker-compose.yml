@@ -64,7 +64,7 @@ services:
     #command: >
     #  sh -c 'python manage.py runserver 0:8000'
     command: >
-      sh -c 'python manage.py runserver 0:8000'
+      sh -c 'python manage.py runserver 0:80'
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
@@ -84,18 +84,31 @@ services:
     restart: unless-stopped
     command: 
       - "--log.level=DEBUG"
+      - "--api.dashboard=true"
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.tls=true"
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=jelona@posteo.com"
+      #- "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      #- "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=developer@convidera.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      
+      
+      #- "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      #- "--certificatesresolvers.myresolver.acme.email=jelona@posteo.com"
+      #- "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       #- "--certificatesresolvhers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.proxy-part.entrypoints: web
+      traefik.http.routers.proxy-part.rule: Host(`proxy.janina.devcon.team`)
+      traefik.http.routers.proxy-part.service: api@internal
+      traefik.http.middlewares.force-https.redirectscheme.scheme: https
     ports:
       - "80:80"
       - "443:443"
@@ -103,7 +116,8 @@ services:
       - proxy
     volumes: 
       - /etc/traefik:/etc/traefik
-      - ./letsencrypt:/letsencrypt
+      #- ./letsencrypt:/letsencrypt
+      - traefik_acme:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
@@ -115,5 +129,7 @@ networks:
     driver: bridge
 
 volumes:
+  traefik_acme:
+    driver: local
   mysql:
     driver: local

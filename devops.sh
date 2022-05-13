@@ -1,6 +1,9 @@
-#! /bin/bash
+#! /bin/bash -x
+ENVPATH=./.env
 
 COMPOSE="docker-compose"
+USERENV="GITHUB_USER"
+TOKENENV="GITHUB_TOKEN"
 
 if [ $# -gt 0 ]
 then
@@ -38,6 +41,16 @@ then
     git commit -m "$2" && \
     shift 2
     git push "$@"
+  elif [ "$1" == "pull" ];then
+    if test -f "$ENVPATH"; then
+      if grep -Fxq "$USERENV" .env; then 
+        echo "true"
+      else
+        echo "environment variables missing in .env file"
+      fi
+    else
+      echo ".env file missing"
+    fi
   else
     $COMPOSE "$@"
   fi
