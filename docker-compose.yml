@@ -4,11 +4,11 @@ services:
   frontend-part:
     image: alonimacaroni/vote-frontend:latest
     labels: 
-      - traefik.enable=true
-      - traefik.http.routers.frontend-part.entrypoints=websecure,web
-      - traefik.http.routers.frontend-part.rule=Host(`janina.devcon.team`)
-      - traefik.http.routers.frontend-part.tls=true
-      - treafik.http.routers.frontend-part.tls.certresolver=production
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend-part.entrypoints=websecure, web"
+      - "traefik.http.routers.frontend-part.rule=Host(`janina.devcon.team`, `www.janina.devcon.team`)"
+      - "traefik.http.routers.frontend-part.tls=true"
+      - "treafik.http.routers.frontend-part.tls.certresolver=myresolver"
     restart: unless-stopped
     volumes:
       - ./frontend-ui:/app
@@ -23,6 +23,8 @@ services:
     networks:
       - frontend
       - proxy
+    depends_on:
+      - proxy-part
   vote-app-mysql:
     image: mysql:8.0
     restart: unless-stopped
@@ -41,11 +43,11 @@ services:
   backend-part:
     image: alonimacaroni/vote-backend:latest
     labels: 
-      - traefik.enable=true
-      - traefik.http.routers.backend-part.entrypoints=websecure,web
-      - traefik.http.routers.backend-part.rule=Host(`janina.devcon.team/api/*`)
-      - traefik.http.routers.backend-part.tls=true
-      - treafik.http.routers.backend-part.tls.certresolver=production
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend-part.entrypoints=websecure, web"
+      - "traefik.http.routers.backend-part.rule=Host(`janina.devcon.team`, `www.janina.devcon.team`) && Path(`/api`)"
+      - "traefik.http.routers.backend-part.tls=true"
+      - "treafik.http.routers.backend-part.tls.certresolver=myresolver"
     restart: unless-stopped
     volumes:
       - ./vote_app_backend:/code
@@ -66,18 +68,34 @@ services:
       - proxy
     depends_on:
       - vote-app-mysql
+      - proxy-part
   proxy-part:
     image: traefik:v2.7
     restart: unless-stopped
-    command: --providers.docker
+    command: 
+      - "--log.level=DEBUG"
+      #activate API Traefik endpoint
+      - "--api.insecure=true"
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=jelona@posteo.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      #- "--certificatesresolvhers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
     ports:
-      - 80:80 
-      - 443:443
+      - "80:80"
+      - "443:443"
+      #Traefik web UI
+      - "8080:8080"
     networks: 
       - proxy
     volumes: 
       - /etc/traefik:/etc/traefik
-      - traefik-ssl-certs:/ssl-certs
+      - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
@@ -90,6 +108,4 @@ networks:
 
 volumes:
   mysql:
-    driver: local
-  traefik-ssl-certs:
     driver: local
