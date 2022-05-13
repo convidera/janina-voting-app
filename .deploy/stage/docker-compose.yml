@@ -1,0 +1,143 @@
+version: "3"
+
+services:
+  frontend-part:
+    image: alonimacaroni/vote-frontend:latest
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.frontend-part.rule: Host(`janina.devcon.team`, `www.janina.devcon.team`)
+      traefik.http.routers.frontend-part.entrypoints: websecure
+      traefik.http.routers.frontend-part.tls.certresolver: myresolver
+      traefik.http.routers.frontend-part-http.rule: Host(`janina.devcon.team`, `www.janina.devcon.team`)
+      traefik.http.routers.frontend-part-http.entrypoints: web
+      traefik.http.routers.frontend-part-http.middlewares: force-https 
+      #- "traefik.enable=true"
+      #- "traefik.http.routers.frontend-part.entrypoints=websecure, web"
+      #- "traefik.http.routers.frontend-part.rule=Host(`janina.devcon.team`, `www.janina.devcon.team`)"
+      #- "traefik.http.routers.frontend-part.tls=true"
+      #- "treafik.http.routers.frontend-part.tls.certresolver=myresolver"
+    restart: unless-stopped
+    volumes:
+      - ./frontend-ui:/app
+    #ports:
+    #  - "8080:8080"
+    # TODO: on stage, this should not run npm run serve but probably nginx
+    command: >
+      sh -c 'npm run serve -- --port 80'
+    environment:
+      - VUE_APP_URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
+      - VUE_APP_URI_CSRF_PATH=${URI_CSRF_PATH}
+      - VUE_APP_DOMAIN_URL=${DOMAIN_URL}
+    networks:
+      - frontend
+      - proxy
+    depends_on:
+      - proxy-part
+  
+  vote-app-mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    volumes:
+      - mysql:/var/lib/mysql:delegated
+      - ./db_assets:/docker-entrypoint-initdb.d/:delegated
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks: 
+      - backend
+
+  backend-part:
+    image: alonimacaroni/vote-backend:latest
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.backend-part.rule: Host(`janina.devcon.team`, `www.janina.devcon.team`) && Path(`/api`)
+      traefik.http.routers.backend-part.entrypoints: websecure
+      traefik.http.routers.backend-part.tls.certresolver: myresolver
+      traefik.http.routers.backend-part-http.rule: Host(`janina.devcon.team`, `www.janina.devcon.team`) && Path(`/api`)
+      traefik.http.routers.backend-part-http.entrypoints: web
+      traefik.http.routers.backend-part-http.middlewares: force-https 
+      #- "traefik.enable=true"
+      #- "traefik.http.routers.backend-part.entrypoints=websecure, web"
+      #- "traefik.http.routers.backend-part.rule=Host(`janina.devcon.team`, `www.janina.devcon.team`) && Path(`/api`)"
+      #- "traefik.http.routers.backend-part.tls=true"
+      #- "treafik.http.routers.backend-part.tls.certresolver=myresolver"
+    restart: unless-stopped
+    volumes:
+      - ./vote_app_backend:/code
+    #ports:
+    #  - "8000:8000"
+    # TODO: on server this should not run this, but rather something like gunicorn
+    command: >
+      sh -c 'python manage.py runserver 0:80'
+    environment:
+      - DATABASE_NAME=${MYSQL_DATABASE}
+      - DATABASE_USER=${MYSQL_USER}
+      - DATABASE_PASS=${MYSQL_PASSWORD}
+      - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
+      - URI_CSRF_PATH=${URI_CSRF_PATH}
+      - DOMAIN_URL=${DOMAIN_URL}
+    networks:
+      - backend
+      - frontend
+      - proxy
+    depends_on:
+      - vote-app-mysql
+      - proxy-part
+
+  proxy-part:
+    image: traefik:v2.7
+    restart: unless-stopped
+    command: 
+      - "--api.dashboard=true"
+      - "--log.level=DEBUG"
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+      - "--entrypoints.web.address=:80"
+      #- "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      #- "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=developer@convidera.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+
+
+      #- "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      #- "--certificatesresolvers.myresolver.acme.email=jelona@posteo.com"
+      #- "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      #- "--certificatesresolvhers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.proxy.entrypoints: web
+      traefik.http.routers.proxy.rule: Host(`proxy.janina.devcon.team`)
+      traefik.http.routers.proxy.service: api@internal
+      traefik.http.middlewares.force-https.redirectscheme.scheme: https
+    ports:
+      - "80:80"
+      - "443:443"
+    networks: 
+      - proxy
+    volumes: 
+      - /etc/traefik:/etc/traefik
+      #- ./letsencrypt:/letsencrypt
+      - traefik_acme:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
+  proxy:
+    driver: bridge
+
+volumes:
+  traefik_acme:
+    driver: local
+  mysql:
+    driver: local
