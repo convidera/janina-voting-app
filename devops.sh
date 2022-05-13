@@ -41,9 +41,9 @@ then
     git commit -m "$2" && \
     shift 2
     git push "$@"
-  elif [ "$1" == "pull" ];then
-    if test -f "$ENVPATH"; then
-      if grep -Fxq "$USERENV" .env; then 
+  elif [ "$1" == "pullserver" ];then
+    if [ -f "$ENVPATH" ]; then
+      if grep -Fxy $USERENV .env ; then
         echo "true"
       else
         echo "environment variables missing in .env file"
