@@ -1,9 +1,7 @@
 #! /bin/bash -x
-ENVPATH=./.env
 
 COMPOSE="docker-compose"
-USERENV="GITHUB_USER"
-TOKENENV="GITHUB_TOKEN"
+
 
 if [ $# -gt 0 ]
 then
@@ -42,9 +40,19 @@ then
     shift 2
     git push "$@"
   elif [ "$1" == "pullserver" ];then
-    if [ -f "$ENVPATH" ]; then
-      if grep -Fxy $USERENV .env ; then
-        echo "true"
+    #check if .env exists
+    if [ -f .env ]; then
+      #import environment variables from .env
+      export $(cat .env | xargs)
+      #check if GITHUB_USER and GITHUB_TOKEN strings exist in .env
+      if grep -Fq GITHUB_USER .env && grep -Fq GITHUB_TOKEN .env
+      then
+        #check if variables are unset
+        if [ -z "$GITHUB_USER" ] && [ -z "$GITHUB_TOKEN" ];then
+          echo "environment variables unset in .env file"
+        else
+          
+        fi
       else
         echo "environment variables missing in .env file"
       fi
