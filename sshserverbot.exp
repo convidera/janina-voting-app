@@ -11,4 +11,4 @@ expect "Enter passphrase*"
 
 send -- "$server_pass\r"
 
-expect eof
+interact 
