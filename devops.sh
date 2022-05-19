@@ -1,7 +1,13 @@
 #! /bin/bash
 COMPOSE="docker-compose"
 
-
+function install() {
+    ENV=${1:-local}
+    cp -n .deploy/${ENV}/docker-compose.yml  docker-compose.yml || true
+    cp -n backend/.env.example               backend/.env       || true
+    cp -n frontend/.npmrc.example            frontend/.npmrc    || true
+    cp -n .env.example                       .env               || true
+}
 
 if [ $# -gt 0 ]
 then

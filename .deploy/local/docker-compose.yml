@@ -1,5 +1,6 @@
 version: "3"
 
+
 services:
   frontend-part:
     image: alonimacaroni/vote-frontend:latest
@@ -30,6 +31,8 @@ services:
       - proxy
     depends_on:
       - proxy-part
+    env_file:
+      - ./../../.env
   vote-app-mysql:
     image: mysql:8.0
     restart: unless-stopped
@@ -45,6 +48,8 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     networks: 
       - backend
+    env_file:
+      - ./../../.env
   backend-part:
     image: alonimacaroni/vote-backend:latest
     labels: 
@@ -79,6 +84,8 @@ services:
     depends_on:
       - vote-app-mysql
       - proxy-part
+    env_file:
+      - ./../../.env
   proxy-part:
     image: traefik:v2.7
     restart: unless-stopped
