@@ -51,7 +51,7 @@ then
         if [ -z "$GITHUB_USER" ] && [ -z "$GITHUB_TOKEN" ];then
           echo "environment variables unset in .env file"
         else
-          
+          ./pullserverbot.exp
         fi
       else
         echo "environment variables missing in .env file"

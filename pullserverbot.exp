@@ -1,0 +1,10 @@
+#!/user/bin/expect -f
+
+set timeout -1
+
+expect {
+    "*password" { send -- Password\r }
+    "*password" { send -- Password\r }
+}
+
+expect eof
