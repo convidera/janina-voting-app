@@ -2,14 +2,22 @@
 COMPOSE="docker-compose"
 
 function install() {
-    EXECLOC=${1:-local}
-    cp -n .deploy/${EXECLOC}/docker-compose.yml  docker-compose.yml || true
+  LOC=local
+  if [ "$1" == "ci" ] || [ "$1" == "stage" ] || [ "$1" == "local" ];then
+    LOC="$1"
+  fi
+  cp -n .deploy/${LOC}/docker-compose.yml  docker-compose.yml || true
 }
 
-if [ $# -gt 0 ]
+if [ $# -gt 0 ];then
+  install "$1"
+else
+  install
+fi
+
+if [ $# -gt 1 ]
 then
   if [ "$1" == "exit" ];then
-    install
     $COMPOSE down
   elif [ "$1" == "runserver" ];then
     shift 1
@@ -83,6 +91,5 @@ then
     $COMPOSE "$@"
   fi
 else
-  install
   $COMPOSE up
 fi
