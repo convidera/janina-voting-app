@@ -2,16 +2,14 @@
 COMPOSE="docker-compose"
 
 function install() {
-    ENV=${1:-local}
-    cp -n .deploy/${ENV}/docker-compose.yml  docker-compose.yml || true
-    cp -n backend/.env.example               backend/.env       || true
-    cp -n frontend/.npmrc.example            frontend/.npmrc    || true
-    cp -n .env.example                       .env               || true
+    EXECLOC=${1:-local}
+    cp -n .deploy/${EXECLOC}/docker-compose.yml  docker-compose.yml || true
 }
 
 if [ $# -gt 0 ]
 then
   if [ "$1" == "exit" ];then
+    install
     $COMPOSE down
   elif [ "$1" == "runserver" ];then
     shift 1
@@ -85,5 +83,6 @@ then
     $COMPOSE "$@"
   fi
 else
+  install
   $COMPOSE up
 fi
