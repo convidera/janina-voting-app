@@ -18,8 +18,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./frontend-ui:/app
-    #ports:
-      #- "8080:8080"
+    ports:
+      - "8080:8080"
       #add port 443
     command: >
       sh -c 'npm run serve -- --port 80'
@@ -61,9 +61,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./vote_app_backend:/code
-    # ports:
-    #   - "8000:8000"
-    #command: >
+    ports:
+      - "8000:8000"
+    # command: >
     #  sh -c 'python manage.py runserver 0:8000'
     command: >
       sh -c 'python manage.py runserver 0:80'

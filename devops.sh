@@ -14,7 +14,7 @@ function install() {
   fi
 }
 
-function putBack() {
+function cleanUp() {
   if [ "$COPIED" = true ];then
     rm docker-compose.yml
   fi
@@ -25,46 +25,46 @@ then
   if [ "$1" == "exit" ];then
     install
     $COMPOSE down
-    putBack
+    cleanUp
   elif [ "$1" == "runserver" ];then
     install
     shift 1
     $COMPOSE run --rm \
       backend-part \
       python manage.py runserver "$@"
-    putBack
+    cleanUp
   elif [ "$1" == "migrate" ];then
     install
     $COMPOSE run --rm \
       backend-part \
       python manage.py migrate
-    putBack
+    cleanUp
   elif [ "$1" == "makemigrations" ];then
     install
     $COMPOSE run --rm \
       backend-part \
       python manage.py makemigrations showvotes
-    putBack
+    cleanUp
   elif [ "$1" == "flush" ];then
     install
     $COMPOSE run --rm \
       backend-part \
       python manage.py flush
-    putBack
+    cleanUp
   elif [ "$1" == "npm" ]; then
     install
     shift 1
     $COMPOSE run --rm \
       frontend-part \
       npm run serve "$@"
-    putBack
+    cleanUp
   elif [ "$1" == "test" ];then
     install
     shift 1
     $COMPOSE run --rm \
       backend-part \
       pytest "$@"
-    putBack
+    cleanUp
   elif [ "$1" == "push" ];then 
     git add * && \
     git commit -m "$2" && \
@@ -109,10 +109,10 @@ then
   else
     install
     $COMPOSE "$@"
-    putBack
+    cleanUp
   fi
 else
   install
   $COMPOSE up
-  putBack
+  cleanUp
 fi
