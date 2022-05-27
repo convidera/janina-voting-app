@@ -3,45 +3,46 @@ COMPOSE="docker-compose"
 
 function install() {
   LOC=local
-  if [ "$1" == "ci" ] || [ "$1" == "stage" ] || [ "$1" == "local" ];then
-    LOC="$1"
+  if [ LOC == "ci" ] || [ LOC == "stage" ] || [ LOC == "local" ];then
+    LOC=$1
   fi
-  cp -n .deploy/${LOC}/docker-compose.yml  docker-compose.yml || true
+  cp -n .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
 }
 
-if [ $# -gt 0 ];then
-  install "$1"
-else
-  install
-fi
-
-if [ $# -gt 1 ]
+if [ $# -gt 0 ]
 then
   if [ "$1" == "exit" ];then
+    install
     $COMPOSE down
   elif [ "$1" == "runserver" ];then
+    install
     shift 1
     $COMPOSE run --rm \
       backend-part \
       python manage.py runserver "$@"
   elif [ "$1" == "migrate" ];then
+    install
     $COMPOSE run --rm \
       backend-part \
       python manage.py migrate
   elif [ "$1" == "makemigrations" ];then
+    install
     $COMPOSE run --rm \
       backend-part \
       python manage.py makemigrations showvotes
   elif [ "$1" == "flush" ];then
+    install
     $COMPOSE run --rm \
       backend-part \
       python manage.py flush
   elif [ "$1" == "npm" ]; then
+    install
     shift 1
     $COMPOSE run --rm \
       frontend-part \
       npm run serve "$@"
   elif [ "$1" == "test" ];then
+    install
     shift 1
     $COMPOSE run --rm \
       backend-part \
@@ -88,8 +89,10 @@ then
       echo ".env file missing"
     fi
   else
+    install
     $COMPOSE "$@"
   fi
 else
+  install
   $COMPOSE up
 fi
