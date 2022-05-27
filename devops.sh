@@ -3,7 +3,7 @@ COMPOSE="docker-compose"
 
 function install() {
   LOC=local
-  if [ LOC == "ci" ] || [ LOC == "stage" ] || [ LOC == "local" ];then
+  if [ LOC == ci ] || [ LOC == stage ];then
     LOC=$1
   fi
   cp -n .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
