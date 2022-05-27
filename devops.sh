@@ -1,12 +1,23 @@
 #! /bin/bash
 COMPOSE="docker-compose"
+COPIED=false
 
 function install() {
   LOC=local
   if [ LOC == ci ] || [ LOC == stage ];then
     LOC=$1
   fi
-  cp -n .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
+  #if file does not exist
+  if [ ! -f docker-compose.yml ];then
+    cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
+    COPIED=true
+  fi
+}
+
+function putBack() {
+  if [ "$COPIED" = true ];then
+    rm docker-compose.yml
+  fi
 }
 
 if [ $# -gt 0 ]
@@ -14,39 +25,46 @@ then
   if [ "$1" == "exit" ];then
     install
     $COMPOSE down
+    putBack
   elif [ "$1" == "runserver" ];then
     install
     shift 1
     $COMPOSE run --rm \
       backend-part \
       python manage.py runserver "$@"
+    putBack
   elif [ "$1" == "migrate" ];then
     install
     $COMPOSE run --rm \
       backend-part \
       python manage.py migrate
+    putBack
   elif [ "$1" == "makemigrations" ];then
     install
     $COMPOSE run --rm \
       backend-part \
       python manage.py makemigrations showvotes
+    putBack
   elif [ "$1" == "flush" ];then
     install
     $COMPOSE run --rm \
       backend-part \
       python manage.py flush
+    putBack
   elif [ "$1" == "npm" ]; then
     install
     shift 1
     $COMPOSE run --rm \
       frontend-part \
       npm run serve "$@"
+    putBack
   elif [ "$1" == "test" ];then
     install
     shift 1
     $COMPOSE run --rm \
       backend-part \
       pytest "$@"
+    putBack
   elif [ "$1" == "push" ];then 
     git add * && \
     git commit -m "$2" && \
@@ -91,8 +109,10 @@ then
   else
     install
     $COMPOSE "$@"
+    putBack
   fi
 else
   install
   $COMPOSE up
+  putBack
 fi
