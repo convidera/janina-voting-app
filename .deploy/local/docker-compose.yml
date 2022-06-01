@@ -20,10 +20,10 @@ services:
     ports:
       - "8080:8080"
     #don't use run serve on server
-    command: >
-      sh -c 'npm run serve'
     #command: >
-      #sh -c 'npm run serve -- --port 80'
+    #  sh -c 'npm run serve'
+    command: >
+      sh -c 'npm run serve -- --port 80'
     environment:
       - VUE_APP_URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
       - VUE_APP_URI_CSRF_PATH=${URI_CSRF_PATH}
@@ -48,6 +48,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     networks: 
       - backend
+      - proxy
   backend-part:
     image: alonimacaroni/vote-backend:latest
     labels: 
