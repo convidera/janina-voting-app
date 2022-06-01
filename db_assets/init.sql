@@ -1,2 +1,1 @@
 GRANT ALL PRIVILEGES ON *.* TO 'Programmer'@'%';
-FLUSH PRIVILEGES;
