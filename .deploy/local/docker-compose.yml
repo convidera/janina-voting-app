@@ -7,11 +7,11 @@ services:
     image: alonimacaroni/vote-frontend:latest
     labels: 
       #turn on traefik monitoring: enable traefik to recognize changes in the label configurations in the container
-      traefik.enable: true
+      traefik.enable: "true"
       traefik.http.routers.frontend-part.entrypoints: web, websecure
       traefik.http.routers.frontend-part.rule: Host(`janina.devcon.team`, `www.janina.devcon.team`)
       #obtain trusted SSL certificate
-      traefik.http.routers.frontent-part.tls: true
+      traefik.http.routers.frontent-part.tls: "true"
       #traefik.http.routers.frontend-part.tls.certresolver: myresolver
       #traefik.http.routers.frontend-part-http.middlewares: force-https
     restart: unless-stopped
@@ -19,7 +19,6 @@ services:
       - ./frontend-ui:/app
     ports:
       - "8080:8080"
-      - "443:443"
     #don't use run serve on server
     command: >
       sh -c 'npm run serve'
@@ -52,10 +51,10 @@ services:
   backend-part:
     image: alonimacaroni/vote-backend:latest
     labels: 
-      traefik.enable: true
+      traefik.enable: "true"
       traefik.http.routers.backend-part.entrypoints: web, websecure
       traefik.http.routers.backend-part.rule: Host(`janina.devcon.team`, `www.janina.devcon.team`) && PathPrefix(`/api/`)
-      traefik.http.routers.backend-part.tls: true
+      traefik.http.routers.backend-part.tls: "true"
       #for letsencrypt
       #traefik.http.routers.backend-part.tls.certresolver: myresolver 
       #traefik.http.routers.backend-part-http.middlewares: force-https
@@ -64,7 +63,6 @@ services:
       - ./vote_app_backend:/code
     ports:
       - "8000:8000"
-      - "443:443"
     command: >
       sh -c 'python manage.py runserver 0:8000'
     #command: >
@@ -90,7 +88,6 @@ services:
     command: 
       - "--global.checkNewVersion=true"
       - "--global.sendAnonymousUsage=false"
-      - "--enable=true"
       #for debugging
       - "--log.level=DEBUG"
 #formatbezeichnung richtig?
@@ -117,10 +114,12 @@ services:
       #traefik.http.routers.proxy-part.entrypoint: web
       #traefik.http.routers.proxy-part.entrypoint.to: websecure
       #traefik.http.middlewares.force-https.redirectscheme.scheme: https
+      - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       #- "--certificatesresolvers.myresolver.acme.tlschallenge=true"
     #dynamic configuration
     labels:
+      traefik.enable: "true"
       traefik.tls.certificates.certFile: /usr/local/share/certificates/rwpc/janina.devcon.team+1.pem
       traefik.tls.certificates.keyFile: /usr/local/share/ca-certificates/rwpc/janina.devcon.team+1-key.pem
       traefik.http.routers.proxy-part.rule: Host(`proxy-part.janina.devcon.team`, `proxy-part.www.janina.devcon.team`)
@@ -130,7 +129,7 @@ services:
       - "80:80"
       - "443:443"
       #dashboard
-      - "8080:8080"
+      #- "8080:8080"
     networks: 
       - proxy
     volumes: 
