@@ -141,7 +141,7 @@ networks:
     driver: bridge
 
 volumes:
-  traefik_acme:
-    driver: local
+  #traefik_acme:
+  #  driver: local
   mysql:
     driver: local
