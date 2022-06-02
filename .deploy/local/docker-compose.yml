@@ -17,8 +17,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./frontend-ui:/app
-    #ports:
-    #  - "8080:8080"
     #don't use run serve on server
     command: >
       sh -c 'npm run serve -- --port 80'
@@ -38,8 +36,6 @@ services:
     volumes:
       - mysql:/var/lib/mysql:delegated
       - ./db_assets:/docker-entrypoint-initdb.d/:delegated
-    # ports:
-    #   - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -51,7 +47,8 @@ services:
     image: alonimacaroni/vote-backend:latest
     labels: 
       traefik.enable: "true"
-      traefik.http.routers.backend-part.entrypoints: web, websecure
+      traefik.http.routers.backend-part.entrypoints: web
+#, websecure
       traefik.http.routers.backend-part.rule: Host(`janina.test`, `www.janina.test`) && PathPrefix(`/api/`)
       traefik.http.routers.backend-part.tls: "true"
       #for letsencrypt
@@ -60,8 +57,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./vote_app_backend:/code
-    #ports:
-    #  - "8000:8000"
     command: >
       sh -c 'python manage.py runserver 0:80'
     #command: >
@@ -100,10 +95,10 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       #redirection to HTTPS
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      #- "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       #in order to use https locally you still need a CA
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--entrypoints.websecure.address=:443"
+#      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+#      - "--entrypoints.websecure.address=:443"
       #settings for mkcert, self-signed certs should be used locally (not letsencrypt)
       #letsencrypt needs to establish a connection via the http challenge
       #mkcert creates a cert and installs a CA locally
@@ -120,7 +115,7 @@ services:
     #dynamic configuration
     labels:
       traefik.enable: "true"
-      traefik.http.routers.proxy-part.tls: true
+#      traefik.http.routers.proxy-part.tls: true
       #traefik.http.services.traefik.loadbalancer.server.port: "8080"
       traefik.tls.certificates.certFile: /usr/local/share/certificates/rwpc/janina.test+1.pem
       traefik.tls.certificates.keyFile: /usr/local/share/ca-certificates/rwpc/janina.test+1-key.pem
@@ -129,7 +124,7 @@ services:
       #traefik.http.routers.proxy-part.tls.domains.main: janina.test, www.janina.test
     ports:
       - "80:80"
-      - "443:443"
+#      - "443:443"
     security_opt:
       - no-new-privileges:true
     networks: 
