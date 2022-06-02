@@ -30,7 +30,6 @@ services:
       - VUE_APP_URI_CSRF_PATH=${URI_CSRF_PATH}
       - VUE_APP_DOMAIN_URL=${DOMAIN_URL}
     networks:
-      - frontend
       - proxy
     depends_on:
       - proxy-part
