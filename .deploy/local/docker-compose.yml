@@ -121,7 +121,7 @@ services:
       traefik.tls.certificates.keyFile: /usr/local/share/ca-certificates/rwpc/janina.test+1-key.pem
       traefik.http.routers.proxy-part.rule: Host(`dash.janina.test`, `www.dash.janina.test`)
       traefik.http.routers.proxy-part.service: api@internal
-      traefik.http.routers.proxy-part.tls.domains.main: janina.test, www.janina.test
+      #traefik.http.routers.proxy-part.tls.domains.main: janina.test, www.janina.test
     ports:
       - "80:80"
       - "443:443"
