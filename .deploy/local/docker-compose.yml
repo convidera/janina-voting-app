@@ -8,7 +8,7 @@ services:
     labels: 
       #turn on traefik monitoring: enable traefik to recognize changes in the label configurations in the container
       traefik.enable: "true"
-      #traefik.http.routers.frontend-part.entrypoints: web, websecure
+      traefik.http.routers.frontend-part.entrypoints: web, websecure
       traefik.http.routers.frontend-part.rule: Host(`janina.test`, `www.janina.test`)
       #obtain trusted SSL certificate
       traefik.http.routers.frontent-part.tls: "true"
@@ -51,7 +51,7 @@ services:
     image: alonimacaroni/vote-backend:latest
     labels: 
       traefik.enable: "true"
-      #traefik.http.routers.backend-part.entrypoints: web, websecure
+      traefik.http.routers.backend-part.entrypoints: web, websecure
       traefik.http.routers.backend-part.rule: Host(`janina.test`, `www.janina.test`) && PathPrefix(`/api/`)
       traefik.http.routers.backend-part.tls: "true"
       #for letsencrypt
@@ -83,10 +83,10 @@ services:
     restart: unless-stopped
     #static configuration
     command: 
-      - "--global.sendAnonymousUsage=false"
+      - "--global.sendanonymoususage=false"
       #for debugging
       - "--log.level=DEBUG"
-      - "--log.level.format=common"
+      #- "--log.level.format=common"
 #formatbezeichnung richtig?
       #- "--log.format=json"
 #dateiendung richtig?
@@ -96,13 +96,14 @@ services:
       - "--api.insecure=true"
       #- "--providers.docker.endpoint=unix:///var/run/docker.sock"
       #- "--providers.docker.watch=true"
+      - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--entryPoints.web.address=:80"
+      - "--entrypoints.web.address=:80"
       #redirection to HTTPS
-      - "--entryPoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       #in order to use https locally you still need a CA
-      - "--entryPoints.web.http.redirections.entryPoint.scheme=https"
-      - "--entryPoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
       #settings for mkcert, self-signed certs should be used locally (not letsencrypt)
       #letsencrypt needs to establish a connection via the http challenge
       #mkcert creates a cert and installs a CA locally
@@ -119,14 +120,13 @@ services:
     #dynamic configuration
     labels:
       traefik.enable: "true"
-      traefik.http.routers.proxy-part: "true"
       traefik.http.routers.proxy-part.tls: "true"
       #traefik.http.services.traefik.loadbalancer.server.port: "8080"
       traefik.tls.certificates.certFile: /usr/local/share/certificates/rwpc/janina.test+1.pem
       traefik.tls.certificates.keyFile: /usr/local/share/ca-certificates/rwpc/janina.test+1-key.pem
       traefik.http.routers.proxy-part.rule: Host(`dash.janina.test`, `www.dash.janina.test`)
       traefik.http.routers.proxy-part.service: api@internal
-      traefik.http.routers.proxy-part.tls.domains.main: janina.test, www.janina.test
+      #traefik.http.routers.proxy-part.tls.domains.main: janina.test, www.janina.test
     ports:
       - "80:80"
       - "443:443"
