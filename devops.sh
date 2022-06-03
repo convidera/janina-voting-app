@@ -8,8 +8,9 @@ function install() {
     LOC=$1
   fi
   #if file does not exist
-  if [ ! -f docker-compose.yml ];then
+  if [ ! -f docker-compose.yml ] && [ ! -f vue.config.js ];then
     cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
+    cp .deploy/${LOC}/vue.config.js frontend-ui/vue.config.js || true
     COPIED=true
   fi
 }
@@ -17,6 +18,7 @@ function install() {
 function cleanUp() {
   if [ "$COPIED" = true ];then
     rm docker-compose.yml
+    rm frontend-ui/vue.config.js
   fi
 }
 

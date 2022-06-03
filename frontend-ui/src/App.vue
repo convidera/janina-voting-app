@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     getCSRF() {
-      axios.get('https://' + process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH)
+      axios.get('http://' + process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH)
     },
 
     nameChanged(name) {
@@ -96,7 +96,7 @@ export default {
         if (this.enableDefaultSel) {
           this.dataForAPI.progrLang = "C";
         }
-        axios.post('https://' + process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH, this.dataForAPI)
+        axios.post('http://' + process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH, this.dataForAPI)
         .then(response => {
           if (!response.data.error) {
             this.username = response.data.username;
