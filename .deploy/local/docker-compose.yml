@@ -8,8 +8,8 @@ services:
     labels: 
       #turn on traefik monitoring: enable traefik to recognize changes in the label configurations in the container
       - "traefik.enable=true"
-      - "traefik.port=80"
-      - "traefik.docker.network=proxy"
+#      - "traefik.port=80"
+#      - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend-part.entrypoints=web"
 #, websecure
       - "traefik.http.routers.frontend-part.rule=Host(`janina.test`, `www.janina.test`)"
@@ -37,8 +37,8 @@ services:
     image: mysql:8.0
     labels: 
       - "traefik.enable=true"
-      - "traefik.port=80"
-      - "traefik.docker.network=proxy"
+#      - "traefik.port=80"
+#      - "traefik.docker.network=proxy"
       - "traefik.http.services.traefik.loadbalancer.server.port=80"
       - "traefik.default.protocol=http"
     restart: unless-stopped
@@ -58,8 +58,8 @@ services:
     image: alonimacaroni/vote-backend:latest
     labels: 
       - "traefik.enable=true"
-      - "traefik.port=80"
-      - "traefik.docker.network=proxy"
+#      - "traefik.port=80"
+#     - "traefik.docker.network=proxy"
       - "traefik.http.routers.backend-part.entrypoints=web"
 #, websecure
       - "traefik.http.routers.backend-part.rule=Host(`janina.test`, `www.janina.test`) && PathPrefix(`/api/`)"
@@ -128,8 +128,8 @@ services:
     #dynamic configuration
     labels:
       - "traefik.enable=true"
-      - "traefik.port=80"
-      - "traefik.docker.network=proxy"
+#      - "traefik.port=80"
+#      - "traefik.docker.network=proxy"
       - "traefik.http.routers.proxy-part.tls=false"
 #      - "traefik.http.services.proxy-part.loadbalancer.server.port=80"
 #      traefik.tls.certificates.certFile: /usr/local/share/certificates/rwpc/janina.test+1.pem
@@ -142,8 +142,6 @@ services:
       - "80:80"
 #      - "8080:8080"
 #      - "443:443"
-    security_opt:
-      - no-new-privileges:true
     networks: 
       - proxy
     volumes: 
