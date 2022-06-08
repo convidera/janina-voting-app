@@ -33,5 +33,5 @@ vote_app_backend/tests/__pycache__/
 vote_app_backend/.pytest_cache/
 frontend_ui/node_modules/
 letsencrypt/
-.deploy/local/certificates/janina.test+1-key.pem
-.deploy/local/certificates/janina.test+1.pem
+.deploy/local/certificates/janina.test+3-key.pem
+.deploy/local/certificates/janina.test+3.pem
