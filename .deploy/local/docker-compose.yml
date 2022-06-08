@@ -11,7 +11,8 @@ services:
 #      - "traefik.port=80"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend-part.entrypoints=web, websecure"
-      - "traefik.http.routers.frontend-part.rule=Host(`janina.test`, `www.janina.test`)"
+      #- "traefik.http.routers.frontend-part.rule=Host(`frontend-part.janina.test`, `frontend.part.www.janina.test`)"
+      - "traefik.http.routers.frontend-part.rule=Host(`frontend-part.janina.test`)"
 #      - "traefik.http.services.traefik.loadbalancer.server.port=80"
       #obtain trusted SSL certificate
       - "traefik.http.routers.frontent-part.tls=true"
@@ -60,7 +61,7 @@ services:
 #      - "traefik.port=80"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.backend-part.entrypoints=web, websecure"
-      - "traefik.http.routers.backend-part.rule=Host(`janina.test`, `www.janina.test`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.backend-part.rule=Host(`backend-part.janina.test`) && PathPrefix(`/api/`)"
 #      - "traefik.http.services.traefik.loadbalancer.server.port=80"
       - "traefik.http.routers.backend-part.tls=true"
       #for letsencrypt
@@ -130,9 +131,10 @@ services:
 #      - "traefik.http.services.proxy-part.loadbalancer.server.port=80"
       - "traefik.tls.certificates.certFile=/usr/local/share/certificates/rwpc/janina.test+1.pem"
       - "traefik.tls.certificates.keyFile=/usr/local/share/ca-certificates/rwpc/janina.test+1-key.pem"
-      - "traefik.http.routers.proxy-part.rule=Host(`dash.janina.test`, `www.dash.janina.test`)"
+      - "traefik.http.routers.proxy-part.rule=Host(`proxy-part.janina.test`)"
       - "traefik.http.routers.proxy-part.service=api@internal"
-      - "traefik.http.routers.proxy-part.tls.domains.main=janina.test, www.janina.test"
+      - "traefik.http.routers.proxy-part.tls.domains.main=janina.test"
+      - "traefik.http.routers.proxy-part.tls.domains.sans=*.janina.test"
     security_opt:
       - no-new-privileges:true
     ports:
