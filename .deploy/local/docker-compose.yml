@@ -9,15 +9,18 @@ services:
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-part-http.entrypoints=web"
-      - "traefik.http.routers.frontend-part-http.rule=Host(`${DOMAIN_URL}`, `wwww.${DOMAIN_URL}`)"
+      - "traefik.http.routers.frontend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
       - "traefik.http.routers.frontend-part-http.middlewares=frontend-part-https"
       - "traefik.http.middlewares.frontend-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.frontend-part.entrypoints=websecure"
-      - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`)"
+      - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
       - "traefik.http.routers.frontend-part.tls=true"
+      - "traefik.docker.network=proxy"
     restart: unless-stopped
         #traefik.http.routers.frontend-part.tls.certresolver: myresolver
     #traefik.http.routers.frontend-part-http.middlewares: force-https
+    networks:
+      - proxy
     volumes:
       - ./frontend-ui:/app
     #don't use run serve on server
@@ -38,6 +41,8 @@ services:
         published: 3306
         protocol: tcp
         mode: host
+    networks:
+      - proxy
     volumes:
       - mysql:/var/lib/mysql:delegated
       - ./db_assets:/docker-entrypoint-initdb.d/:delegated
@@ -57,16 +62,19 @@ services:
     labels: 
       - "traefik.enable=true" 
       - "traefik.http.routers.backend-part-http.entrypoints=web"
-      - "traefik.http.routers.backend-part-http.rule=Host(`${DOMAIN_URL}`, `wwww.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.backend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part-http.middlewares=backend-part-https"
       - "traefik.http.middlewares.backend-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
-      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `wwww.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls=true"
+      - "traefik.docker.network=proxy"
     restart: unless-stopped
         #for letsencrypt
     #traefik.http.routers.backend-part.tls.certresolver: myresolver 
     #traefik.http.routers.backend-part-http.middlewares: force-https
+    networks:
+      - proxy
     volumes:
       - ./vote_app_backend:/code
     command: >
@@ -105,7 +113,7 @@ services:
       - "traefik.http.middlewares.proxy-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.proxy-part.entrypoints=websecure"
       - "traefik.http.routers.proxy-part.service=api@internal"
-      - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`, `wwww.dash.${DOMAIN_URL}`)"
+      - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
       - "traefik.http.routers.proxy-part.tls=true"
     security_opt:
       - no-new-privileges:true
@@ -128,12 +136,18 @@ services:
     # - "--certificatesResolvers.myresolver.acme.httpChallenge.entryPoint=web"
     #- "--certificatesresolvers.myresolver.acme.tlschallenge=true"
     #dynamic configuration
+    networks:
+      - proxy
     volumes: 
     #- /etc/traefik:/etc/traefik
       - ./.deploy/local/certificates:/usr/local/share/ca-certificates/janina:ro
     #- traefik_acme:/letsencrypt
     #ro - read only
       - /var/run/docker.sock:/var/run/docker.sock:ro
+
+networks:
+  proxy:
+    external: true
 
 volumes:
 #traefik_acme:
