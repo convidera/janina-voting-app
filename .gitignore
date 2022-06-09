@@ -35,3 +35,5 @@ frontend_ui/node_modules/
 letsencrypt/
 .deploy/local/certificates/janina.test+3-key.pem
 .deploy/local/certificates/janina.test+3.pem
+frontend-ui/certs/janina.test+3-key.pem
+frontend-ui/certs/janina.test+3.pem
