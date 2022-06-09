@@ -8,9 +8,13 @@ services:
         #turn on traefik monitoring: enable traefik to recognize changes in the label configurations in the container
     labels: 
       - "traefik.enable=true"
-      #- "traefik.http.routers.frontend-part.rule=Host(`janina.test`, `www.janina.test`)"
-      - "traefik.http.routers.frontend-part.rule=Host(`janina.test`)"
-      - "traefik.http.routers.frontent-part.tls=true"
+      - "traefik.http.routers.frontend-part-http.entrypoints=web"
+      - "traefik.http.routers.frontend-part-http.rule=Host(`${DOMAIN_URL}`, `wwww.${DOMAIN_URL}`)"
+      - "traefik.http.routers.frontend-part-http.middlewares=frontend-part-https"
+      - "traefik.http.middlewares.frontend-part-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.frontend-part.entrypoints=websecure"
+      - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`)"
+      - "traefik.http.routers.frontend-part.tls=true"
     restart: unless-stopped
         #traefik.http.routers.frontend-part.tls.certresolver: myresolver
     #traefik.http.routers.frontend-part-http.middlewares: force-https
@@ -51,9 +55,13 @@ services:
 #    build:
 #      context: ./vote_app_backend
     labels: 
-      - "traefik.enable=true"
-      #- "traefik.http.routers.backend-part.rule=Host(`janina.test`, `www.janina.test`) && PathPrefix(`/api/`)"
-      - "traefik.http.routers.backend-part.rule=Host(`janina.test`) && PathPrefix(`/api/`)"
+      - "traefik.enable=true" 
+      - "traefik.http.routers.backend-part-http.entrypoints=web"
+      - "traefik.http.routers.backend-part-http.rule=Host(`${DOMAIN_URL}`, `wwww.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.backend-part-http.middlewares=backend-part-https"
+      - "traefik.http.middlewares.backend-part-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.backend-part.entrypoints=websecure"
+      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `wwww.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls=true"
     restart: unless-stopped
         #for letsencrypt
@@ -87,14 +95,17 @@ services:
       --providers.docker.exposedbydefault=false
       --entrypoints.web.address=:80
       --entrypoints.websecure.address=:443
-      --entrypoints.web.http.redirections.entryPoint.to=websecure
-      --entrypoints.web.http.redirections.entryPoint.scheme=https
       --providers.file.filename=/usr/local/share/ca-certificates/janina/traefik.yml
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.proxy-part-http.entrypoints=web"
+      - "traefik.http.routers.proxy-part-http.service=api@internal"
+      - "traefik.http.routers.proxy-part-http.rule=Host(`dash.${DOMAIN_URL}`)"
+      - "traefik.http.routers.proxy-part-http.middlewares=proxy-part-https"
+      - "traefik.http.middlewares.proxy-part-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.proxy-part.entrypoints=websecure"
       - "traefik.http.routers.proxy-part.service=api@internal"
-      - "traefik.http.routers.proxy-part.rule=Host(`dash.janina.test`)"
-      #- "traefik.http.routers.proxy-part.rule=Host(`dash.janina.test`, `www.dash.janina.test`)"
+      - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`, `wwww.dash.${DOMAIN_URL}`)"
       - "traefik.http.routers.proxy-part.tls=true"
     security_opt:
       - no-new-privileges:true
