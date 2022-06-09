@@ -4,12 +4,12 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     allowedHosts: [
-      'www.janina.test',
-      'janina.test',
-      'www.janina.test/api/',
-      'janina.test/api/',
-      'www.janina.test/api/get-csrf',
-      'janina.test/api/get-csrf',
+      'www.' + process.env.VUE_APP_DOMAIN_URL,
+      process.env.VUE_APP_DOMAIN_URL,
+      // 'www.janina.test/api/',
+      // 'janina.test/api/',
+      // 'www.' + process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH,
+      // process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH,
     ],
   },
 })

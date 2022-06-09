@@ -68,6 +68,7 @@ services:
       - "traefik.http.routers.backend-part.entrypoints=websecure"
       - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls=true"
+      - "traefik.http.services.backend-part-http.loadbalancer.server.port=8000"
       - "traefik.docker.network=proxy"
     restart: unless-stopped
         #for letsencrypt
