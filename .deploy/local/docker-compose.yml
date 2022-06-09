@@ -8,9 +8,10 @@ services:
         #turn on traefik monitoring: enable traefik to recognize changes in the label configurations in the container
     labels: 
       - "traefik.enable=true"
-      - "traefik.http.routers.frontent-part-https.tls=true"
+      #- "traefik.http.routers.frontend-part-https.rule=Host(`janina.test`, `www.janina.test`)"
+      - "traefik.http.routers.frontend-part-https.rule=Host(`janina.test`)"
       - "traefik.http.routers.frontend-part-https.entrypoints=websecure"
-      - "traefik.http.routers.frontend-part-https.rule=Host(`janina.test`, `www.janina.test`)"
+      - "traefik.http.routers.frontent-part-https.tls=true"
     restart: unless-stopped
         #traefik.http.routers.frontend-part.tls.certresolver: myresolver
     #traefik.http.routers.frontend-part-http.middlewares: force-https
@@ -25,6 +26,7 @@ services:
       - VUE_APP_DOMAIN_URL=${DOMAIN_URL}
     security_opt:
       - no-new-privileges:true
+  
   vote-app-mysql:
     image: mysql:8.0
     restart: unless-stopped
@@ -38,13 +40,18 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     security_opt:
       - no-new-privileges:true
+  
   backend-part:
     image: alonimacaroni/vote-backend:latest
+#   install missing dependencies
+#    build:
+#      context: ./vote_app_backend
     labels: 
       - "traefik.enable=true"
-      - "traefik.http.routers.backend-part-https.tls=true"
+      #- "traefik.http.routers.backend-part-https.rule=Host(`janina.test`, `www.janina.test`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.backend-part-https.rule=Host(`janina.test`) && PathPrefix(`/api/`)"
       - "traefik.http.routers.backend-part-https.entrypoints=websecure"
-      - "traefik.http.routers.backend-part-https.rule=Host(`janina.test`, `www.janina.test`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.backend-part-https.tls=true"
     restart: unless-stopped
         #for letsencrypt
     #traefik.http.routers.backend-part.tls.certresolver: myresolver 
@@ -64,12 +71,12 @@ services:
       - no-new-privileges:true
     depends_on:
       - vote-app-mysql
+  
   proxy-part:
     image: traefik:v2.7
     restart: unless-stopped
     #static configuration
     command: >-
-      --global.sendanonymoususage=false
       --log.level=DEBUG
       --api.dashboard=true
       --providers.docker=true
@@ -82,10 +89,11 @@ services:
       --providers.file.filename=/usr/local/share/ca-certificates/janina/traefik.yml
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.proxy-part-https.tls=true"
-      - "traefik.http.routers.proxy-part-https.entrypoints=websecure"
-      - "traefik.http.routers.proxy-part-https.rule=Host(`dash.janina.test`, `www.dash.janina.test`)"
       - "traefik.http.routers.proxy-part-https.service=api@internal"
+      - "traefik.http.routers.proxy-part-https.rule=Host(`dash.janina.test`)"
+      #- "traefik.http.routers.proxy-part-https.rule=Host(`dash.janina.test`, `www.dash.janina.test`)"
+      - "traefik.http.routers.proxy-part-https.entrypoints=websecure"
+      - "traefik.http.routers.proxy-part-https.tls=true"
     security_opt:
       - no-new-privileges:true
     ports:
