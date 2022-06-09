@@ -132,6 +132,10 @@ export default {
   margin-top: 60px;
 }
 
+button, input {
+  border: none;
+}
+
 #subbtn {
     margin-top: 100px;
 }
