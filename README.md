@@ -2,7 +2,7 @@
 
 # Project setup
 
-Rename .env.example to .env and provide your password before running the up command.
+Rename .env.example to .env and provide your password before running the up command. MYSQL_ROOT_PASSWORD, MYSQL_DATABASE, MYSQL_USER and MYSQL_PASSWORD are not predefined and can be freely chosen by the user. The GITHUB_ and SERVER_ environment variables are only needed by devops script commands pullserver and sshserver.
 
 ## Build frontend and backend images:
 
