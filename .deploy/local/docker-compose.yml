@@ -5,6 +5,8 @@ version: "3.9"
 services:
   frontend-part:
     image: alonimacaroni/vote-frontend:latest
+    build:
+      context: ./frontend-ui
         #turn on traefik monitoring: enable traefik to recognize changes in the label configurations in the container
     labels: 
       - "traefik.enable=true"
@@ -57,8 +59,8 @@ services:
   backend-part:
     image: alonimacaroni/vote-backend:latest
 #   install missing dependencies
-#    build:
-#      context: ./vote_app_backend
+    build:
+      context: ./vote_app_backend
     labels: 
       - "traefik.enable=true" 
       - "traefik.http.routers.backend-part-http.entrypoints=web"
@@ -79,7 +81,7 @@ services:
     volumes:
       - ./vote_app_backend:/code
     command: >
-      sh -c 'python manage.py runserver 0:8000'
+      sh -c 'gunicorn vote_app_backend.wsgi:application --bind 0.0.0.0:8000'
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}

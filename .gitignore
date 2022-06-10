@@ -25,12 +25,11 @@ pnpm-debug.log*
 *.sw?
 
 # Custom ignores:
-vote_app_backend/vote_env2/
-vote_app_backend/requirements_env2.txt
 vote_app_backend/showvotes/__pycache__/
 vote_app_backend/vote_app_backend/__pycache__/
 vote_app_backend/tests/__pycache__/
 vote_app_backend/.pytest_cache/
+vote_app_backend/projenv/
 frontend_ui/node_modules/
 letsencrypt/
 .deploy/local/certificates/janina.test+3-key.pem
