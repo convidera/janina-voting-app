@@ -1,7 +1,6 @@
 #local
 version: "3.9"
 
-
 services:
   frontend-part:
     image: alonimacaroni/vote-frontend:latest
@@ -85,7 +84,6 @@ services:
   proxy-part:
     image: traefik:v2.7
     restart: unless-stopped
-    #static configuration
     command: >-
       --log.level=DEBUG
       --api.dashboard=true
@@ -117,7 +115,6 @@ services:
         published: 443
         protocol: tcp
         mode: host
-    #dynamic configuration
     networks:
       - proxy
     volumes: 
