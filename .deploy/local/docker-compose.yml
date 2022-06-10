@@ -97,7 +97,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.proxy-part-http.entrypoints=web"
       - "traefik.http.routers.proxy-part-http.service=api@internal"
-      - "traefik.http.routers.proxy-part-http.rule=Host(`dash.${DOMAIN_URL}`)"
+      - "traefik.http.routers.proxy-part-http.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
       - "traefik.http.routers.proxy-part-http.middlewares=proxy-part-https"
       - "traefik.http.middlewares.proxy-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.proxy-part.entrypoints=websecure"

@@ -4,20 +4,26 @@
 
 Rename .env.example to .env and provide your password before running the up command. MYSQL_ROOT_PASSWORD, MYSQL_DATABASE, MYSQL_USER and MYSQL_PASSWORD are not predefined and can be freely chosen by the user. The GITHUB_ and SERVER_ environment variables are only needed by devops script commands pullserver and sshserver.
 
-## Build frontend and backend images:
+# Build frontend and backend images:
 
 ```bash
 docker build -t alonimacaroni/frontend-part .
 docker build -t alonimacaroni/backend-part .
 ```
 
-## Build node modules in frontend root folder:
+# Build node modules in frontend root folder:
 
 ```bash
 npm install
 ```
 
-## Makemigrations and apply migrations (see devops.sh).
+# Makemigrations and apply migrations (see devops.sh).
+
+# Create a docker network called proxy in project root:
+
+```bash
+docker network create proxy
+```
 
 # Use devops.sh bash script for executing commands in a service in running app:
 

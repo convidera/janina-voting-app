@@ -1,26 +1,19 @@
-#local
+#stage
 version: "3.9"
-
 
 services:
   frontend-part:
     image: alonimacaroni/vote-frontend:latest
-    build:
-      context: ./frontend-ui
-        #turn on traefik monitoring: enable traefik to recognize changes in the label configurations in the container
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-part-http.entrypoints=web"
-      - "traefik.http.routers.frontend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
-      - "traefik.http.routers.frontend-part-http.middlewares=frontend-part-https"
-      - "traefik.http.middlewares.frontend-part-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.frontend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.frontend-part-http.middlewares=force-https"
       - "traefik.http.routers.frontend-part.entrypoints=websecure"
-      - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
+      - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.frontend-part.tls=true"
-      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
     restart: unless-stopped
-        #traefik.http.routers.frontend-part.tls.certresolver: myresolver
-    #traefik.http.routers.frontend-part-http.middlewares: force-https
     networks:
       - proxy
     volumes:
@@ -39,10 +32,7 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     ports:
-      - target: 3306
-        published: 3306
-        protocol: tcp
-        mode: host
+      - "3306:3306"
     networks:
       - proxy
     volumes:
@@ -59,23 +49,18 @@ services:
   backend-part:
     image: alonimacaroni/vote-backend:latest
 #   install missing dependencies
-    build:
-      context: ./vote_app_backend
+#    build:
+#      context: ./vote_app_backend
     labels: 
       - "traefik.enable=true" 
       - "traefik.http.routers.backend-part-http.entrypoints=web"
       - "traefik.http.routers.backend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
-      - "traefik.http.routers.backend-part-http.middlewares=backend-part-https"
-      - "traefik.http.middlewares.backend-part-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.backend-part-http.middlewares=force-https"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
       - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls=true"
-      - "traefik.http.services.backend-part-http.loadbalancer.server.port=8000"
-      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
     restart: unless-stopped
-        #for letsencrypt
-    #traefik.http.routers.backend-part.tls.certresolver: myresolver 
-    #traefik.http.routers.backend-part-http.middlewares: force-https
     networks:
       - proxy
     volumes:
@@ -99,6 +84,7 @@ services:
     restart: unless-stopped
     #static configuration
     command: >-
+      --global.sendAnonymousUsage=false
       --log.level=DEBUG
       --api.dashboard=true
       --api.insecure=true
@@ -106,54 +92,48 @@ services:
       --providers.docker.exposedbydefault=false
       --entrypoints.web.address=:80
       --entrypoints.websecure.address=:443
-      --providers.file.filename=/usr/local/share/ca-certificates/janina/traefik.yml
+      --entrypoints.web.http.redirections.entrypoint.to=websecure
+      --entrypoints.web.http.redirections.entrypoint.scheme=https
+      --certificatesResolvers.myresolver.acme.email=schroeder@convidera.com
+      --certificatesResolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      --certificatesResolvers.myresolver.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
+      --certificatesResolvers.myresolver.acme.httpChallenge.entryPoint=web
+      --tls.options.default.minversion=VersionTLS12
+    ##  disable TLS version 1.0 and 1.1
+    #  --certificatesresolvers.myresolver.acme.tlschallenge=true
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.proxy-part-http.entrypoints=web"
       - "traefik.http.routers.proxy-part-http.service=api@internal"
-      - "traefik.http.routers.proxy-part-http.rule=Host(`dash.${DOMAIN_URL}`)"
-      - "traefik.http.routers.proxy-part-http.middlewares=proxy-part-https"
-      - "traefik.http.middlewares.proxy-part-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.proxy-part-http.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
       - "traefik.http.routers.proxy-part.entrypoints=websecure"
       - "traefik.http.routers.proxy-part.service=api@internal"
       - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
       - "traefik.http.routers.proxy-part.tls=true"
     security_opt:
       - no-new-privileges:true
-    ports:
-      - target: 80
-        published: 80
-        protocol: tcp
-        mode: host
-      - target: 443
-        published: 443
-        protocol: tcp
-        mode: host
     #settings for mkcert, self-signed certs should be used locally (not letsencrypt)
     #letsencrypt needs to establish a connection via the http challenge
     #mkcert creates a cert and installs a CA locally
     #certificateresolver is only needed with letsencrypt
-    # - "--certificatesResolvers.myresolver.acme.email=schroeder@convidera.com"
-    # - "--certificatesResolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    # - "--certificatesResolvers.myresolver.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory"
-    # - "--certificatesResolvers.myresolver.acme.httpChallenge.entryPoint=web"
-    #- "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+    ports:
+      - "80:80"
+      - "443:443"
     #dynamic configuration
     networks:
       - proxy
     volumes: 
-    #- /etc/traefik:/etc/traefik
       - ./.deploy/local/certificates:/usr/local/share/ca-certificates/janina:ro
-    #- traefik_acme:/letsencrypt
+      - traefik_acme:/letsencrypt
     #ro - read only
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
   proxy:
-    external: true
+    driver: bridge
 
 volumes:
-#traefik_acme:
-#  driver: local
+  traefik_acme:
+    driver: local
   mysql:
     driver: local
