@@ -5,9 +5,6 @@ version: "3.9"
 services:
   frontend-part:
     image: alonimacaroni/vote-frontend:latest
-    build:
-      context: ./frontend-ui
-        #turn on traefik monitoring: enable traefik to recognize changes in the label configurations in the container
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-part-http.entrypoints=web"
@@ -19,13 +16,10 @@ services:
       - "traefik.http.routers.frontend-part.tls=true"
       - "traefik.docker.network=proxy"
     restart: unless-stopped
-        #traefik.http.routers.frontend-part.tls.certresolver: myresolver
-    #traefik.http.routers.frontend-part-http.middlewares: force-https
     networks:
       - proxy
     volumes:
       - ./frontend-ui:/app
-    #don't use run serve on server
     command: >
       sh -c 'npm run serve'
     environment:
@@ -58,9 +52,6 @@ services:
   
   backend-part:
     image: alonimacaroni/vote-backend:latest
-#   install missing dependencies
-    build:
-      context: ./vote_app_backend
     labels: 
       - "traefik.enable=true" 
       - "traefik.http.routers.backend-part-http.entrypoints=web"
@@ -73,9 +64,6 @@ services:
       - "traefik.http.services.backend-part-http.loadbalancer.server.port=8000"
       - "traefik.docker.network=proxy"
     restart: unless-stopped
-        #for letsencrypt
-    #traefik.http.routers.backend-part.tls.certresolver: myresolver 
-    #traefik.http.routers.backend-part-http.middlewares: force-https
     networks:
       - proxy
     volumes:
@@ -129,23 +117,11 @@ services:
         published: 443
         protocol: tcp
         mode: host
-    #settings for mkcert, self-signed certs should be used locally (not letsencrypt)
-    #letsencrypt needs to establish a connection via the http challenge
-    #mkcert creates a cert and installs a CA locally
-    #certificateresolver is only needed with letsencrypt
-    # - "--certificatesResolvers.myresolver.acme.email=schroeder@convidera.com"
-    # - "--certificatesResolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    # - "--certificatesResolvers.myresolver.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory"
-    # - "--certificatesResolvers.myresolver.acme.httpChallenge.entryPoint=web"
-    #- "--certificatesresolvers.myresolver.acme.tlschallenge=true"
     #dynamic configuration
     networks:
       - proxy
     volumes: 
-    #- /etc/traefik:/etc/traefik
       - ./.deploy/local/certificates:/usr/local/share/ca-certificates/janina:ro
-    #- traefik_acme:/letsencrypt
-    #ro - read only
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
@@ -153,7 +129,5 @@ networks:
     external: true
 
 volumes:
-#traefik_acme:
-#  driver: local
   mysql:
     driver: local
