@@ -33,7 +33,7 @@ then
     shift 1
     $COMPOSE run --rm \
       backend-part \
-      python manage.py runserver "$@"
+      gunicorn vote_app_backend.wsgi:application "$@"
     cleanUp
   elif [ "$1" == "migrate" ];then
     install

@@ -17,6 +17,8 @@ docker build -t alonimacaroni/backend-part .
 npm install
 ```
 
+## Makemigrations and apply migrations (see devops.sh).
+
 # Use devops.sh bash script for executing commands in a service in running app:
 
 Make devops.sh executable (Mac OS, Linux):
@@ -30,14 +32,13 @@ Execute script:
 ```bash
 ./devops.sh
 ```
-
-## Script commands:
-
 Without command options script runs:
 
 ```bash
 docker-compose up
 ```
+
+## Script commands:
 
 Shut down app:
 
@@ -56,7 +57,7 @@ Run server in backend, more options for original command can be appended:
 This is the same as:
 
 ```bash
-python manage.py runserver
+gunicorn vote_app_backend.wsgi:application
 ```
 
 \
@@ -107,4 +108,20 @@ Push changes to github:
 
 ```bash
 ./devops push "<message>"
+```
+
+\
+\
+Pull changes from github to server:
+
+```bash
+./devops pullserver
+```
+
+\
+\
+Login to server via SSH:
+
+```bash
+./devops sshserver
 ```
