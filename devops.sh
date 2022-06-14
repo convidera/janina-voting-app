@@ -2,13 +2,19 @@
 COMPOSE="docker-compose"
 COPIED=false
 export LOC=${LOC:-local}
+ABORT=false
 
 function install() {
   #if file does not exist
   if [ ! -f docker-compose.yml ] && [ ! -f vue.config.js ];then
-    cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
-    cp .deploy/${LOC}/vue.config.js frontend-ui/vue.config.js || true
-    COPIED=true
+    if [ "$LOC" == "local" ] || [ "$LOC" == "stage" ] || [ "$LOC" == "ci" ];then
+      cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
+      cp .deploy/${LOC}/vue.config.js frontend-ui/vue.config.js || true
+      COPIED=true
+    else
+      echo "wrong execution folder specified, specify local, stage or ci"
+      ABORT=true
+    fi
   fi
 }
 
@@ -23,27 +29,35 @@ if [ $# -gt 0 ]
 then
   if [ "$1" == "exit" ];then
     install
-    $COMPOSE down
-    cleanUp
+    if [ $ABORT = false ];then
+      $COMPOSE down
+      cleanUp
+    fi
   elif [ "$1" == "runserver" ];then
     install
-    shift 1
-    $COMPOSE run --rm \
-      backend-part \
-      gunicorn vote_app_backend.wsgi:application "$@"
-    cleanUp
+    if [ $ABORT = false ];then
+      shift 1
+      $COMPOSE run --rm \
+        backend-part \
+        gunicorn vote_app_backend.wsgi:application "$@"
+      cleanUp
+    fi
   elif [ "$1" == "migrate" ];then
     install
-    $COMPOSE run --rm \
-      backend-part \
-      python manage.py migrate
-    cleanUp
+    if [ $ABORT = false ];then
+      $COMPOSE run --rm \
+        backend-part \
+        python manage.py migrate
+      cleanUp
+    fi
   elif [ "$1" == "makemigrations" ];then
     install
-    $COMPOSE run --rm \
-      backend-part \
-      python manage.py makemigrations showvotes
-    cleanUp
+    if [ $ABORT = false ];then
+      $COMPOSE run --rm \
+        backend-part \
+        python manage.py makemigrations showvotes
+      cleanUp
+    fi
   elif [ "$1" == "flush" ];then
     install
     $COMPOSE run --rm \
@@ -52,18 +66,22 @@ then
     cleanUp
   elif [ "$1" == "npm" ]; then
     install
-    shift 1
-    $COMPOSE run --rm \
-      frontend-part \
-      npm run serve "$@"
-    cleanUp
+    if [ $ABORT = false ];then
+      shift 1
+      $COMPOSE run --rm \
+        frontend-part \
+        npm run serve "$@"
+      cleanUp
+    fi
   elif [ "$1" == "test" ];then
     install
-    shift 1
-    $COMPOSE run --rm \
-      backend-part \
-      pytest "$@"
-    cleanUp
+    if [ $ABORT = false ];then
+      shift 1
+      $COMPOSE run --rm \
+        backend-part \
+        pytest "$@"
+      cleanUp
+    fi
   elif [ "$1" == "push" ];then 
     git add * && \
     git commit -m "$2" && \
@@ -107,11 +125,15 @@ then
     fi
   else
     install
-    $COMPOSE "$@"
-    cleanUp
+    if [ $ABORT = false ];then
+      $COMPOSE "$@"
+      cleanUp
+    fi 
   fi
 else
   install
-  $COMPOSE up
-  cleanUp
+  if [ $ABORT = false ];then
+    $COMPOSE up
+    cleanUp
+  fi
 fi
