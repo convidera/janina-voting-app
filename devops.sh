@@ -1,9 +1,9 @@
 #! /bin/bash
 COMPOSE="docker-compose"
 COPIED=false
+export LOC=${LOC:-local}
 
 function install() {
-  LOC=${1:-local}
   #if file does not exist
   if [ ! -f docker-compose.yml ] && [ ! -f vue.config.js ];then
     cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
