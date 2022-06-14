@@ -3,10 +3,7 @@ COMPOSE="docker-compose"
 COPIED=false
 
 function install() {
-  LOC=local
-  if [ LOC == ci ] || [ LOC == stage ];then
-    LOC=$1
-  fi
+  LOC=${1:-local}
   #if file does not exist
   if [ ! -f docker-compose.yml ] && [ ! -f vue.config.js ];then
     cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
