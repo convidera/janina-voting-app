@@ -132,7 +132,7 @@ networks:
     driver: bridge
 
 volumes:
-  traefik-ssl-certs:
+  traefik_acme:
     driver: local
   mysql:
     driver: local
