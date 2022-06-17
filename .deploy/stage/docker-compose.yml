@@ -157,7 +157,7 @@ services:
     networks:
       - proxy
     volumes: 
-      - ./.deploy/stage/letsencrypt/acme.json:/letsencrypt/acme.json
+      - ./.deploy/stage/letsencrypt:/letsencrypt
       #if you are using Docker as your provider
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
