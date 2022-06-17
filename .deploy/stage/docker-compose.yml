@@ -58,7 +58,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-part-http.entrypoints=web"
       - "traefik.http.routers.backend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
-      - "traefik.http.routers.backend-part-http.middlewares=frontend-part-https"
+      - "traefik.http.routers.backend-part-http.middlewares=backend-part-https"
       - "traefik.http.middlewares.backend-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
       - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
