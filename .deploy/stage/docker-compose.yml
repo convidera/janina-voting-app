@@ -147,8 +147,7 @@ services:
     networks:
       - proxy
     volumes: 
-      - ./.deploy/local/certificates:/usr/local/share/ca-certificates/janina:ro
-      - traefik_acme:/letsencrypt
+      - traefik_acme:/letsencrypt:ro
       #if you are using Docker as your provider
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
