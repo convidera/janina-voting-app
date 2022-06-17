@@ -118,23 +118,22 @@ services:
 #      - "traefik.http.routers.backend-part.middlewares=force-https"
       - "traefik.http.routers.proxy-part.tls.certresolver=myresolver"
       ##  disable TLS version 1.0 and 1.1
-      - "traefik.tls.options.default.minversion=VersionTLS12"
-      - "traefik.http.middlewares.secureheaders.headers.browserxssfilter=true"
-      - "traefik.http.middlewares.secureheaders.headers.contenttypenosniff=true"
-      #SSL config
-      - "traefik.http.middlewares.secureheaders.headers.framedeny=true"
-      - "traefik.http.middlewares.secureheaders.headers.sslredirect=true"
-      #HSTS config
-      - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
-      - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
-      - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
-      - "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
-      #CORS config
-      - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
-      - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
-      - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
-      - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
-    
+      # - "traefik.tls.options.default.minversion=VersionTLS12"
+      # - "traefik.http.middlewares.secureheaders.headers.browserxssfilter=true"
+      # - "traefik.http.middlewares.secureheaders.headers.contenttypenosniff=true"
+      # #SSL config
+      # - "traefik.http.middlewares.secureheaders.headers.framedeny=true"
+      # - "traefik.http.middlewares.secureheaders.headers.sslredirect=true"
+      # #HSTS config
+      # - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
+      # - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
+      # - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
+      # - "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
+      # #CORS config
+      # - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
+      # - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
+      # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
+      # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
     security_opt:
       - no-new-privileges:true
     #settings for mkcert, self-signed certs should be used locally (not letsencrypt)
@@ -144,8 +143,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      #expose dashboard, don't do this in production
-      - "8080:8080" 
     #dynamic configuration
     networks:
       - proxy
