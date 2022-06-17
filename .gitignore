@@ -31,6 +31,6 @@ vote_app_backend/tests/__pycache__/
 vote_app_backend/.pytest_cache/
 vote_app_backend/projenv/
 frontend_ui/node_modules/
-letsencrypt/
+.deploy/stage/letsencrypt/acme.json
 .deploy/local/certificates/janina.test+3-key.pem
 .deploy/local/certificates/janina.test+3.pem

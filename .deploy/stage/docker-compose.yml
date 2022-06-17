@@ -35,7 +35,10 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - target: 3306
+        published: 3306
+        protocol: tcp
+        mode: host
     networks:
       - proxy
     volumes:
@@ -98,14 +101,15 @@ services:
       --providers.docker.exposedbydefault=false
       --entrypoints.web.address=:80
       --entrypoints.websecure.address=:443
-      --certificatesResolvers.myresolver.acme.email=schroeder@convidera.com
-      --certificatesResolvers.myresolver.acme.storage=/letsencrypt/acme.json
-      --certificatesResolvers.myresolver.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
-      --certificatesResolvers.myresolver.acme.httpChallenge.entryPoint=web
+      --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
+      --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
     #  --certificatesresolvers.myresolver.acme.tlschallenge=true
     ## don't do this in production:
     #  --api.dashboard=true
     labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.proxy-part-http.entrypoints=web"
       - "traefik.http.routers.proxy-part-http.service=api@internal"
       - "traefik.http.routers.proxy-part-http.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
@@ -115,8 +119,8 @@ services:
       - "traefik.http.routers.proxy-part.service=api@internal"
       - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
       - "traefik.http.routers.proxy-part.tls=true"
-#      - "traefik.http.routers.backend-part.middlewares=force-https"
       - "traefik.http.routers.proxy-part.tls.certresolver=myresolver"
+#      - "traefik.http.routers.backend-part.middlewares=force-https"    
       ##  disable TLS version 1.0 and 1.1
       # - "traefik.tls.options.default.minversion=VersionTLS12"
       # - "traefik.http.middlewares.secureheaders.headers.browserxssfilter=true"
@@ -141,13 +145,19 @@ services:
     #mkcert creates a cert and installs a CA locally
     #certificateresolver is only needed with letsencrypt
     ports:
-      - "80:80"
-      - "443:443"
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
     #dynamic configuration
     networks:
       - proxy
     volumes: 
-      - traefik_acme:/letsencrypt:ro
+      - ./.deploy/stage/letsencrypt/acme.json:/letsencrypt/acme.json
       #if you are using Docker as your provider
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
@@ -156,7 +166,5 @@ networks:
     external: true
 
 volumes:
-  traefik_acme:
-    driver: local
   mysql:
     driver: local
