@@ -105,7 +105,7 @@ services:
       --entrypoints.web.address=:80
       --entrypoints.websecure.address=:443
       --certificatesresolvers.myresolver.acme.tlschallenge=true
-      --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
+      --certificatesresolvers.myresolver.acme.tlschallenge.entrypoint=websecure
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
 #      --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory  
