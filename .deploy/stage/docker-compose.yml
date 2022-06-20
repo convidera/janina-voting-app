@@ -12,10 +12,7 @@ services:
       # - "traefik.http.middlewares.frontend-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.frontend-part.entrypoints=websecure"
       - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
-      # - "traefik.http.routers.frontend-part.tls=true"
       - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
-      # - "traefik.http.routers.frontend-part.tls.domains[0].main=${DOMAIN_URL}"
-      # - "traefik.http.routers.frontend-part.tls.domains[0].sans=www.${DOMAIN_URL}"
       # - "traefik.docker.network=proxy"
 #      - "traefik.http.routers.frontend-part.middlewares=force-https"
     restart: unless-stopped
@@ -67,10 +64,7 @@ services:
       # - "traefik.http.middlewares.backend-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
       - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
-#      - "traefik.http.routers.backend-part.tls=true"
       - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
-      # - "traefik.http.routers.backend-part.tls.domains[0].main=${DOMAIN_URL}"
-      # - "traefik.http.routers.backend-part.tls.domains[0].sans=www.${DOMAIN_URL}"
 #      - "traefik.docker.network=proxy"
 #      - "traefik.http.routers.backend-part.middlewares=force-https"
     restart: unless-stopped
@@ -102,14 +96,14 @@ services:
       --api.insecure=true
       --providers.docker=true
       --providers.docker.exposedbydefault=false
+      --entrypoints.web.address=:80
+      --entrypoints.web.http.redirections.entrypoint.to=websecure
+      --entrypoints.web.http.redirections.entrypoint.scheme=https
       --entrypoints.websecure.address=:443
       --certificatesresolvers.myresolver.acme.tlschallenge=true
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
 #      --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory  
-      # --entrypoints.web.address=:80
-      # --entrypoints.web.http.redirections.entrypoint.to=websecure
-      # --entrypoints.web.http.redirections.entrypoint.scheme=https
     ## don't do this in production:
     #  --api.dashboard=true
     labels:
@@ -121,8 +115,7 @@ services:
       # - "traefik.http.middlewares.proxy-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.proxy-part.entrypoints=websecure"
       - "traefik.http.routers.proxy-part.service=api@internal"
-      - "traefik.http.routers.proxy-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/dash`)"
-#      - "traefik.http.routers.proxy-part.tls=true"
+      - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
       - "traefik.http.routers.proxy-part.tls.certresolver=myresolver"
       # - "traefik.http.routers.proxy-part.tls.domains[0].main=${DOMAIN_URL}"
       # - "traefik.http.routers.proxy-part.tls.domains[0].sans=www.${DOMAIN_URL}"
