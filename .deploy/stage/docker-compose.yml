@@ -110,10 +110,10 @@ services:
       - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
       - "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
       # #CORS config
-      # - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
-      # - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
-      # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
-      # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
+      - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
+      - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
+      - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
     security_opt:
       - no-new-privileges:true
     #settings for mkcert, self-signed certs should be used locally (not letsencrypt)
