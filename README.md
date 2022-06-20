@@ -19,10 +19,18 @@ npm install
 
 # Makemigrations and apply migrations (see devops.sh).
 
-# Create a docker network called proxy in project root:
+# local environment: Create a docker network called proxy in project root:
 
 ```bash
 docker network create proxy
+```
+
+# stage environment: In frontend-ui folder:
+
+Create a folder named dist.
+
+```bash
+npm run build
 ```
 
 # Use devops.sh bash script for executing commands in a service in running app:
