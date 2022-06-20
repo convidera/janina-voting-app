@@ -25,12 +25,20 @@ npm install
 docker network create proxy
 ```
 
-# stage environment: In frontend-ui folder:
+# stage environment: 
+
+## In frontend-ui folder:
 
 Create a folder named dist.
 
 ```bash
 npm run build
+```
+
+## For vote_app_backend (use devops.sh):
+
+```bash
+LOC=stage ./devops.sh run --rm backend-part python manage.py collectstatic
 ```
 
 # Use devops.sh bash script for executing commands in a service in running app:
