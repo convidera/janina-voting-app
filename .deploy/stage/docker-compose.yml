@@ -144,15 +144,15 @@ services:
     #letsencrypt needs to establish a connection via the http challenge
     #mkcert creates a cert and installs a CA locally
     #certificateresolver is only needed with letsencrypt
-    #ports:
-      # - target: 80
-      #   published: 80
-      #   protocol: tcp
-      #   mode: host
-      # - target: 443
-      #   published: 443
-      #   protocol: tcp
-      #   mode: host
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
     #dynamic configuration
     networks:
       - proxy
