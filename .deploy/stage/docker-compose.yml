@@ -144,7 +144,7 @@ services:
     #letsencrypt needs to establish a connection via the http challenge
     #mkcert creates a cert and installs a CA locally
     #certificateresolver is only needed with letsencrypt
-    ports:
+    #ports:
       # - target: 80
       #   published: 80
       #   protocol: tcp
