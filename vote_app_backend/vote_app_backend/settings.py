@@ -123,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #production
 ALLOWED_HOSTS = [
-    str(os.environ.get('URI_ENTRYP_PATH')), 'www.' + str(os.environ.get('URI_ENTRYP_PATH')),
+    str(os.environ.get('DOMAIN_URL')), 'www.' + str(os.environ.get('DOMAIN_URL')),
 ]
 
 
@@ -131,16 +131,16 @@ CORS_ALLOWED_ORIGINS = [
     "https://127.0.0.1:8080",
     "https://localhost:8080",
     "https://frontend-part",
-    "https://" + str(os.environ.get('URI_ENTRYP_PATH')),
-    "https://*." + str(os.environ.get('URI_ENTRYP_PATH')),
+    "https://" + str(os.environ.get('DOMAIN_URL')),
+    "https://*." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://127.0.0.1:8080",
     "https://localhost:8080",
     "https://frontend-part",
-    "https://" + str(os.environ.get('URI_ENTRYP_PATH')),
-    "https://*." + str(os.environ.get('URI_ENTRYP_PATH')),
+    "https://" + str(os.environ.get('DOMAIN_URL')),
+    "https://*." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CORS_ALLOW_METHODS = [
