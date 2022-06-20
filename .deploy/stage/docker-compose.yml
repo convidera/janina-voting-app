@@ -108,7 +108,7 @@ services:
       - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
       - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
       - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
-      - "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
+      #- "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
       # #CORS config
       - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
       - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"

@@ -128,29 +128,19 @@ ALLOWED_HOSTS = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8080",
-    "http://localhost:8080",
-    "http://frontend-part",
-    "http://" + str(os.environ.get('DOMAIN_URL')),
-    "http://*." + str(os.environ.get('DOMAIN_URL')),
     "https://127.0.0.1:8080",
     "https://localhost:8080",
     "https://frontend-part",
-    "https://" + str(os.environ.get('DOMAIN_URL')),
-    "https://*." + str(os.environ.get('DOMAIN_URL')),
+    "https://" + str(os.environ.get('URI_ENTRYP_PATH')),
+    "https://*." + str(os.environ.get('URI_ENTRYP_PATH')),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:8080",
-    "http://localhost:8080",
-    "http://frontend-part",
-    "http://" + str(os.environ.get('DOMAIN_URL')),
-    "http://*." + str(os.environ.get('DOMAIN_URL')),
     "https://127.0.0.1:8080",
     "https://localhost:8080",
     "https://frontend-part",
-    "https://" + str(os.environ.get('DOMAIN_URL')),
-    "https://*." + str(os.environ.get('DOMAIN_URL')),
+    "https://" + str(os.environ.get('URI_ENTRYP_PATH')),
+    "https://*." + str(os.environ.get('URI_ENTRYP_PATH')),
 ]
 
 CORS_ALLOW_METHODS = [
