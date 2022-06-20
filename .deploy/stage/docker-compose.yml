@@ -119,7 +119,7 @@ services:
       # - "traefik.http.middlewares.proxy-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.proxy-part.entrypoints=websecure"
       - "traefik.http.routers.proxy-part.service=api@internal"
-      - "traefik.http.routers.proxy-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/dash`)"
+      - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
       - "traefik.http.routers.proxy-part.tls=true"
       - "traefik.http.routers.proxy-part.tls.certresolver=myresolver"
       - "traefik.http.routers.proxy-part.tls.domains[0].main=${DOMAIN_URL}"
@@ -150,10 +150,10 @@ services:
     #mkcert creates a cert and installs a CA locally
     #certificateresolver is only needed with letsencrypt
     ports:
-      - target: 80
-        published: 80
-        protocol: tcp
-        mode: host
+      # - target: 80
+      #   published: 80
+      #   protocol: tcp
+      #   mode: host
       - target: 443
         published: 443
         protocol: tcp
