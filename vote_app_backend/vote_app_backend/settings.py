@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 
 import os
-#from pathlib import Path
+from pathlib import Path
 
 
 
@@ -23,7 +23,7 @@ import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-#BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -115,9 +115,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#development
+# ALLOWED_HOSTS = [
+#     '*',
+#     '0.0.0.0',
+# ]
+
+#production
 ALLOWED_HOSTS = [
-    '*',
-    '0.0.0.0',
+    str(os.environ.get('URI_ENTRYP_PATH')), 'www.' + str(os.environ.get('URI_ENTRYP_PATH'))
 ]
 
 
@@ -172,7 +178,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+#production
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 
 # Default primary key field type
@@ -183,8 +192,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Strict'
 
+#production
+SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
