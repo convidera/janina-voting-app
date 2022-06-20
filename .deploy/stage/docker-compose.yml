@@ -6,10 +6,10 @@ services:
     image: alonimacaroni/vote-frontend:latest
     labels: 
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend-part-http.entrypoints=web"
-      - "traefik.http.routers.frontend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
-      - "traefik.http.routers.frontend-part-http.middlewares=frontend-part-https"
-      - "traefik.http.middlewares.frontend-part-https.redirectscheme.scheme=https"
+      # - "traefik.http.routers.frontend-part-http.entrypoints=web"
+      # - "traefik.http.routers.frontend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
+      # - "traefik.http.routers.frontend-part-http.middlewares=frontend-part-https"
+      # - "traefik.http.middlewares.frontend-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.frontend-part.entrypoints=websecure"
       - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
       - "traefik.http.routers.frontend-part.tls=true"
@@ -61,10 +61,10 @@ services:
 #      context: ./vote_app_backend
     labels: 
       - "traefik.enable=true"
-      - "traefik.http.routers.backend-part-http.entrypoints=web"
-      - "traefik.http.routers.backend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
-      - "traefik.http.routers.backend-part-http.middlewares=backend-part-https"
-      - "traefik.http.middlewares.backend-part-https.redirectscheme.scheme=https"
+      # - "traefik.http.routers.backend-part-http.entrypoints=web"
+      # - "traefik.http.routers.backend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      # - "traefik.http.routers.backend-part-http.middlewares=backend-part-https"
+      # - "traefik.http.middlewares.backend-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
       - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls=true"
@@ -102,21 +102,21 @@ services:
       --api.insecure=true
       --providers.docker=true
       --providers.docker.exposedbydefault=false
-      --entrypoints.web.address=:80
       --entrypoints.websecure.address=:443
       --certificatesresolvers.myresolver.acme.tlschallenge=true
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+#      --entrypoints.web.address=:80
 #      --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory  
     ## don't do this in production:
     #  --api.dashboard=true
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.proxy-part-http.entrypoints=web"
-      - "traefik.http.routers.proxy-part-http.service=api@internal"
-      - "traefik.http.routers.proxy-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/dash`)"
-      - "traefik.http.routers.proxy-part-http.middlewares=proxy-part-https"
-      - "traefik.http.middlewares.proxy-part-https.redirectscheme.scheme=https"
+#      - "traefik.http.routers.proxy-part-http.entrypoints=web"
+      # - "traefik.http.routers.proxy-part-http.service=api@internal"
+      # - "traefik.http.routers.proxy-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/dash`)"
+      # - "traefik.http.routers.proxy-part-http.middlewares=proxy-part-https"
+      # - "traefik.http.middlewares.proxy-part-https.redirectscheme.scheme=https"
       - "traefik.http.routers.proxy-part.entrypoints=websecure"
       - "traefik.http.routers.proxy-part.service=api@internal"
       - "traefik.http.routers.proxy-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/dash`)"
