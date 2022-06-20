@@ -14,8 +14,8 @@ services:
       - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
       - "traefik.http.routers.frontend-part.tls=true"
       - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
-      - "traefik.http.routers.frontend-part.tls.domains[0].main=janina.devcon.team"
-      - "traefik.http.routers.frontend-part.tls.domains[0].sans=www.janina.devcon.team"
+      - "traefik.http.routers.frontend-part.tls.domains[0].main=${DOMAIN_URL}"
+      - "traefik.http.routers.frontend-part.tls.domains[0].sans=www.${DOMAIN_URL}"
       - "traefik.docker.network=proxy"
 #      - "traefik.http.routers.frontend-part.middlewares=force-https"
     restart: unless-stopped
@@ -69,8 +69,8 @@ services:
       - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls=true"
       - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
-      - "traefik.http.routers.backend-part.tls.domains[0].main=janina.devcon.team"
-      - "traefik.http.routers.backend-part.tls.domains[0].sans=www.janina.devcon.team"
+      - "traefik.http.routers.backend-part.tls.domains[0].main=${DOMAIN_URL}"
+      - "traefik.http.routers.backend-part.tls.domains[0].sans=www.${DOMAIN_URL}"
       - "traefik.docker.network=proxy"
 #      - "traefik.http.routers.backend-part.middlewares=force-https"
     restart: unless-stopped
@@ -97,7 +97,6 @@ services:
     restart: unless-stopped
     #static configuration
     command: >-
-      --global.sendAnonymousUsage=false
       --log.level=DEBUG
       --api.dashboard=true
       --api.insecure=true
@@ -105,11 +104,11 @@ services:
       --providers.docker.exposedbydefault=false
       --entrypoints.web.address=:80
       --entrypoints.websecure.address=:443
+      --certificatesresolvers.myresolver.acme.tlschallenge=true
+      --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-      --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
 #      --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory  
-    #  --certificatesresolvers.myresolver.acme.tlschallenge=true
     ## don't do this in production:
     #  --api.dashboard=true
     labels:
@@ -124,8 +123,8 @@ services:
       - "traefik.http.routers.proxy-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/dash`)"
       - "traefik.http.routers.proxy-part.tls=true"
       - "traefik.http.routers.proxy-part.tls.certresolver=myresolver"
-      - "traefik.http.routers.proxy-part.tls.domains[0].main=janina.devcon.team"
-      - "traefik.http.routers.proxy-part.tls.domains[0].sans=www.janina.devcon.team"
+      - "traefik.http.routers.proxy-part.tls.domains[0].main=${DOMAIN_URL}"
+      - "traefik.http.routers.proxy-part.tls.domains[0].sans=www.${DOMAIN_URL}"
 #      - "traefik.http.routers.backend-part.middlewares=force-https"    
       ##  disable TLS version 1.0 and 1.1
       # - "traefik.tls.options.default.minversion=VersionTLS12"
