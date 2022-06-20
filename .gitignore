@@ -30,6 +30,7 @@ vote_app_backend/vote_app_backend/__pycache__/
 vote_app_backend/tests/__pycache__/
 vote_app_backend/.pytest_cache/
 vote_app_backend/projenv/
+vote_app_backend/static/
 frontend_ui/node_modules/
 frontend_ui/dist/
 .deploy/stage/letsencrypt/acme.json

@@ -123,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #production
 ALLOWED_HOSTS = [
-    str(os.environ.get('URI_ENTRYP_PATH')), 'www.' + str(os.environ.get('URI_ENTRYP_PATH'))
+    str(os.environ.get('URI_ENTRYP_PATH')), 'www.' + str(os.environ.get('URI_ENTRYP_PATH')),
 ]
 
 
