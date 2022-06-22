@@ -21,3 +21,6 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8000 3306
 
+CMD ["gunicorn", "vote_app_backend.wsgi:application"]
+
+#CMD ["gunicorn", "vote_app_backend.wsgi:application", "--bind", "0.0.0.0:8000"]
