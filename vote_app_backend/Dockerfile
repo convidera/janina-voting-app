@@ -9,16 +9,18 @@ RUN apk update \
     && apk add --virtual build-deps gcc python3-dev musl-dev \
     && apk add --no-cache mariadb-dev
 RUN pip install -r requirements.txt
-RUN python manage.py makemigrations && python manage.py migrate
-EXPOSE 8000
 
 # development stage
 FROM python:3-alpine as dev-stage
 COPY --from=build-stage /code /code
+RUN python manage.py makemigrations && python manage.py migrate
+EXPOSE 8000
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "vote_app_backend.wsgi:application"]
 
 # production stage
 FROM python:3-alpine as prod-stage
 COPY --from=build-stage /code /code
+RUN python manage.py makemigrations && python manage.py migrate
 RUN python manage.py collectstatic --noinput
+EXPOSE 8000
 CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "vote_app_backend.wsgi:application"]
