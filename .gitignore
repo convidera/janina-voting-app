@@ -32,6 +32,7 @@ vote_app_backend/.pytest_cache/
 vote_app_backend/projenv/
 vote_app_backend/static/
 frontend_ui/node_modules/
+frontend_ui/.env.production
 .deploy/stage/letsencrypt/acme.json
 .deploy/local/certificates/janina.test+3-key.pem
 .deploy/local/certificates/janina.test+3.pem

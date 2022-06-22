@@ -17,10 +17,6 @@ services:
       - proxy
     volumes:
       - ./frontend-ui:/app
-    environment:
-      - VUE_APP_URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
-      - VUE_APP_URI_CSRF_PATH=${URI_CSRF_PATH}
-      - VUE_APP_DOMAIN_URL=${DOMAIN_URL}
     security_opt:
       - no-new-privileges:true
   
