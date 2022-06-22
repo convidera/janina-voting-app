@@ -49,7 +49,6 @@ services:
     image: alonimacaroni/vote-backend:stage
     build:
       context: ./vote_app_backend/
-      target: prod-stage
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
