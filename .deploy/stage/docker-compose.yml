@@ -3,7 +3,10 @@ version: "3.9"
 
 services:
   frontend-part:
-    image: alonimacaroni/vote-frontend:latest
+    image: alonimacaroni/vote-frontend:stage
+    build:
+      context: ./frontend-ui/
+      target: prod-stage
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-part.entrypoints=websecure"
@@ -22,7 +25,7 @@ services:
       - no-new-privileges:true
   
   vote-app-mysql:
-    image: mysql:8.0
+    image: mysql:8.0:stage
     restart: unless-stopped
     ports:
       - target: 3306
@@ -43,10 +46,10 @@ services:
       - no-new-privileges:true
   
   backend-part:
-    image: alonimacaroni/vote-backend:latest
-#   install missing dependencies
-#    build:
-#      context: ./vote_app_backend
+    image: alonimacaroni/vote-backend:stage
+    build:
+      context: ./vote_app_backend/
+      target: prod-stage
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
