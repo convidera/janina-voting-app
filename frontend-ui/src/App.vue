@@ -62,14 +62,11 @@ export default {
       usernameExists: false,
 
       message: '',
-      info: '',
     }
   },
   methods: {
     getCSRF() {
-      console.log(process.env.VUE_APP_DOMAIN_URL) 
       axios.get('https://' + process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH)
-      .then(response => (this.info = response))
     },
 
     nameChanged(name) {

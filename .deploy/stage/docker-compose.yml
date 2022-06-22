@@ -45,6 +45,7 @@ services:
     image: alonimacaroni/vote-backend:stage
     build:
       context: ./vote_app_backend/
+      target: prod-stage
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
@@ -103,16 +104,16 @@ services:
       # - "traefik.http.middlewares.secureheaders.headers.framedeny=true"
       # - "traefik.http.middlewares.secureheaders.headers.sslredirect=true"
       # #HSTS config
-      - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
-      - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
-      - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
+      # - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
+      # - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
+      # - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
       #- "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
       # #CORS config
-      - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
-      - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
-      - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
-      - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
-    security_opt:
+    #   - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
+    #   - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
+    #   - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
+    #   - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
+    # security_opt:
       - no-new-privileges:true
     #settings for mkcert, self-signed certs should be used locally (not letsencrypt)
     #letsencrypt needs to establish a connection via the http challenge
