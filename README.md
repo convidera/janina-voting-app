@@ -7,8 +7,8 @@ Rename .env.example to .env and provide your password before running the up comm
 # Build frontend and backend images:
 
 ```bash
-docker build -t alonimacaroni/frontend-part .
-docker build -t alonimacaroni/backend-part .
+docker build --target prod-stage -t alonimacaroni/frontend-part:stage .
+docker build --target prod-stage -t alonimacaroni/backend-part:stage .
 ```
 
 # Build node modules in frontend root folder:
