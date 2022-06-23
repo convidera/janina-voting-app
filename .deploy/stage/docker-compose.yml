@@ -42,10 +42,9 @@ services:
       - no-new-privileges:true
   
   backend-part:
-    image: alonimacaroni/vote-backend:stage
+    image: alonimacaroni/vote-backend:latest
     build:
       context: ./vote_app_backend/
-      target: prod-stage
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
