@@ -76,8 +76,6 @@ services:
     #static configuration
     command: >-
       --log.level=DEBUG
-      --api.dashboard=true
-      --api.insecure=true
       --providers.docker=true
       --providers.docker.exposedbydefault=false
       --entrypoints.web.address=:80
@@ -88,14 +86,8 @@ services:
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
 #      --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory  
-    ## don't do this in production:
-    #  --api.dashboard=true
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.proxy-part.entrypoints=websecure"
-      - "traefik.http.routers.proxy-part.service=api@internal"
-      - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
-      - "traefik.http.routers.proxy-part.tls.certresolver=myresolver" 
       ##  disable TLS version 1.0 and 1.1
       # - "traefik.tls.options.default.minversion=VersionTLS12"
       #configure encryption methods
