@@ -17,5 +17,5 @@ CMD ["http-server", "dist"]
 # production stage
 FROM nginx:stable-alpine as prod-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-EXPOSE 8080
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
