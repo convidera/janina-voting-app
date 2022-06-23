@@ -11,7 +11,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-part.entrypoints=websecure"
       - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
-      - "traefik.http.services.frontend-part.loadbalancer.server.port=8080"
       - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
     restart: unless-stopped
     networks:
