@@ -52,6 +52,8 @@ services:
       - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
     restart: unless-stopped
+    command: >
+      sh -c 'gunicorn vote_app_backend.wsgi:application --workers 3 --bind :8000'
     networks:
       - proxy
     volumes:
