@@ -22,4 +22,4 @@ RUN apk update \
     && apk add --no-cache mariadb-dev
 RUN pip install -r requirements.txt
 EXPOSE 80 
-CMD ["gunicorn" , "vote_app_backend.wsgi:application", "--workers", "3" "--bind", ":80"]
+#CMD ["gunicorn" , "vote_app_backend.wsgi:application", "--workers", "3" "--bind", ":80"]
