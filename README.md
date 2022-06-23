@@ -8,9 +8,15 @@ Rename .env.example to .env and provide your password before running the up comm
 
 ```bash
 docker build --target prod-stage -t alonimacaroni/frontend-part:stage .
-docker build --target prod-stage -t alonimacaroni/backend-part:stage .
+docker build --target prod-stage -t alonimacaroni/backend-part .
 ```
 
+or
+
+```bash
+LOC=stage ./devops.sh build frontend-part
+LOC=stage ./devops.sh build backend-part
+```
 # Build node modules in frontend root folder:
 
 ```bash
