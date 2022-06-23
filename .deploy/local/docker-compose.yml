@@ -3,7 +3,10 @@ version: "3.9"
 
 services:
   frontend-part:
-    image: alonimacaroni/vote-frontend:latest
+    image: alonimacaroni/vote-frontend:local
+    build:
+      context: ./frontend-ui/
+      target: dev-stage
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-part-http.entrypoints=web"
@@ -19,12 +22,8 @@ services:
       - proxy
     volumes:
       - ./frontend-ui:/app
-    command: >
-      sh -c 'npm run serve'
-    environment:
-      - VUE_APP_URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
-      - VUE_APP_URI_CSRF_PATH=${URI_CSRF_PATH}
-      - VUE_APP_DOMAIN_URL=${DOMAIN_URL}
+    # command: >
+    #   sh -c 'npm run serve'
     security_opt:
       - no-new-privileges:true
   
@@ -50,7 +49,10 @@ services:
       - no-new-privileges:true
   
   backend-part:
-    image: alonimacaroni/vote-backend:latest
+    image: alonimacaroni/vote-backend:local
+    build:
+      context: ./vote_app_backend/
+      target: dev-stage
     labels: 
       - "traefik.enable=true" 
       - "traefik.http.routers.backend-part-http.entrypoints=web"
@@ -67,8 +69,8 @@ services:
       - proxy
     volumes:
       - ./vote_app_backend:/code
-    command: >
-      sh -c 'gunicorn vote_app_backend.wsgi:application --bind 0.0.0.0:8000'
+    # command: >
+    #   sh -c 'gunicorn vote_app_backend.wsgi:application --bind 0.0.0.0:8000'
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}

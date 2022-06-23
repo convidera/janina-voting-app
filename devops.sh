@@ -10,6 +10,7 @@ function install() {
     if [ "$LOC" == "local" ] || [ "$LOC" == "stage" ] || [ "$LOC" == "ci" ];then
       cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
       cp .deploy/${LOC}/vue.config.js frontend-ui/vue.config.js || true
+      cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
       COPIED=true
     else
       echo "wrong execution folder specified, specify local, stage or ci"

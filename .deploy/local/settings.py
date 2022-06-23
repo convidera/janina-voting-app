@@ -32,7 +32,7 @@ SECRET_KEY = str(os.environ.get('SECRET_KEY'))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = str(os.environ.get('DEBUG_MODE'))
 
 
 
@@ -115,35 +115,30 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#development
-# ALLOWED_HOSTS = [
-#     '0.0.0.0',
-# ]
-
-#production
 ALLOWED_HOSTS = [
-    str(os.environ.get('DOMAIN_URL')), 'www.' + str(os.environ.get('DOMAIN_URL')),
+    '0.0.0.0',
 ]
 
 
+
 CORS_ALLOWED_ORIGINS = [
-    "https://127.0.0.1:8080",
-    "https://localhost:8080",
+    # "https://127.0.0.1:8080",
+    # "https://localhost:8080",
     "https://frontend-part",
     "https://" + str(os.environ.get('DOMAIN_URL')),
-    "https://www.127.0.0.1:8080",
-    "https://www.localhost:8080",
+    # "https://www.127.0.0.1:8080",
+    # "https://www.localhost:8080",
     "https://www.frontend-part",
     "https://www." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://127.0.0.1:8080",
-    "https://localhost:8080",
+    # "https://127.0.0.1:8080",
+    # "https://localhost:8080",
     "https://frontend-part",
     "https://" + str(os.environ.get('DOMAIN_URL')),
-    "https://www.127.0.0.1:8080",
-    "https://www.localhost:8080",
+    # "https://www.127.0.0.1:8080",
+    # "https://www.localhost:8080",
     "https://www.frontend-part",
     "https://www." + str(os.environ.get('DOMAIN_URL')),
 ]
@@ -175,24 +170,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-#production
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-APPEND_SLASH = False
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'Strict'
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Strict'
-
-#production
-SECURE_SSL_REDIRECT = False
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_PRELOAD = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True

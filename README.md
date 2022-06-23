@@ -2,7 +2,11 @@
 
 # Project setup
 
-Rename .env.example to .env and provide your password before running the up command. MYSQL_ROOT_PASSWORD, MYSQL_DATABASE, MYSQL_USER and MYSQL_PASSWORD are not predefined and can be freely chosen by the user. The GITHUB_ and SERVER_ environment variables are only needed by devops script commands pullserver and sshserver.
+Rename all .env.example to .env and provide your passwords before running the up command. MYSQL_ROOT_PASSWORD, MYSQL_DATABASE, MYSQL_USER and MYSQL_PASSWORD are not predefined and can be freely chosen by the user. SECRET_KEY should be genereted by Django. The GITHUB_ and SERVER_ environment variables are only needed by devops script commands pullserver and sshserver.
+
+## Generate Django Secret Key
+
+https://djecrety.ir/
 
 # Build frontend and backend images:
 
@@ -17,11 +21,6 @@ or
 LOC=stage ./devops.sh build frontend-part
 LOC=stage ./devops.sh build backend-part
 ```
-# Build node modules in frontend root folder:
-
-```bash
-npm install
-```
 
 # Makemigrations and apply migrations (see devops.sh).
 
@@ -31,20 +30,10 @@ npm install
 docker network create proxy
 ```
 
-# stage environment: 
-
-## In frontend-ui folder:
-
-Create a folder named dist.
+# Run command (use devops.sh) against service:
 
 ```bash
-npm run build
-```
-
-## For vote_app_backend (use devops.sh):
-
-```bash
-LOC=stage ./devops.sh run --rm backend-part python manage.py collectstatic
+LOC=stage ./devops.sh run --rm <service> <command>
 ```
 
 # Use devops.sh bash script for executing commands in a service in running app:

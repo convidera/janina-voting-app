@@ -42,19 +42,18 @@ services:
       - no-new-privileges:true
   
   backend-part:
-    image: alonimacaroni/vote-backend:latest
+    image: alonimacaroni/vote-backend:stage
     build:
       context: ./vote_app_backend/
+      target: prod-stage
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
       - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
     restart: unless-stopped
-    command: >
-      sh -c 'gunicorn vote_app_backend.wsgi:application --workers 3 --bind :80'
     # command: >
-    #   sh -c 'gunicorn --workers 3 --bind unix:~/janina.devcon.team/janina-voting-app/vote_app_backend/vote_app_backend.sock vote_app_backend.wsgi:application'
+    #   sh -c 'gunicorn vote_app_backend.wsgi:application --workers 3 --bind :80'
     networks:
       - proxy
     volumes:
