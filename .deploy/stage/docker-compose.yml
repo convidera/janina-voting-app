@@ -85,11 +85,13 @@ services:
       --certificatesresolvers.myresolver.acme.tlschallenge=true
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      --providers.file.filename=/letsencrypt/dynamic_conf.yml
 #      --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory  
     labels:
       - "traefik.enable=true"
       ##  disable TLS version 1.0 and 1.1
-      # - "traefik.tls.options.default.minversion=VersionTLS12"
+      - "traefik.tls.options.default.minversion=VersionTLS12"
+      - "traefik.tls.options.default.sniStrict=true"
       #configure encryption methods
       - "traefik.http.middlewares.secureheaders.headers.browserxssfilter=true"
       - "traefik.http.middlewares.secureheaders.headers.contenttypenosniff=true"

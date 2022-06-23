@@ -127,16 +127,12 @@ ALLOWED_HOSTS = [
 
 
 CORS_ALLOWED_ORIGINS = [
-#    "https://frontend-part",
     "https://" + str(os.environ.get('DOMAIN_URL')),
-#    "https://www.frontend-part",
     "https://www." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-#    "https://frontend-part",
     "https://" + str(os.environ.get('DOMAIN_URL')),
-#    "https://www.frontend-part",
     "https://www." + str(os.environ.get('DOMAIN_URL')),
 ]
 
