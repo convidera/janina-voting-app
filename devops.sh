@@ -6,7 +6,7 @@ ABORT=false
 
 function install() {
   #if file does not exist
-  if [ ! -f docker-compose.yml ] && [ ! -f vue.config.js ];then
+  if [ ! -f docker-compose.yml ] && [ ! -f vue.config.js ] && [ ! -f settings.py ];then
     if [ "$LOC" == "local" ] || [ "$LOC" == "stage" ] || [ "$LOC" == "ci" ];then
       cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
       cp .deploy/${LOC}/vue.config.js frontend-ui/vue.config.js || true
