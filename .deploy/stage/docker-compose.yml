@@ -77,7 +77,6 @@ services:
     command: >-
       --log.level=DEBUG
       --api.dashboard=true
-      --api.insecure=true
       --providers.docker=true
       --providers.docker.exposedbydefault=false
       --entrypoints.web.address=:80
@@ -95,8 +94,7 @@ services:
       - "traefik.http.routers.proxy-part.entrypoints=websecure"
       - "traefik.http.routers.proxy-part.service=api@internal"
       - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
-      - "traefik.http.routers.proxy-part.tls.certresolver=myresolver"
-#      - "traefik.http.routers.backend-part.middlewares=force-https"    
+      - "traefik.http.routers.proxy-part.tls.certresolver=myresolver" 
       ##  disable TLS version 1.0 and 1.1
       # - "traefik.tls.options.default.minversion=VersionTLS12"
       #configure encryption methods
@@ -106,16 +104,16 @@ services:
       # - "traefik.http.middlewares.secureheaders.headers.framedeny=true"
       # - "traefik.http.middlewares.secureheaders.headers.sslredirect=true"
       # #HSTS config
-      # - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
-      # - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
-      # - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
-      #- "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
+      - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
+      - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
+      - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
+      - "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
       # #CORS config
-    #   - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
-    #   - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
-    #   - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
-    #   - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
-    # security_opt:
+      - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
+      - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
+      - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
+    security_opt:
       - no-new-privileges:true
     #settings for mkcert, self-signed certs should be used locally (not letsencrypt)
     #letsencrypt needs to establish a connection via the http challenge
