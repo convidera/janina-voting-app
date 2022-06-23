@@ -9,7 +9,6 @@ RUN apk update \
     && apk add --no-cache mariadb-dev
 RUN pip install -r requirements.txt
 EXPOSE 8080 
-CMD ["gunicorn", "vote_app_backend.wsgi:application", "--bind", "0.0.0.0:8000"]
 
 FROM python:3-alpine as prod-stage
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -22,4 +21,3 @@ RUN apk update \
     && apk add --no-cache mariadb-dev
 RUN pip install -r requirements.txt
 EXPOSE 80 
-CMD ["gunicorn" , "vote_app_backend.wsgi:application", "--workers", "3" "--bind", ":80"]
