@@ -22,8 +22,8 @@ services:
       - proxy
     volumes:
       - ./frontend-ui:/app
-    # command: >
-    #   sh -c 'npm run serve'
+    command: >
+      sh -c 'npm run serve'
     security_opt:
       - no-new-privileges:true
   
@@ -69,8 +69,8 @@ services:
       - proxy
     volumes:
       - ./vote_app_backend:/code
-    # command: >
-    #   sh -c 'gunicorn vote_app_backend.wsgi:application --bind 0.0.0.0:8000'
+    command: >
+      sh -c 'gunicorn vote_app_backend.wsgi:application --bind 0.0.0.0:8000'
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
