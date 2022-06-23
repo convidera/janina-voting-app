@@ -77,6 +77,7 @@ services:
     command: >-
       --log.level=DEBUG
       --api.dashboard=true
+      --api.insecure=true
       --providers.docker=true
       --providers.docker.exposedbydefault=false
       --entrypoints.web.address=:80
@@ -98,11 +99,11 @@ services:
       ##  disable TLS version 1.0 and 1.1
       # - "traefik.tls.options.default.minversion=VersionTLS12"
       #configure encryption methods
-      # - "traefik.http.middlewares.secureheaders.headers.browserxssfilter=true"
-      # - "traefik.http.middlewares.secureheaders.headers.contenttypenosniff=true"
+      - "traefik.http.middlewares.secureheaders.headers.browserxssfilter=true"
+      - "traefik.http.middlewares.secureheaders.headers.contenttypenosniff=true"
       # #SSL config
-      # - "traefik.http.middlewares.secureheaders.headers.framedeny=true"
-      # - "traefik.http.middlewares.secureheaders.headers.sslredirect=true"
+      - "traefik.http.middlewares.secureheaders.headers.framedeny=true"
+      - "traefik.http.middlewares.secureheaders.headers.sslredirect=true"
       # #HSTS config
       - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
       - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
