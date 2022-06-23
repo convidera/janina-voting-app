@@ -12,7 +12,7 @@ https://djecrety.ir/
 
 ```bash
 docker build --target prod-stage -t alonimacaroni/frontend-part:stage .
-docker build --target prod-stage -t alonimacaroni/backend-part .
+docker build --target prod-stage -t alonimacaroni/backend-part:stage .
 ```
 
 or

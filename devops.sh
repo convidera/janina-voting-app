@@ -23,6 +23,7 @@ function cleanUp() {
   if [ "$COPIED" = true ];then
     rm docker-compose.yml
     rm frontend-ui/vue.config.js
+    rm vote_app_backend/vote_app_backend/settings.py
   fi
 }
 
