@@ -5,6 +5,9 @@ export LOC=${LOC:-local}
 ABORT=false
 
 function install() {
+  if [ "$LOC" == "local" ];then
+    docker network create proxy
+  fi
   #if file does not exist
   if [ ! -f docker-compose.yml ] && [ ! -f frontend-ui/vue.config.js ] && [ ! -f vote_app_backend/vote_app_backend/settings.py ];then
     if [ "$LOC" == "local" ] || [ "$LOC" == "stage" ] || [ "$LOC" == "ci" ];then
@@ -20,22 +23,20 @@ function install() {
 }
 
 function cleanUp() {
+  $COMPOSE down
   if [ "$COPIED" = true ];then
     rm docker-compose.yml
     rm frontend-ui/vue.config.js
     rm vote_app_backend/vote_app_backend/settings.py
   fi
+  if [ "$LOC" == "local" ];then
+    docker network rm proxy
+  fi
 }
 
 if [ $# -gt 0 ]
 then
-  if [ "$1" == "exit" ];then
-    install
-    if [ $ABORT = false ];then
-      $COMPOSE down
-      cleanUp
-    fi
-  elif [ "$1" == "runserver" ];then
+  if [ "$1" == "runserver" ];then
     install
     if [ $ABORT = false ];then
       shift 1

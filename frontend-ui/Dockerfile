@@ -9,7 +9,7 @@ RUN npm run build
 
 # development stage
 FROM node:lts-alpine as dev-stage
-COPY --from=build-stage /app /app
+COPY --from=build-stage /app . 
 RUN npm install -g http-server
 EXPOSE 8080
 CMD ["http-server", "dist"]
