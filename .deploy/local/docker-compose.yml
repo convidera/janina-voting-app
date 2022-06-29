@@ -31,8 +31,8 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     ports:
-      - target: 3306
-        published: 3306
+      - target: ${MYSQL_PORT}
+        published: ${MYSQL_PORT}
         protocol: tcp
         mode: host
     networks:
@@ -45,6 +45,8 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
     security_opt:
       - no-new-privileges:true
   
@@ -69,14 +71,14 @@ services:
       - proxy
     volumes:
       - ./vote_app_backend:/code
-    # command: >
-    #   sh -c 'gunicorn vote_app_backend.wsgi:application --bind 0.0.0.0:8000'
     command: >
       sh -c 'gunicorn vote_app_backend.wsgi:application --bind :8000'
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
       - DATABASE_PASS=${MYSQL_PASSWORD}
+      - DATABASE_HOST=${MYSQL_HOST}
+      - DATABASE_PORT=${MYSQL_PORT}
       - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
       - URI_CSRF_PATH=${URI_CSRF_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
