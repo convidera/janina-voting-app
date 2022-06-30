@@ -117,18 +117,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ALLOWED_HOSTS = [
     str(os.environ.get('DOMAIN_URL')), 
-    'www.' + str(os.environ.get('DOMAIN_URL')),
 ]
 
 
 CORS_ALLOWED_ORIGINS = [
     "https://" + str(os.environ.get('DOMAIN_URL')),
-    "https://www." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://" + str(os.environ.get('DOMAIN_URL')),
-    "https://www." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CORS_ALLOW_METHODS = [
