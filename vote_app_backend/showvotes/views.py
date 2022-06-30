@@ -1,4 +1,3 @@
-#from django.http import HttpResponseRedirect
 from django.http import JsonResponse, HttpResponse
 from django.middleware.csrf import get_token
 from .models import Username, Choice

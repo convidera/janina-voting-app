@@ -4,7 +4,6 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     allowedHosts: [
-      'www.' + process.env.VUE_APP_DOMAIN_URL,
       process.env.VUE_APP_DOMAIN_URL,
     ],
   },

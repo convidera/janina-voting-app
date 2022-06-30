@@ -117,23 +117,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ALLOWED_HOSTS = [
     str(os.environ.get('DOMAIN_URL')),
-    'www.' + str(os.environ.get('DOMAIN_URL')),
 ]
-
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://frontend-part",
     "https://" + str(os.environ.get('DOMAIN_URL')),
-    "https://www.frontend-part",
-    "https://www." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://frontend-part",
     "https://" + str(os.environ.get('DOMAIN_URL')),
-    "https://www.frontend-part",
-    "https://www." + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CORS_ALLOW_METHODS = [
@@ -171,5 +163,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'Strict'
+#allow specific subdomain
+#CSRF_COOKIE_DOMAIN = "www." + str(os.environ.get('DOMAIN_URL'))
+#allow all subdomains:
+#CSRF_COOKIE_DOMAIN = "." + str(os.environ.get('DOMAIN_URL'))
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Strict'

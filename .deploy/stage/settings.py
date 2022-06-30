@@ -115,7 +115,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#production
 ALLOWED_HOSTS = [
     str(os.environ.get('DOMAIN_URL')), 
     'www.' + str(os.environ.get('DOMAIN_URL')),

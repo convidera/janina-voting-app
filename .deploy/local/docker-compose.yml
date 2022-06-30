@@ -10,12 +10,13 @@ services:
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-part-http.entrypoints=web"
-      - "traefik.http.routers.frontend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
-      - "traefik.http.routers.frontend-part-http.middlewares=frontend-part-https"
-      - "traefik.http.middlewares.frontend-part-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.frontend-part-http.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
+      - "traefik.http.routers.frontend-part-http.middlewares=http-to-https"
       - "traefik.http.routers.frontend-part.entrypoints=websecure"
-      - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`)"
+      - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
       - "traefik.http.routers.frontend-part.tls=true"
+      # www to https redirection
+      - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
       - "traefik.docker.network=proxy"
     restart: unless-stopped
     networks:
@@ -58,14 +59,14 @@ services:
     labels: 
       - "traefik.enable=true" 
       - "traefik.http.routers.backend-part-http.entrypoints=web"
-      - "traefik.http.routers.backend-part-http.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
-      - "traefik.http.routers.backend-part-http.middlewares=backend-part-https"
-      - "traefik.http.middlewares.backend-part-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.backend-part-http.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.backend-part-http.middlewares=http-to-https"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
-      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`, `www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls=true"
-      - "traefik.docker.network=proxy"
       - "traefik.http.services.backend-part-http.loadbalancer.server.port=8000"
+      - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
+      - "traefik.docker.network=proxy" 
     restart: unless-stopped
     networks:
       - proxy
@@ -98,18 +99,25 @@ services:
       --providers.docker.exposedbydefault=false
       --entrypoints.web.address=:80
       --entrypoints.websecure.address=:443
-      --providers.file.filename=/usr/local/share/ca-certificates/janina/traefik.yml
+      --providers.file.filename=/usr/local/share/ca-certificates/janina/dynamic_conf.yml
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.proxy-part-http.entrypoints=web"
       - "traefik.http.routers.proxy-part-http.service=api@internal"
-      - "traefik.http.routers.proxy-part-http.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
-      - "traefik.http.routers.proxy-part-http.middlewares=proxy-part-https"
-      - "traefik.http.middlewares.proxy-part-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.proxy-part-http.rule=Host(`dash.${DOMAIN_URL}`) || Host(`www.dash.${DOMAIN_URL}`)"
+      - "traefik.http.routers.proxy-part-http.middlewares=http-to-https"
+      - "traefik.http.middlewares.http-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.proxy-part.tls=true"
       - "traefik.http.routers.proxy-part.entrypoints=websecure"
       - "traefik.http.routers.proxy-part.service=api@internal"
-      - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`, `www.dash.${DOMAIN_URL}`)"
-      - "traefik.http.routers.proxy-part.tls=true"
+      - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`) || Host(`www.dash.${DOMAIN_URL}`)"
+      # www to https redirection
+      - "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
+      # The regular expression to match and capture elements from the request URL
+      - "traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)"
+      # How to modify the URL to have the new target URL
+      - "traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true"
     security_opt:
       - no-new-privileges:true
     ports:
