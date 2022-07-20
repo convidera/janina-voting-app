@@ -1,2 +1,143 @@
 #ci
-version: "3"
+version: "3.9"
+
+services:
+  frontend-part:
+    image: alonimacaroni/vote-frontend:local
+    build:
+      context: ./frontend-ui/
+      target: dev-stage
+    labels: 
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend-part-http.entrypoints=web"
+      - "traefik.http.routers.frontend-part-http.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
+      - "traefik.http.routers.frontend-part-http.middlewares=http-to-https"
+      - "traefik.http.routers.frontend-part.entrypoints=websecure"
+      - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
+      - "traefik.http.routers.frontend-part.tls=true"
+      - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
+      - "traefik.docker.network=proxy"
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - ./frontend-ui:/app
+    command: >
+      sh -c 'npm run serve'
+    security_opt:
+      - no-new-privileges:true
+  
+  vote-app-mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    ports:
+      - target: ${MYSQL_PORT}
+        published: ${MYSQL_PORT}
+        protocol: tcp
+        mode: host
+    networks:
+      - proxy
+    volumes:
+      - mysql:/var/lib/mysql:delegated
+      - ./db_assets:/docker-entrypoint-initdb.d/:delegated
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+    security_opt:
+      - no-new-privileges:true
+  
+  backend-part:
+    image: alonimacaroni/vote-backend:local
+    build:
+      context: ./vote_app_backend/
+      target: dev-stage
+    labels: 
+      - "traefik.enable=true" 
+      - "traefik.http.routers.backend-part-http.entrypoints=web"
+      - "traefik.http.routers.backend-part-http.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.backend-part-http.middlewares=http-to-https"
+      - "traefik.http.routers.backend-part.entrypoints=websecure"
+      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.backend-part.tls=true"
+      - "traefik.http.services.backend-part-http.loadbalancer.server.port=8000"
+      - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
+      - "traefik.docker.network=proxy" 
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - ./vote_app_backend:/code
+    command: >
+      sh -c 'gunicorn vote_app_backend.wsgi:application --bind :8000'
+    environment:
+      - DATABASE_NAME=${MYSQL_DATABASE}
+      - DATABASE_USER=${MYSQL_USER}
+      - DATABASE_PASS=${MYSQL_PASSWORD}
+      - DATABASE_HOST=${MYSQL_HOST}
+      - DATABASE_PORT=${MYSQL_PORT}
+      - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
+      - URI_CSRF_PATH=${URI_CSRF_PATH}
+      - DOMAIN_URL=${DOMAIN_URL}
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      - vote-app-mysql
+  
+  proxy-part:
+    image: traefik:v2.7
+    restart: unless-stopped
+    command: >-
+      --log.level=DEBUG
+      --api.dashboard=true
+      --api.insecure=true
+      --providers.docker=true
+      --providers.docker.exposedbydefault=false
+      --entrypoints.web.address=:80
+      --entrypoints.websecure.address=:443
+      --providers.file.filename=/usr/local/share/ca-certificates/janina/dynamic_conf.yml
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.proxy-part-http.entrypoints=web"
+      - "traefik.http.routers.proxy-part-http.service=api@internal"
+      - "traefik.http.routers.proxy-part-http.rule=Host(`dash.${DOMAIN_URL}`) || Host(`www.dash.${DOMAIN_URL}`)"
+      - "traefik.http.routers.proxy-part-http.middlewares=http-to-https"
+      - "traefik.http.middlewares.http-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.proxy-part.tls=true"
+      - "traefik.http.routers.proxy-part.entrypoints=websecure"
+      - "traefik.http.routers.proxy-part.service=api@internal"
+      - "traefik.http.routers.proxy-part.rule=Host(`dash.${DOMAIN_URL}`) || Host(`www.dash.${DOMAIN_URL}`)"
+      # www to https redirection
+      - "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
+      # The regular expression to match and capture elements from the request URL
+      - "traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)"
+      # How to modify the URL to have the new target URL
+      - "traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true"
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+    networks:
+      - proxy
+    volumes: 
+      - ./.deploy/local/certificates:/usr/local/share/ca-certificates/janina:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  mysql:
+    driver: local

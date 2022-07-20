@@ -1,14 +1,15 @@
 name: Test pull-request and merge with main
 on:
   pull_request:
-    branches:
-      - main
+    branches: [ 'main' ]
 jobs:
   run-tests-on-pull-request:
     runs-on: [self-hosted, ubuntu, k8s]
     steps:
-      - name: Run tests against pull request
+      - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Run tests against pull request
         run: LOC=ci ./devops.sh test
 
       - name: Merge branch -> main
