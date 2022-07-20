@@ -24,12 +24,6 @@ LOC=stage ./devops.sh build backend-part
 
 # Makemigrations and apply migrations (see devops.sh).
 
-# local environment: Create a docker network called proxy in project root:
-
-```bash
-docker network create proxy
-```
-
 # Run command (use devops.sh) against service:
 
 ```bash
