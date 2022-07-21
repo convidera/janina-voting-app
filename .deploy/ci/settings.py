@@ -121,11 +121,11 @@ ALLOWED_HOSTS = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://" + str(os.environ.get('DOMAIN_URL')),
+    "http://" + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://" + str(os.environ.get('DOMAIN_URL')),
+    "http://" + str(os.environ.get('DOMAIN_URL')),
 ]
 
 CORS_ALLOW_METHODS = [
