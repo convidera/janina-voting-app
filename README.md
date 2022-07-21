@@ -8,6 +8,12 @@ Rename all .env.example to .env and provide your passwords before running the up
 
 https://djecrety.ir/
 
+# Generate self-signed certificates with mkcert for local and ci environments and certificates signed by a CA with letsencrypt for stage environment.
+
+# Set up a local DNS like Dnsmasq (Mac OS) for local environment in order to direct traffic from test domain to localhost.
+
+https://passingcuriosity.com/2013/dnsmasq-dev-osx/
+
 # Build frontend and backend images:
 
 ```bash
