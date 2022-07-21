@@ -6,6 +6,9 @@ jobs:
   run-tests-on-pull-request:
     runs-on: [self-hosted, ubuntu, k8s]
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Setup Docker Context for Buildx
         id: buildx-context
         run: |
@@ -17,12 +20,12 @@ jobs:
         with:
           endpoint: builders
 
+      - name: Decrypt .env.ci files
+        run: git secret reveal
+
       - name: Build Docker images
         run: |
           docker buildx build -t alonimacaroni/backend-part:ci --target dev-stage .
-
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
       - name: Run tests against pull request
         run: LOC=ci ./devops.sh test
