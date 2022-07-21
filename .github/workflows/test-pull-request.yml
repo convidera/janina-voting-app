@@ -25,10 +25,13 @@ jobs:
 
       - name: Build Docker images
         run: |
+          cd vote_app_backend
           docker buildx build -t alonimacaroni/backend-part:ci --target dev-stage .
 
       - name: Run tests against pull request
-        run: LOC=ci ./devops.sh test
+      run: |
+          cd ..
+          LOC=ci ./devops.sh test
 
       - name: Merge branch -> main
         uses: devmasx/merge-branch@master
@@ -36,4 +39,3 @@ jobs:
           type: now
           target_branch: main
           github_token: ${{ github.token }}
-
