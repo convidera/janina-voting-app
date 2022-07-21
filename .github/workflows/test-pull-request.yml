@@ -1,7 +1,7 @@
 name: Test pull-request and merge with main
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 jobs:
   run-tests-on-pull-request:
     runs-on: [self-hosted, ubuntu, k8s]
@@ -33,10 +33,3 @@ jobs:
       run: |
           cd ..
           LOC=ci ./devops.sh test
-
-      - name: Merge branch -> main
-        uses: devmasx/merge-branch@master
-        with:
-          type: now
-          target_branch: main
-          github_token: ${{ github.token }}
