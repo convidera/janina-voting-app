@@ -21,7 +21,8 @@ jobs:
           endpoint: builders
 
       - name: Decrypt .env.ci files
-        run: git secret reveal
+        run: |
+          git secret reveal
 
       - name: Build Docker images
         run: |
