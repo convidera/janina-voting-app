@@ -6,6 +6,21 @@ jobs:
   run-tests-on-pull-request:
     runs-on: [self-hosted, ubuntu, k8s]
     steps:
+      - name: Setup Docker Context for Buildx
+        id: buildx-context
+        run: |
+          docker context create builders
+      
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          endpoint: builders
+
+      - name: Build Docker images
+        run: |
+          docker buildx build -t alonimacaroni/backend-part:ci --target dev-stage .
+
       - name: Checkout repository
         uses: actions/checkout@v3
 

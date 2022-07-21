@@ -8,6 +8,7 @@ node_modules
 vote_app_backend/vote_app_backend/.env
 .env.local
 .env.*.local
+.env.ci
 
 # Log files
 npm-debug.log*
