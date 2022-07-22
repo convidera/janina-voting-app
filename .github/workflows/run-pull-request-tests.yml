@@ -43,9 +43,7 @@ jobs:
       - name: Build Docker images
         run: |
           cd vote_app_backend
-          docker buildx build \
-            --tag alonimacaroni/backend-part:ci \
-            --target dev-stage .
+          docker buildx build --tag alonimacaroni/backend-part:ci --target dev-stage .
 
       - name: Run tests against pull request
         run: |
