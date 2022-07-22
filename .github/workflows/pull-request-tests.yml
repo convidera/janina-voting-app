@@ -1,0 +1,51 @@
+name: 'Run pull-request tests'
+
+on: 
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-tests-on-pull-request:
+    runs-on: [self-hosted, ubuntu, k8s]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Docker Context for Buildx
+        id: buildx-context
+        run: docker context create builders
+      
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          endpoint: builders
+      
+      - name: Update Ubuntu package repositories
+        run: sudo apt-get update -y
+
+      - name: Install GnuPG
+        run: sudo apt-get install -y gnupg
+
+      - name: Install git-secret
+        run: sudo apt-get install -y git-secret
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+
+      - name: Decrypt .env.ci files
+        run: git secret reveal
+      
+      - name: Build Docker images
+        run: |
+          cd vote_app_backend
+          docker buildx build --tag alonimacaroni/backend-part:ci --target dev-stage .
+
+      - name: Run tests against pull request
+        run: |
+          cd ..
+          LOC=ci ./devops.sh test
