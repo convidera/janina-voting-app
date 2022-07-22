@@ -15,8 +15,7 @@ jobs:
       
       - name: Setup Docker Context for Buildx
         id: buildx-context
-        run: |
-          docker context create builders
+        run: docker context create builders
       
       - name: Set up Docker Buildx
         id: buildx
@@ -25,8 +24,7 @@ jobs:
           endpoint: builders
       
       - name: Decrypt .env.ci files
-        run: |
-          git secret reveal
+        run: git secret reveal
       
       - name: Build Docker images
         run: |
