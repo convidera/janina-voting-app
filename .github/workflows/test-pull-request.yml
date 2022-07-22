@@ -5,7 +5,9 @@ on:
       - main
 jobs:
   run-tests-on-pull-request:
+    
     runs-on: [self-hosted, ubuntu, k8s]
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
