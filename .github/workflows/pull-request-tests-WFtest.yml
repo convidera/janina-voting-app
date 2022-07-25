@@ -1,9 +1,7 @@
 name: 'Run pull-request tests'
 
 on: 
-  pull_request_target:
-    branches:
-      - main
+  pull_request:
 
 jobs:
   run-tests-on-pull-request:
