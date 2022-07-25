@@ -5,7 +5,8 @@ node_modules
 
 # local env files
 .env
-vote_app_backend/vote_app_backend/.env
+vote_app_backend/.env
+vote_app_backend/.env.ci
 .env.local
 .env.*.local
 .env.ci
@@ -37,3 +38,5 @@ frontend_ui/.env.production
 .deploy/stage/letsencrypt/acme.json
 .deploy/local/certificates/janina.test+3-key.pem
 .deploy/local/certificates/janina.test+3.pem
+.gitsecret/keys/random_seed
+!*.secret
