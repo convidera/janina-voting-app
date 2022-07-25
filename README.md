@@ -14,7 +14,8 @@ https://djecrety.ir/
 
 https://passingcuriosity.com/2013/dnsmasq-dev-osx/
 
-# Build frontend and backend images:
+# Build frontend and backend images for stage environment:
+Go to frontend and backend project folders.
 
 ```bash
 docker build --target prod-stage -t alonimacaroni/frontend-part:stage .
@@ -28,7 +29,26 @@ LOC=stage ./devops.sh build frontend-part
 LOC=stage ./devops.sh build backend-part
 ```
 
-# Makemigrations and apply migrations (see devops.sh).
+# Build frontend and backend images for local environment:
+Go to frontend and backend project folders.
+
+```bash
+docker build --target dev-stage -t alonimacaroni/frontend-part:local .
+docker build --target dev-stage -t alonimacaroni/backend-part:local .
+```
+
+or
+
+```bash
+./devops.sh build frontend-part
+./devops.sh build backend-part
+```
+
+# Apply migrations (here: local):
+
+```bash
+./devops.sh migrate
+```
 
 # Run command (use devops.sh) against service:
 
