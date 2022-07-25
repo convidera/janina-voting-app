@@ -2,7 +2,6 @@ name: 'Run pull-request tests'
 
 on: 
   pull_request:
-  push:
 
 jobs:
   run-tests-on-pull-request:
