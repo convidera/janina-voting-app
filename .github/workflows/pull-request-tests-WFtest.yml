@@ -1,0 +1,11 @@
+name: 'Run pull-request tests'
+
+on:
+  pull_request:
+
+jobs:
+  run-tests-on-pull-request:
+    runs-on: [self-hosted, ubuntu, k8s]
+    steps:
+      - name: Test
+        run: echo 'Hello'
