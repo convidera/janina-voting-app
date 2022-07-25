@@ -57,14 +57,6 @@ docker-compose up
 
 ## Script commands:
 
-Shut down app:
-
-```bash
-./devops exit
-```
-
-\
-\
 Run server in backend, more options for original command can be appended:
 
 ```bash
