@@ -1,7 +1,9 @@
 name: 'Run pull-request tests'
 
-on:
+on: 
   pull_request:
+    branches:
+      - main
 
 jobs:
   run-tests-on-pull-request:
@@ -32,19 +34,18 @@ jobs:
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v5
         with:
-          gpg_private_key: ${{ secrets.TESTER_PRIVKEY }}
-          passphrase: ${{ secrets.TESTER_PASS }}
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
 
       - name: Decrypt .env.ci files
         run: git secret reveal
-
-      - name: Build Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./vote_app_backend/
-          tags: alonimacaroni/backend-part:ci
-          target: dev-stage
+      
+      - name: Build Docker images
+        run: |
+          cd vote_app_backend
+          docker buildx build --tag alonimacaroni/backend-part:ci --target dev-stage .
 
       - name: Run tests against pull request
         run: |
+          cd ..
           LOC=ci ./devops.sh test

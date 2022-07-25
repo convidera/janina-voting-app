@@ -139,7 +139,6 @@ services:
       - proxy
     volumes: 
       - ./.deploy/stage/letsencrypt:/letsencrypt
-      #if you are using Docker as your provider
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
