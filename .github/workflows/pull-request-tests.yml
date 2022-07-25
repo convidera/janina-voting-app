@@ -39,13 +39,14 @@ jobs:
 
       - name: Decrypt .env.ci files
         run: git secret reveal
-      
-      - name: Build Docker images
-        run: |
-          cd vote_app_backend
-          docker buildx build --tag alonimacaroni/backend-part:ci --target dev-stage .
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./vote_app_backend/
+          tags: alonimacaroni/backend-part:ci
+          target: dev-stage
 
       - name: Run tests against pull request
         run: |
-          cd ..
           LOC=ci ./devops.sh test

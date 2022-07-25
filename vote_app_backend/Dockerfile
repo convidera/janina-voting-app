@@ -8,7 +8,7 @@ RUN apk update \
     && apk add --virtual build-deps gcc python3-dev musl-dev \
     && apk add --no-cache mariadb-dev
 RUN pip install -r requirements.txt
-EXPOSE 8080 
+EXPOSE 8000 
 
 FROM python:3-alpine as prod-stage
 ENV PYTHONDONTWRITEBYTECODE=1
