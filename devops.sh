@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 COMPOSE="docker-compose"
 COPIED=false
 export LOC=${LOC:-local}
@@ -91,9 +91,10 @@ then
   elif [ "$1" == "test" ];then
     install
     if [ $ABORT = false ];then
+      shift 1
       $COMPOSE run --rm \
         backend-part \
-        pytest
+        pytest "$@"
       cleanUp
     fi
   elif [ "$1" == "push" ];then 
