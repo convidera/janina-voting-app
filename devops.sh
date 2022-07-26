@@ -1,4 +1,5 @@
 #!/bin/bash
+#show errors with exit code
 set -euo pipefail
 COMPOSE="docker-compose"
 COPIED=false
