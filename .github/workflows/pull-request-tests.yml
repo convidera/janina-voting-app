@@ -23,8 +23,8 @@ jobs:
       - name: Update Ubuntu package repositories
         run: sudo apt-get update -y
       
-      - name: Install bash
-        run: sudo apt install -y bash
+#      - name: Install bash
+#        run: sudo apt install -y bash
 
       - name: Install GnuPG
         run: sudo apt-get install -y gnupg
