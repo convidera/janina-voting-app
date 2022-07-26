@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 COMPOSE="docker-compose"
 COPIED=false
 export LOC=${LOC:-local}
