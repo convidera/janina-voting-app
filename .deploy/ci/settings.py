@@ -120,7 +120,7 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://" + str(os.environ.get('DOMAIN_URL')),
+    "https://" + str(os.environ.get('DOMAIN_URL')),
 ]
 
 
