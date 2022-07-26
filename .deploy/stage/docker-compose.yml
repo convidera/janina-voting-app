@@ -25,8 +25,8 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     ports:
-      - target: 3306
-        published: 3306
+      - target: ${MYSQL_PORT}
+        published: ${MYSQL_PORT}
         protocol: tcp
         mode: host
     networks:
@@ -122,10 +122,6 @@ services:
       - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
     security_opt:
       - no-new-privileges:true
-    #settings for mkcert, self-signed certs should be used locally (not letsencrypt)
-    #letsencrypt needs to establish a connection via the http challenge
-    #mkcert creates a cert and installs a CA locally
-    #certificateresolver is only needed with letsencrypt
     ports:
       - target: 80
         published: 80
