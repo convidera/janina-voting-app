@@ -39,7 +39,7 @@ jobs:
         run: git secret reveal -p ${{ secrets.TESTER_PASS }}
 
       - name: Show envs
-        run: ls -lah
+        run: env
 
       - name: Build Docker image
         uses: docker/build-push-action@v3
