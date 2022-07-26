@@ -8,11 +8,21 @@ function install() {
   if [ "$LOC" == "local" ];then
     docker network create proxy
   fi
-  #if file does not exist
-  if [ ! -f docker-compose.yml ] && [ ! -f frontend-ui/vue.config.js ] && [ ! -f vote_app_backend/vote_app_backend/settings.py ];then
-    if [ "$LOC" == "local" ] || [ "$LOC" == "stage" ] || [ "$LOC" == "ci" ];then
+  if [ "$LOC" == "local" ] || [ "$LOC" == "stage" ];then
+    #if file does not exist
+    if [ ! -f docker-compose.yml ] && [ ! -f frontend-ui/vue.config.js ] && [ ! -f vote_app_backend/vote_app_backend/settings.py ];then
       cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
       cp .deploy/${LOC}/vue.config.js frontend-ui/vue.config.js || true
+      cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
+      COPIED=true
+    else
+      echo "wrong execution folder specified, specify local, stage or ci"
+      ABORT=true
+    fi
+  fi
+  if [ "$LOC" == "ci" ];then
+    if [ ! -f docker-compose.yml ] && [ ! -f vote_app_backend/vote_app_backend/settings.py ];then
+      cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
       cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
       COPIED=true
     else
@@ -26,8 +36,10 @@ function cleanUp() {
   $COMPOSE down
   if [ "$COPIED" = true ];then
     rm docker-compose.yml
-    rm frontend-ui/vue.config.js
     rm vote_app_backend/vote_app_backend/settings.py
+    if [ -f frontend-ui/vue.config.js ];then
+      rm frontend-ui/vue.config.js
+    fi
   fi
   if [ "$LOC" == "local" ];then
     docker network rm proxy
