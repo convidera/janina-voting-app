@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 COMPOSE="docker-compose"
 COPIED=false
 export LOC=${LOC:-local}

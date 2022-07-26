@@ -22,9 +22,6 @@ jobs:
       
       - name: Update Ubuntu package repositories
         run: sudo apt-get update -y
-      
-#      - name: Install bash
-#        run: sudo apt install -y bash
 
       - name: Install GnuPG
         run: sudo apt-get install -y gnupg
@@ -40,6 +37,9 @@ jobs:
 
       - name: Decrypt .env.ci files
         run: git secret reveal
+
+      - name: Show envs
+        run: cat .env
 
       - name: Build Docker image
         uses: docker/build-push-action@v3
