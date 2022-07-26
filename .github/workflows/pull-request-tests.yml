@@ -39,7 +39,7 @@ jobs:
         run: git secret reveal
 
       - name: Show envs
-        run: cat .env
+        run: cat .env.ci
 
       - name: Build Docker image
         uses: docker/build-push-action@v3
