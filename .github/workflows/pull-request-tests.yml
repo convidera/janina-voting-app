@@ -42,6 +42,7 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v3
         with:
+          push: true
           context: ./vote_app_backend/
           tags: alonimacaroni/backend-part:ci
           target: dev-stage
