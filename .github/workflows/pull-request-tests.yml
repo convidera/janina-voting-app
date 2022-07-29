@@ -54,7 +54,7 @@ jobs:
           target: dev-stage
 
       - name: Display envs
-        run: LOC=ci ./devops.sh backend-part env | sort
+        run: LOC=ci ./devops.sh exec backend-part env | sort
 
       - name: Run migrate command
         run: LOC=ci ./devops.sh migrate
