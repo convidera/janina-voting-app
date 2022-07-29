@@ -34,6 +34,9 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.TESTER_PRIVKEY }}
           passphrase: ${{ secrets.TESTER_PASS }}
+      
+      - name: Init git-secret
+        run: git-secret init
 
       - name: Decrypt .env.ci files
         run: git secret reveal -p ${{ secrets.TESTER_PASS }}
