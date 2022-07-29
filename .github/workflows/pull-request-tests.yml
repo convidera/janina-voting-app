@@ -36,7 +36,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
 
       - name: Decrypt .env.ci files
-        run: git secret reveal -p ${{ secrets.PASSPHRASE }}
+        run: git secret reveal -p "${{ secrets.PASSPHRASE }}"
 
       - name: Show envs
         run: ls -lah
