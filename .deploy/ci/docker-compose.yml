@@ -23,7 +23,7 @@ services:
       - no-new-privileges:true
   
   backend-part:
-    image: alonimacaroni/vote-backend:ci
+    image: alonimacaroni/backend-part:ci
     restart: unless-stopped
     volumes:
       - ./vote_app_backend:/code
