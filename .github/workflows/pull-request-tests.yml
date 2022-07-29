@@ -46,6 +46,9 @@ jobs:
           tags: alonimacaroni/backend-part:ci
           target: dev-stage
 
+      - name: ls images
+        run: docker image ls -a
+
       - name: Run tests against pull request
         run: |
           LOC=ci ./devops.sh test
