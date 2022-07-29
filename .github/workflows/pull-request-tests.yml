@@ -7,8 +7,14 @@ jobs:
   run-tests-on-pull-request:
     runs-on: [self-hosted, ubuntu, k8s]
     steps:
+      - name: before checkout
+        run: pwd
+
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: after checkout
+        run: pwd
       
       - name: Setup Docker Context for Buildx
         id: buildx-context
