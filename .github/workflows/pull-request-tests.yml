@@ -40,7 +40,7 @@ jobs:
 
       - name: Decrypt .env.ci files
         run: |
-          gpg --decrypt --yes --output .env.ci .env.ci.gpg
+          gpg --decrypt --yes --output ./.env.ci ./.env.ci.gpg
 #          gpg --debug-all --decrypt --output ./.env.ci --yes --passphrase ${{ secrets.PASSPHRASE }} ./.env.ci.gpg
 #          gpg --debug-all --decrypt --output ./vote_app_backend/.env.ci --yes --passphrase '${{ secrets.PASSPHRASE }}' ./vote_app_backend/.env.ci.gpg
 
