@@ -34,8 +34,8 @@ jobs:
 
       - name: Decrypt .env.ci files
         run: |
-          gpg --yes --passphrase ${{ secrets.PASSPHRASE }} .env.ci.gpg
-          gpg --yes --passphrase ${{ secrets.PASSPHRASE }} vote_app_backend/.env.ci.gpg
+          gpg --batch --passphrase ${{ secrets.PASSPHRASE }} .env.ci.gpg
+          gpg --batch --passphrase ${{ secrets.PASSPHRASE }} vote_app_backend/.env.ci.gpg
 
       - name: Show envs
         run: ls -lah
