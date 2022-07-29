@@ -7,8 +7,13 @@ export LOC=${LOC:-local}
 ABORT=true
 
 function install() {
-  if [ "$LOC" == "local" ];then
-    docker network create proxy
+  if [ "$LOC" == "ci" ];then
+    if [ ! -f docker-compose.yml ] && [ ! -f vote_app_backend/vote_app_backend/settings.py ];then
+      docker network create proxy
+      cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
+      cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
+      COPIED=true
+    fi
   fi
   if [ "$LOC" == "local" ] || [ "$LOC" == "stage" ];then
     #if file does not exist
@@ -17,13 +22,6 @@ function install() {
       cp .deploy/${LOC}/vue.config.js frontend-ui/vue.config.js || true
       cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
       COPIED=true
-    fi
-    if [ "$LOC" == "ci" ];then
-      if [ ! -f docker-compose.yml ] && [ ! -f vote_app_backend/vote_app_backend/settings.py ];then
-        cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
-        cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
-        COPIED=true
-      fi
     fi
   fi
 }
@@ -36,9 +34,9 @@ function cleanUp() {
     if [ -f frontend-ui/vue.config.js ];then
       rm frontend-ui/vue.config.js
     fi
-  fi
-  if [ "$LOC" == "local" ];then
-    docker network rm proxy
+    if [ "$LOC" == "local" ];then
+      docker network rm proxy
+    fi
   fi
 }
 
