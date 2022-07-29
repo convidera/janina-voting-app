@@ -36,16 +36,10 @@ jobs:
         uses: crazy-max/ghaction-import-gpg@v5
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-
-      - name: list keys
-        run: | 
-          gpg --list-keys
-          gpg --list-secret-keys
 
       - name: Decrypt .env.ci files
         run: |
-          gpg --decrypt --yes --passphrase ${{ secrets.PASSPHRASE }} ./.env.ci.gpg
+          gpg --decrypt --yes .env.ci.gpg
 #          gpg --debug-all --decrypt --output ./.env.ci --yes --passphrase ${{ secrets.PASSPHRASE }} ./.env.ci.gpg
 #          gpg --debug-all --decrypt --output ./vote_app_backend/.env.ci --yes --passphrase '${{ secrets.PASSPHRASE }}' ./vote_app_backend/.env.ci.gpg
 
