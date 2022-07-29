@@ -41,6 +41,9 @@ jobs:
       - name: Show envs
         run: ls -lah
 
+      - name: Print encrypted .env.ci
+        run: git secret cat env.ci.secret
+
       - name: Build Docker image
         uses: docker/build-push-action@v3
         with:
