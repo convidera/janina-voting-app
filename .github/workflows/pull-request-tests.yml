@@ -15,7 +15,7 @@ jobs:
 
       - name: after checkout
         run: pwd
-      
+   
       - name: Setup Docker Context for Buildx
         id: buildx-context
         run: docker context create builders
@@ -38,6 +38,12 @@ jobs:
         run: |
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-ci .env --force
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-ci vote_app_backend/.env --force
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build Docker image
         uses: docker/build-push-action@v3
