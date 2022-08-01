@@ -1,27 +1,25 @@
 #!/bin/bash
 set -euo pipefail
 COMPOSE="docker-compose"
-COPIED=false
+copied=0
 export LOC=${LOC:-local}
-ABORT=true
 
 function install() {
   if [ "$LOC" == "local" ];then
     docker network create proxy
     if [ ! -f docker-compose.yml ] && [ ! -f frontend-ui/vue.config.js ] && [ ! -f vote_app_backend/vote_app_backend/settings.py ];then
+      echo "hello"
       cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
       cp .deploy/${LOC}/vue.config.js frontend-ui/vue.config.js || true
       cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
-      COPIED=true
-      ABORT=false
+      copied=1
     fi
   fi
   if [ "$LOC" == "ci" ];then
     if [ ! -f docker-compose.yml ] && [ ! -f vote_app_backend/vote_app_backend/settings.py ];then
       cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
       cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
-      COPIED=true
-      ABORT=false
+      copied=1
     fi
   fi
   if [ "$LOC" == "stage" ];then
@@ -29,23 +27,20 @@ function install() {
       cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
       cp .deploy/${LOC}/vue.config.js frontend-ui/vue.config.js || true
       cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
-      COPIED=true
-      ABORT=false
+      copied=1
     fi
   fi
 }
 
 function cleanUp() {
   $COMPOSE down
-  if [ "$COPIED" = true ];then
-    rm docker-compose.yml
-    rm vote_app_backend/vote_app_backend/settings.py
-    if [ -f frontend-ui/vue.config.js ];then
-      rm frontend-ui/vue.config.js
-    fi
-    if [ "$LOC" == "local" ];then
-      docker network rm proxy
-    fi
+  rm docker-compose.yml
+  rm vote_app_backend/vote_app_backend/settings.py
+  if [ -f frontend-ui/vue.config.js ];then
+    rm frontend-ui/vue.config.js
+  fi
+  if [ "$LOC" == "local" ];then
+    docker network rm proxy
   fi
 }
 
@@ -53,7 +48,7 @@ if [ $# -gt 0 ]
 then
   if [ "$1" == "runserver" ];then
     install
-    if [ $ABORT = false ];then
+    if [ $copied -eq 1 ];then
       shift 1
       $COMPOSE run --rm \
         backend-part \
@@ -62,7 +57,7 @@ then
     fi
   elif [ "$1" == "migrate" ];then
     install
-    if [ $ABORT = false ];then
+    if [ $copied -eq 1 ];then
       $COMPOSE run --rm \
         backend-part \
         python manage.py migrate
@@ -70,7 +65,7 @@ then
     fi
   elif [ "$1" == "makemigrations" ];then
     install
-    if [ $ABORT = false ];then
+        if [ $copied -eq 1 ];then
       $COMPOSE run --rm \
         backend-part \
         python manage.py makemigrations showvotes
@@ -78,13 +73,15 @@ then
     fi
   elif [ "$1" == "flush" ];then
     install
-    $COMPOSE run --rm \
-      backend-part \
-      python manage.py flush
-    cleanUp
+    if [ $copied -eq 1 ];then
+      $COMPOSE run --rm \
+        backend-part \
+        python manage.py flush
+      cleanUp
+    fi
   elif [ "$1" == "npm" ]; then
     install
-    if [ $ABORT = false ];then
+    if [ $copied -eq 1 ];then
       shift 1
       $COMPOSE run --rm \
         frontend-part \
@@ -93,7 +90,7 @@ then
     fi
   elif [ "$1" == "test" ];then
     install
-    if [ $ABORT = false ];then
+    if [ $copied -eq 1 ];then
       shift 1
       $COMPOSE run --rm \
         backend-part \
@@ -143,14 +140,14 @@ then
     fi
   else
     install
-    if [ $ABORT = false ];then
+    if [ $copied -eq 1 ];then
       $COMPOSE "$@"
       cleanUp
     fi 
   fi
 else
   install
-  if [ $ABORT = false ];then
+  if [ $copied -eq 1 ];then
     $COMPOSE up
     cleanUp
   fi

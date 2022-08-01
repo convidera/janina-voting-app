@@ -37,11 +37,31 @@ docker build --target dev-stage -t alonimacaroni/frontend-part:local .
 docker build --target dev-stage -t alonimacaroni/backend-part:local .
 ```
 
-or
+or build from project root
 
 ```bash
 ./devops.sh build frontend-part
 ./devops.sh build backend-part
+```
+
+or build all from project root:
+
+```bash
+./devops.sh build
+```
+
+# Build frontend and backend images for stage environment:
+
+```bash
+docker build --target prod-stage -t alonimacaroni/frontend-part:stage .
+docker build --target prod-stage -t alonimacaroni/backend-part:stage .
+```
+
+# Build frontend and backend images for ci environment:
+
+```bash
+docker build --target dev-stage -t alonimacaroni/frontend-part:ci .
+docker build --target dev-stage -t alonimacaroni/backend-part:ci .
 ```
 
 # Apply migrations (here: local):
@@ -54,6 +74,10 @@ or
 
 ```bash
 LOC=stage ./devops.sh run --rm <service> <command>
+```
+
+```bash
+LOC=stage ./devops.sh exec --rm <service> <command>
 ```
 
 # Use devops.sh bash script for executing commands in a service in running app:
