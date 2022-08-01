@@ -18,8 +18,8 @@ https://passingcuriosity.com/2013/dnsmasq-dev-osx/
 Go to frontend and backend project folders.
 
 ```bash
-docker build --target dev-stage -t alonimacaroni/frontend-part:local .
-docker build --target dev-stage -t alonimacaroni/backend-part:local .
+docker build --target dev-stage -t alonimacaroni/vote-frontend:local .
+docker build --target dev-stage -t alonimacaroni/vote-backend:local .
 ```
 
 or build from project root
@@ -38,15 +38,15 @@ or build all from project root:
 # Build frontend and backend images for stage environment:
 
 ```bash
-docker build --target prod-stage -t alonimacaroni/frontend-part:stage .
-docker build --target prod-stage -t alonimacaroni/backend-part:stage .
+docker build --target prod-stage -t alonimacaroni/vote-frontend:stage .
+docker build --target prod-stage -t alonimacaroni/vote-backend:stage .
 ```
 
-# Build frontend and backend images for ci environment:
+# Build backend image for ci environment:
+mysql:8.0 image needs to be pulled from Dockerhub.
 
 ```bash
-docker build --target dev-stage -t alonimacaroni/frontend-part:ci .
-docker build --target dev-stage -t alonimacaroni/backend-part:ci .
+docker build --target dev-stage -t alonimacaroni/vote-backend:ci .
 ```
 
 # Apply migrations (here: local):

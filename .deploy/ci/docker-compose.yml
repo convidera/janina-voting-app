@@ -25,7 +25,7 @@ services:
       - ci-net
   
   backend-part:
-    image: alonimacaroni/backend-part:ci
+    image: alonimacaroni/vote-backend:ci
     restart: unless-stopped
     volumes:
       - ./vote_app_backend:/code

@@ -44,7 +44,7 @@ jobs:
         with:
           push: true
           context: ./vote_app_backend/
-          tags: alonimacaroni/backend-part:ci
+          tags: alonimacaroni/vote-backend:ci
           target: dev-stage
 
       - name: Display envs

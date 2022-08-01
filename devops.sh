@@ -64,7 +64,7 @@ then
       $COMPOSE "$@"
     fi
     cleanUp
-  else [ "$LOC" == "op" ];then
+  elif [ "$LOC" == "op" ];then
     if [ "$1" == "push" ];then 
       git add * && \
       git commit -m "$2" && \
@@ -109,9 +109,7 @@ then
     fi
   fi
 else
-  if [ "$LOC" == "local" ];then
-    install
-    $COMPOSE up
-    cleanUp
-  fi
+  install
+  $COMPOSE up
+  cleanUp
 fi
