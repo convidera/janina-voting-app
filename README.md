@@ -8,7 +8,7 @@ Rename all .env.example to .env and provide your passwords before running the up
 
 https://djecrety.ir/
 
-# Generate self-signed certificates with mkcert for local and ci environments and certificates signed by a CA with letsencrypt for stage environment.
+# Generate self-signed certificates with mkcert for local environment and Let's Encrypt certificates for stage environment.
 
 # Set up a local DNS like Dnsmasq (Mac OS) for local environment in order to direct traffic from test domain to localhost.
 
