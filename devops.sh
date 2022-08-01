@@ -60,6 +60,8 @@ then
       $COMPOSE run --rm \
         backend-part \
         pytest "$@"
+    elif [ "$1" == "exit" ];then
+      $COMPOSE down
     else
       $COMPOSE "$@"
     fi
