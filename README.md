@@ -14,21 +14,6 @@ https://djecrety.ir/
 
 https://passingcuriosity.com/2013/dnsmasq-dev-osx/
 
-# Build frontend and backend images for stage environment:
-Go to frontend and backend project folders.
-
-```bash
-docker build --target prod-stage -t alonimacaroni/frontend-part:stage .
-docker build --target prod-stage -t alonimacaroni/backend-part:stage .
-```
-
-or
-
-```bash
-LOC=stage ./devops.sh build frontend-part
-LOC=stage ./devops.sh build backend-part
-```
-
 # Build frontend and backend images for local environment:
 Go to frontend and backend project folders.
 
