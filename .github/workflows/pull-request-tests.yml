@@ -59,6 +59,3 @@ jobs:
       - name: Run tests against pull request
         run: |
           LOC=ci ./devops.sh test
-
-      - name: Shutdown app
-        run: LOC=exec ./devops.sh exit
