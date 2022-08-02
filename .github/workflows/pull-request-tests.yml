@@ -48,7 +48,7 @@ jobs:
           target: dev-stage
 
       - name: Start app
-        run: LOC=ci ./devops.sh -d up
+        run: LOC=ci ./devops.sh up
 
       - name: Run migrate command
         run: LOC=exec ./devops.sh migrate
