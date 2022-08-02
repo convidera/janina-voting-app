@@ -134,5 +134,5 @@ then
 #start app correctly
 elif [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
   install
-  $COMPOSE up 2>/dev/null
+  $COMPOSE up -d
 fi
