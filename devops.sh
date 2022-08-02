@@ -29,18 +29,19 @@ function install() {
 
 function cleanUp() {
   $COMPOSE down
+  if [ "$LOC" == "local" ];then
+    docker network rm proxy
+  fi
   rm docker-compose.yml
   rm vote_app_backend/vote_app_backend/settings.py
   if [ -f frontend-ui/vue.config.js ];then
     rm frontend-ui/vue.config.js
   fi
-  if [ "$LOC" == "local" ];then
-    docker network rm proxy
-  fi
 }
 
 if [ $# -gt 0 ]
 then
+#################docker-compose dependent command options
   if [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
     install
     if [ "$1" == "migrate" ];then
@@ -60,10 +61,13 @@ then
       $COMPOSE run --rm \
         backend-part \
         pytest "$@"
+    elif [ "$1" == "setup" ];then
+      $COMPOSE build
     else
       $COMPOSE "$@"
     fi
     cleanUp
+#################docker-compose independent command options
   elif [ "$LOC" == "op" ];then
     if [ "$1" == "push" ];then 
       git add * && \
@@ -106,10 +110,11 @@ then
       else
         echo ".env file missing"
       fi
-    elif [ "$1" == "cleanstart" ];then
+    elif [ "$1" == "clean" ];then
       docker container stop $(docker container ls -aq) && \
         docker system prune -af --volumes
     fi
+#################running containers command options
   elif [ "$LOC" == "exec" ];then
     if [ -f docker-compose.yml ];then
       if [ "$1" == "migrate" ];then

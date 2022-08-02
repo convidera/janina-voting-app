@@ -47,12 +47,12 @@ jobs:
           tags: alonimacaroni/vote-backend:ci
           target: dev-stage
 
-      - name: Display envs
-        run: LOC=ci ./devops.sh exec backend-part env | sort
+      - name: Start app
+        run: LOC=ci ./devops.sh -d
 
       - name: Run migrate command
-        run: LOC=ci ./devops.sh migrate
+        run: LOC=exec ./devops.sh migrate
 
       - name: Run tests against pull request
         run: |
-          LOC=ci ./devops.sh test
+          LOC=exec ./devops.sh test
