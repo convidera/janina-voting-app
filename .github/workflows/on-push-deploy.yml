@@ -30,6 +30,11 @@ jobs:
           access_key: ${{ secrets.SPACES_ACCESS_KEY }}
           secret_key: ${{ secrets.SPACES_SECRET_KEY }}
 
+      - name: SSH to server
+        run: |
+          LOC=op ./devops.sh sshserver
+          cd janina.devcon.team/janina-voting-app/
+
       - name: Get .env from web spaces
         run: |
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage .env --force
@@ -42,15 +47,13 @@ jobs:
           username: ${{ secrets.JANINA_DOCKER_HUB_USER }}
           password: ${{ secrets.JANINA_DOCKER_HUB_ACCESS_KEY }}
 
-      - name: Pull images from Docker Hub to server
-
       - name: Build Docker backend image
         uses: docker/build-push-action@v3
         with:
           push: true
           context: ./vote_app_backend/
           tags: alonimacaroni/vote-backend:stage
-          target: dev-stage
+          target: prod-stage
 
       - name: Build Docker frontend image
         uses: docker/build-push-action@v3
@@ -58,17 +61,13 @@ jobs:
           push: true
           context: ./frontend-ui/
           tags: alonimacaroni/vote-frontend:stage
-          target: dev-stage
+          target: prod-stage
 
       - name: Start app
-        run: LOC=ci ./devops.sh
+        run: LOC=stage ./devops.sh
 
       - name: Wait for app to setup
         run: sleep 10
 
       - name: Run migrate command
-        run: LOC=ci ./devops.sh migrate
-
-      - name: Run tests against pull request
-        run: |
-          LOC=ci ./devops.sh test
+        run: LOC=stage ./devops.sh migrate
