@@ -8,13 +8,15 @@ Rename all .env.example to .env and provide your passwords before running the up
 
 https://djecrety.ir/
 
-# Generate self-signed certificates with mkcert for local environment and Let's Encrypt certificates for stage environment.
+## Generate self-signed certificates with mkcert for local environment and Let's Encrypt certificates for stage environment.
 
-# Set up a local DNS like Dnsmasq (Mac OS) for local environment in order to direct traffic from test domain to localhost.
+## Set up a local DNS like Dnsmasq (Mac OS) for local environment in order to direct traffic from test domain to localhost.
 
 https://passingcuriosity.com/2013/dnsmasq-dev-osx/
 
-# Build frontend and backend images for local environment:
+# Build images:
+
+## Build frontend and backend images for local environment:
 Go to frontend and backend project folders.
 
 ```bash
@@ -22,144 +24,123 @@ docker build --target dev-stage -t alonimacaroni/vote-frontend:local .
 docker build --target dev-stage -t alonimacaroni/vote-backend:local .
 ```
 
-or build from project root
-
-```bash
-./devops.sh build frontend-part
-./devops.sh build backend-part
-```
-
-or build all from project root:
-
-```bash
-./devops.sh build
-```
-
-# Build frontend and backend images for stage environment:
+## Build frontend and backend images for stage environment:
 
 ```bash
 docker build --target prod-stage -t alonimacaroni/vote-frontend:stage .
 docker build --target prod-stage -t alonimacaroni/vote-backend:stage .
 ```
 
-# Build backend image for ci environment:
+## Build backend image for ci environment:
+
 mysql:8.0 image needs to be pulled from Dockerhub.
 
 ```bash
 docker build --target dev-stage -t alonimacaroni/vote-backend:ci .
 ```
 
-# Apply migrations (here: local):
+## Build all images at once:
+
+select corresponding LOC parameter:
 
 ```bash
-./devops.sh migrate
+./devops.sh setup
 ```
 
-# Run command (use devops.sh) against service:
-
-```bash
-LOC=stage ./devops.sh run --rm <service> <command>
-```
-
-```bash
-LOC=stage ./devops.sh exec --rm <service> <command>
-```
-
-# Use devops.sh bash script for executing commands in a service in running app:
-
-Make devops.sh executable (Mac OS, Linux):
-
-```bash
-chmod +x devops.sh
-```
-
-Execute script:
+# Start app correctly:
 
 ```bash
 ./devops.sh
 ```
-Without command options script runs:
+
+# Shutdown app correctly:
 
 ```bash
-docker-compose up
+LOC=exec ./devops.sh exit
 ```
 
-## Script commands:
+# Bring app up:
 
-Run server in backend, more options for original command can be appended:
+Start app:
 
 ```bash
-./devops runserver
+./devops.sh
 ```
 
-This is the same as:
+Apply migrations:
 
 ```bash
-gunicorn vote_app_backend.wsgi:application
+LOC=exec ./devops.sh migrate
 ```
 
-\
-\
-Apply changes to database:
+# Script commands:
+
+## one-time app commands (start and shutdown):
+
+All one-time commands work for local, stage and ci environments.
+
+Apply migrations:
 
 ```bash
-./devops migrate
+LOC=stage ./devops.sh migrate
 ```
 
-Create migrations:
+Make migrations:
 
 ```bash
-./devops makemigrations
+LOC=stage ./devops.sh makemigrations
 ```
 
-Reset database:
+Empty database:
 
 ```bash
-./devops flush
+LOC=stage ./devops.sh flush
 ```
 
-\
-\
-Run server in frontend, more options for original command can be appended:
+Run tests in backend:
 
 ```bash
-./devops npm
+LOC=stage ./devops.sh test
 ```
 
-This is the same as:
+## app independent commands:
+
+Choose LOC=op option:
+
+Push to github:
 
 ```bash
-npm run serve
+LOC=op ./devops.sh push
 ```
 
-\
-\
-Execute tests on backend-part:
+Pull github files to server:
 
 ```bash
-./devops test
+LOC=op ./devops.sh pullserver
 ```
 
-\
-\
-Push changes to github:
+Log in to server via SSH:
 
 ```bash
-./devops push "<message>"
+LOC=op ./devops.sh sshserver
 ```
 
-\
-\
-Pull changes from github to server:
+Reset app environment:
 
 ```bash
-./devops pullserver
+LOC=op ./devops.sh clean
 ```
 
-\
-\
-Login to server via SSH:
+## running app commands:
+
+Apply migrations:
 
 ```bash
-./devops sshserver
+LOC=exec ./devops.sh migrate
+```
+
+Run tests in backend:
+
+```bash
+LOC=exec ./devops.sh test
 ```
