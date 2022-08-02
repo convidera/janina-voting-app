@@ -29,7 +29,7 @@ function install() {
 
 function cleanUp() {
   $COMPOSE down
-  if [ "$LOC" == "local" ];then
+  if [ "$LOC" == "local" ] || [ "$LOC" == "exec" ];then
     docker network rm proxy
   fi
   rm docker-compose.yml
@@ -134,5 +134,5 @@ then
 #start app correctly
 elif [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
   install
-  $COMPOSE up
+  $COMPOSE up 2>/dev/null
 fi
