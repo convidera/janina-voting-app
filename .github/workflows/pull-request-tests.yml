@@ -47,8 +47,8 @@ jobs:
           tags: alonimacaroni/vote-backend:ci
           target: dev-stage
 
-      # - name: Start app
-      #   run: LOC=ci ./devops.sh
+      - name: Start app
+        run: LOC=ci ./devops.sh
 
       - name: Run migrate command
         run: LOC=ci ./devops.sh migrate
@@ -57,5 +57,5 @@ jobs:
         run: |
           LOC=ci ./devops.sh test
 
-      # - name: Shutdown app
-      #   run: LOC=exec ./devops.sh exit
+      - name: Shutdown app
+        run: LOC=exec ./devops.sh exit
