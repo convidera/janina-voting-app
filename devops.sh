@@ -63,8 +63,6 @@ then
         pytest "$@"
     elif [ "$1" == "setup" ];then
       $COMPOSE build
-    else
-      $COMPOSE "$@"
     fi
     cleanUp
 #################docker-compose independent command options
@@ -126,14 +124,15 @@ then
         $COMPOSE exec \
           backend-part \
           pytest "$@"
+      #shutdown app correctly
       elif [ "$1" == "exit" ];then
         $COMPOSE down
         cleanUp
       fi
     fi
   fi
-else
+#start app correctly
+elif [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
   install
   $COMPOSE up
-  cleanUp
 fi

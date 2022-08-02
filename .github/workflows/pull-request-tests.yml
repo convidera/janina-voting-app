@@ -48,7 +48,7 @@ jobs:
           target: dev-stage
 
       - name: Start app
-        run: LOC=ci ./devops.sh up
+        run: LOC=ci ./devops.sh
 
       - name: Run migrate command
         run: LOC=exec ./devops.sh migrate
@@ -56,3 +56,6 @@ jobs:
       - name: Run tests against pull request
         run: |
           LOC=exec ./devops.sh test
+
+      - name: Shutdown app
+        run: LOC=exec ./devops.sh exit
