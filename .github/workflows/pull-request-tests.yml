@@ -59,4 +59,3 @@ jobs:
       - name: Run tests against pull request
         run: |
           LOC=ci ./devops.sh test
-
