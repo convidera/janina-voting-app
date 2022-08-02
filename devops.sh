@@ -60,8 +60,6 @@ then
       $COMPOSE run --rm \
         backend-part \
         pytest "$@"
-    elif [ "$1" == "exit" ];then
-      $COMPOSE down
     else
       $COMPOSE "$@"
     fi
@@ -107,6 +105,25 @@ then
         fi
       else
         echo ".env file missing"
+      fi
+    elif [ "$1" == "cleanstart" ];then
+      docker container stop $(docker container ls -aq) && \
+        docker system prune -af --volumes
+    fi
+  elif [ "$LOC" == "exec" ];then
+    if [ -f docker-compose.yml ];then
+      if [ "$1" == "migrate" ];then
+        $COMPOSE exec \
+          backend-part \
+          python manage.py migrate
+      elif [ "$1" == "test" ];then
+        shift 1
+        $COMPOSE exec \
+          backend-part \
+          pytest "$@"
+      elif [ "$1" == "exit" ];then
+        $COMPOSE down
+        cleanUp
       fi
     fi
   fi
