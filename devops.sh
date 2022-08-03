@@ -129,9 +129,7 @@ then
         if [ "$LOC" == "local" ] || [ "$LOC" == "ci" ];then
           $COMPOSE down
           cleanUp
-        fi
-      elif [ "$1" == "exitstack" ];then
-        if [ "$LOC" == "stage" ];then
+        elif [ "$LOC" == "stage" ];then
           docker stack rm vote-app-stack
           cleanUp
         fi

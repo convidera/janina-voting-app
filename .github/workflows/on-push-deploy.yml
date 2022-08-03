@@ -64,10 +64,13 @@ jobs:
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-frontend-stage frontend-ui/.env --force
 
       - name: Start app
-        run: LOC=stage ./devops.sh
+        run: LOC=stage ./devops.sh 
 
       - name: Wait for app to setup
         run: sleep 10
 
       - name: Run migrate command
-        run: LOC=stage ./devops.sh migrate
+        run: LOC=exec ./devops.sh migrate
+      
+      - name: Run migrate command
+        run: LOC=exec ./devops.sh exit
