@@ -72,5 +72,5 @@ jobs:
       - name: Run migrate command
         run: LOC=exec ./devops.sh migrate
       
-      - name: Run migrate command
+      - name: Shutdown app
         run: LOC=exec ./devops.sh exit
