@@ -126,13 +126,23 @@ then
           pytest "$@"
       #shutdown app correctly
       elif [ "$1" == "exit" ];then
-        $COMPOSE down
-        cleanUp
+        if [ "$LOC" == "local" ] || [ "$LOC" == "ci" ];then
+          $COMPOSE down
+          cleanUp
+        fi
+      elif [ "$1" == "exitstack" ];then
+        if [ "$LOC" == "stage" ];then
+          docker stack rm vote-app-stack
+          cleanUp
+        fi
       fi
     fi
   fi
 #start app correctly
-elif [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
+elif [ "$LOC" == "local" ] || [ "$LOC" == "ci" ];then
   install
   $COMPOSE up -d
-fi
+elif [ "$LOC" == "stage" ];then
+  install
+  docker stack deploy --compose-file docker-compose.yml vote-app-stack
+fi  
