@@ -155,7 +155,7 @@ then
 elif [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
   install
   $COMPOSE up -d
-  # if [ "$LOC" == "ci" ];then
-  #   waitForDBConnection
-  # fi
+  if [ "$LOC" == "ci" ];then
+    waitForDBConnection
+  fi
 fi
