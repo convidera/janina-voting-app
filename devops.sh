@@ -116,12 +116,13 @@ then
   elif [ "$LOC" == "exec" ];then
     if [ -f docker-compose.yml ];then
       if [ "$1" == "migrate" ];then
-        $COMPOSE exec \
+        #-T disable pseudo-TTY allocation.
+        $COMPOSE exec -T \
           backend-part \
           python manage.py migrate
       elif [ "$1" == "test" ];then
         shift 1
-        $COMPOSE exec \
+        $COMPOSE exec -T \
           backend-part \
           pytest "$@"
       #shutdown app correctly

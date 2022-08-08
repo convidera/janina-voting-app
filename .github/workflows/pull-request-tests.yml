@@ -50,15 +50,15 @@ jobs:
       - name: Start app
         run: LOC=ci ./devops.sh
 
-      - name: Wait for app to setup
-        run: sleep 10
+      # - name: Wait for app to setup
+      #   run: sleep 10
 
       - name: Run migrate command
-        run: LOC=ci ./devops.sh migrate
+        run: LOC=exec ./devops.sh migrate
 
       - name: Run tests against pull request
         run: |
-          LOC=ci ./devops.sh test
+          LOC=exec ./devops.sh test
       
       - name: Shutdown app
         run: LOC=exec ./devops.sh exit
