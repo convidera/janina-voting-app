@@ -6,7 +6,7 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     ports:
-      - "${MYSQL_HOST}:${MYSQL_PORT}:${MYSQL_PORT}"
+      - "172.0.0.1:3306:3306"
     volumes:
       - mysql:/var/lib/mysql:delegated
       - ./db_assets:/docker-entrypoint-initdb.d/:delegated
