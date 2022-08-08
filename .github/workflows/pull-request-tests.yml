@@ -60,7 +60,7 @@ jobs:
           LOC=exec ./devops.sh test
       
       - name: Shutdown app
-        run: LOC=exec ./devops.sh exit
+        run: LOC=exec ./devops.sh exitlocal
 
       - name: Clean Docker Environment
         run: LOC=op ./devops.sh clean
