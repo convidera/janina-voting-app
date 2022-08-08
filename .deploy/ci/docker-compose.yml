@@ -12,7 +12,7 @@ services:
       - ./db_assets:/docker-entrypoint-initdb.d/:delegated
 #copy mysql config in running container
     command: >
-      sh -c 'docker cp ./db_assets/mysqld.cnf $(docker ps -aqf "name=^janina-voting-app_vote-app-mysql"):/var/lib/mysql/'
+      sh -c 'docker cp ./db_assets/mysqld.cnf janina-voting-app_vote-app-mysql_1:/var/lib/mysql/'
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
