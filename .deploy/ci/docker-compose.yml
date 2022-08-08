@@ -6,7 +6,10 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - target: ${MYSQL_PORT}
+        published: ${MYSQL_PORT}
+        protocol: tcp
+        mode: host
     volumes:
       - mysql:/var/lib/mysql:delegated
       - ./db_assets:/docker-entrypoint-initdb.d/:delegated
@@ -34,7 +37,10 @@ services:
     image: alonimacaroni/vote-backend:ci
     restart: on-failure
     ports:
-      - "8000:8000"
+      - target: 8000
+        published: 8000
+        protocol: tcp
+        mode: host
     volumes:
       - ./vote_app_backend:/code
     command: >
