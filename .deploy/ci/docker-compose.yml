@@ -10,7 +10,7 @@ services:
     volumes:
       - mysql:/var/lib/mysql:delegated
       - ./db_assets:/docker-entrypoint-initdb.d/:delegated
-      - ./db_assets/.mysqld.cnf:/var/lib/mysql:ro
+#      - ./db_assets/mysqld.cnf:/var/lib/mysql:ro
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
