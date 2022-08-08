@@ -6,11 +6,7 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     ports:
-      - target: ${MYSQL_PORT}
-        host_ip: 127.0.0.1
-        published: ${MYSQL_PORT}
-        protocol: tcp
-        mode: host
+      - "3306:3306"
     volumes:
       - mysql:/var/lib/mysql:delegated
       - ./db_assets:/docker-entrypoint-initdb.d/:delegated
@@ -31,18 +27,12 @@ services:
       - MYSQL_PORT=${MYSQL_PORT}
     security_opt:
       - no-new-privileges:true
-    networks:
-      - ci-network
   
   backend-part:
     image: alonimacaroni/vote-backend:ci
     restart: on-failure
     ports:
-      - target: 8000
-        host_ip: ${DOMAIN_URL}
-        published: 8000
-        protocol: tcp
-        mode: host
+      - "8000:8000"
     volumes:
       - ./vote_app_backend:/code
     command: >
@@ -60,13 +50,6 @@ services:
       - no-new-privileges:true
     depends_on:
       - vote-app-mysql
-    networks:
-      - ci-network
-
-networks:
-  ci-network:
-    driver: bridge
-
 
 volumes:
   mysql:
