@@ -51,7 +51,7 @@ jobs:
         run: LOC=ci ./devops.sh
 
       - name: Inspect
-        run:  docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' vote-app-mysql
+        run: docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' vote-app-mysql
 
       - name: Run migrate command
         run: LOC=ci ./devops.sh migrate

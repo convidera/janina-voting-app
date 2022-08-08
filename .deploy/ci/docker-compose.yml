@@ -3,6 +3,7 @@ version: "3.9"
 
 services:
   vote-app-mysql:
+    name: vote-app-mysql
     image: mysql:8.0
     restart: unless-stopped
     ports:
@@ -26,6 +27,7 @@ services:
       - ci-net
   
   backend-part:
+    name: backend-part
     image: alonimacaroni/vote-backend:ci
     restart: unless-stopped
     ports:
