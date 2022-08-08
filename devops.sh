@@ -39,6 +39,25 @@ function cleanUp() {
   fi
 }
 
+function waitForDBConnection() {
+  if [ -f .env ]; then
+    export $(cat .env | xargs)
+    if grep -Fq MYSQL_HOST .env && grep -Fq MYSQL_PORT .env
+    then
+      if [ -z "$MYSQL_HOST" ] && [ -z "$MYSQL_PORT" ];then
+        echo "environment variables unset in .env file"
+      else
+        echo "Waiting for database connection ..."
+        until nc -z -v -w30 $MYSQL_HOST $MYSQL_PORT
+        do
+          echo "."
+          sleep 2
+        done
+      fi
+    fi 
+  fi
+}
+
 if [ $# -gt 0 ]
 then
 #################docker-compose dependent command options
@@ -57,7 +76,7 @@ then
         backend-part \
         python manage.py flush
     elif [ "$1" == "test" ];then
-      shift 1
+      shift 1v
       $COMPOSE run --rm \
         backend-part \
         pytest "$@"
@@ -68,8 +87,8 @@ then
 #################docker-compose independent command options
   elif [ "$LOC" == "op" ];then
     if [ "$1" == "push" ];then 
-      git add * && \
-      git commit -m "$2" && \
+      git add *
+      git commit -m "$2"
       shift 2
       git push "$@"
     elif [ "$1" == "pullserver" ];then
@@ -136,4 +155,5 @@ then
 elif [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
   install
   $COMPOSE up -d
+  waitForDBConnection
 fi
