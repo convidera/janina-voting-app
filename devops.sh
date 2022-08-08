@@ -53,7 +53,6 @@ function waitForDBConnection() {
           echo "."
           sleep 2
         done
-        sleep 2
       fi
     fi 
   fi

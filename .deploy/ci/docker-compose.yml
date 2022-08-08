@@ -27,6 +27,8 @@ services:
   backend-part:
     image: alonimacaroni/vote-backend:ci
     restart: unless-stopped
+    ports:
+      - 8000:8000
     volumes:
       - ./vote_app_backend:/code
     command: >
