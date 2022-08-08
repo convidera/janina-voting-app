@@ -7,6 +7,7 @@ services:
     restart: unless-stopped
     ports:
       - target: ${MYSQL_PORT}
+        host_ip: 127.0.0.1
         published: ${MYSQL_PORT}
         protocol: tcp
         mode: host
@@ -38,6 +39,7 @@ services:
     restart: on-failure
     ports:
       - target: 8000
+        host_ip: ${DOMAIN_URL}
         published: 8000
         protocol: tcp
         mode: host
