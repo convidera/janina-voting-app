@@ -150,6 +150,8 @@ then
         $COMPOSE down
         docker network rm proxy
         cleanUp
+      else
+        $COMPOSE exec -T "$@"
       fi
     fi
   fi
