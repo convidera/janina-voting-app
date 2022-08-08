@@ -48,7 +48,7 @@ function waitForDBConnection() {
         echo "environment variables unset in .env file"
       else
         echo "Waiting for database connection ..."
-        until nc -z -v -w30 127.0.0.1 $MYSQL_PORT
+        until nc -z -v -w30 172.18.0.2 $MYSQL_PORT
         do
           echo "."
           sleep 2
