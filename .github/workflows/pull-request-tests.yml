@@ -50,8 +50,8 @@ jobs:
       - name: Start app
         run: LOC=ci ./devops.sh
 
-      - name: Inspect
-        run: docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' janina-voting-app_vote-app-mysql_1
+      # - name: Inspect
+      #   run: docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' janina-voting-app_vote-app-mysql_1
 
       - name: Run migrate command
         run: LOC=ci ./devops.sh migrate

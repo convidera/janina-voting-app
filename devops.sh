@@ -76,7 +76,7 @@ then
         backend-part \
         python manage.py flush
     elif [ "$1" == "test" ];then
-      shift 1v
+      shift 1
       $COMPOSE run --rm \
         backend-part \
         pytest "$@"
@@ -155,7 +155,7 @@ then
 elif [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
   install
   $COMPOSE up -d
-  if [ "$LOC" == "ci" ];then
-    waitForDBConnection
-  fi
+  # if [ "$LOC" == "ci" ];then
+  #   waitForDBConnection
+  # fi
 fi
