@@ -29,9 +29,6 @@ function install() {
 
 function cleanUp() {
   $COMPOSE down
-  if [ "$LOC" == "local" ] || [ "$LOC" == "exec" ];then
-    docker network rm proxy
-  fi
   rm docker-compose.yml
   rm vote_app_backend/vote_app_backend/settings.py
   if [ -f frontend-ui/vue.config.js ];then
@@ -144,9 +141,14 @@ then
         $COMPOSE exec -T \
           backend-part \
           pytest "$@"
-      #shutdown app correctly
+      #shutdown app correctly ci, stage
       elif [ "$1" == "exit" ];then
         $COMPOSE down
+        cleanUp
+      #shutdown app correctly local
+      elif [ "$1" == "exitlocal" ];then
+        $COMPOSE down
+        docker network rm proxy
         cleanUp
       fi
     fi
