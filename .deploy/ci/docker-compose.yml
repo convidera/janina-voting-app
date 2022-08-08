@@ -37,7 +37,7 @@ services:
     volumes:
       - ./vote_app_backend:/code
     command: >
-      sh -c 'gunicorn vote_app_backend.wsgi:application --bind ${DOMAIN_URL}:8000'
+      sh -c 'gunicorn vote_app_backend.wsgi:application --bind :8000'
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
