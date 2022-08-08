@@ -28,6 +28,8 @@ services:
       - MYSQL_PORT=${MYSQL_PORT}
     security_opt:
       - no-new-privileges:true
+    networks:
+      - ci-network
   
   backend-part:
     image: alonimacaroni/vote-backend:ci
@@ -52,6 +54,12 @@ services:
       - no-new-privileges:true
     depends_on:
       - vote-app-mysql
+    networks:
+      - ci-network
+
+networks:
+  ci-network:
+    driver: bridge
 
 volumes:
   mysql:
