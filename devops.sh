@@ -37,6 +37,7 @@ function cleanUp() {
 }
 
 function waitForDBConnection() {
+  bash
   if [ -f .env ]; then
     export $(cat .env | xargs)
     if grep -Fq MYSQL_PORT .env && grep -Fq MYSQL_HOST .env
@@ -45,11 +46,11 @@ function waitForDBConnection() {
         echo "environment variables unset in .env file"
       else
         echo "Waiting for database connection ..."
-        #until nc -z -v -w30 $MYSQL_HOST $MYSQL_PORT
-        until nc -zv $MYSQL_HOST $MYSQL_PORT
+        #until nc -zv $MYSQL_HOST $MYSQL_PORT
+        until nc -z -v -w30 $MYSQL_HOST $MYSQL_PORT
         do
           echo "."
-          sleep 2
+          sleep 1
         done
       fi
     fi 
