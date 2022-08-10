@@ -54,7 +54,7 @@ jobs:
         run: nc -zv 127.0.0.1 3306
 
       - name: DEBUG BE container env
-        run: docker-compose -T exec backend-part env | sort
+        run: docker-compose -T exec backend-part env
 
       - name: DEBUG nc in BE
         run: docker-compose exec -T backend-part nc -zv vote-app-mysql 3306
