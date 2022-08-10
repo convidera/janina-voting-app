@@ -50,8 +50,17 @@ jobs:
       - name: Start app
         run: LOC=ci ./devops.sh
 
-      - name: Wait for DB Connection
-        run: LOC=exec ./devops.sh waitdb
+      - name: DEBUG nc outside
+        run: nc -zv 127.0.0.1 3306
+
+      - name: DEBUG BE container env
+        run: docker-compose exec backend-part env | sort
+
+      - name: DEBUG nc in BE
+        run: docker-compose exec backend-part nc -zv vote-app-mysql 3306
+
+      # - name: Wait for DB Connection
+      #   run: LOC=exec ./devops.sh waitdb
 
       # - name: Inspect
       #   run: docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' janina-voting-app_vote-app-mysql_1
