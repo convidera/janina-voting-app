@@ -46,7 +46,7 @@ function waitForDBConnection() {
       else
         echo "Waiting for database connection ..."
         #until nc -z -v -w30 $MYSQL_HOST $MYSQL_PORT
-        until exec nc -zv $MYSQL_HOST $MYSQL_PORT
+        until nc -zv $MYSQL_HOST $MYSQL_PORT
         do
           echo "."
           sleep 2
