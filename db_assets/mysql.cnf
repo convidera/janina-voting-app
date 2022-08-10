@@ -1,5 +1,0 @@
-[client]
-host=vote-app-mysql
-
-[mysql]
-bind-address = 127.0.0.1
