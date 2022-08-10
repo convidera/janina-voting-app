@@ -58,6 +58,9 @@ jobs:
       - name: Start app
         run: docker-compose up -d
 
+      - name: DEBUG ping DB host
+        run: docker-compose exec -T backend-part ping vote-app-mysql
+
       - name: DEBUG nc outside
         run: nc -zv 127.0.0.1 3306
 
