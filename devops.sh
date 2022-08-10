@@ -37,9 +37,9 @@ function cleanUp() {
 }
 
 function waitForDBConnection() {
-  if [ -f .env ]; then
+  if [ -f .env-ci ]; then
     export $(cat .env | xargs)
-    if grep -Fq MYSQL_PORT .env && grep -Fq MYSQL_HOST .env
+    if grep -Fq MYSQL_PORT .env-ci && grep -Fq MYSQL_HOST .env-ci
     then
       if [ -z "$MYSQL_PORT" ] && [ -z "$MYSQL_HOST" ];then
         echo "environment variables unset in .env file"
