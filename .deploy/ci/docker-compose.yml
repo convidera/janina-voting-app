@@ -23,8 +23,6 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     security_opt:
       - no-new-privileges:true
-    # networks:
-    #   - ci-network
   
   backend-part:
     image: alonimacaroni/vote-backend:ci
@@ -48,12 +46,7 @@ services:
       - no-new-privileges:true
     depends_on:
       - vote-app-mysql
-    # networks:
-    #   - ci-network
 
 volumes:
   mysql:
     driver: local
-
-# networks:
-#     ci-network:

@@ -52,9 +52,6 @@ jobs:
       # - name: DEBUG
       #   run: grep proxy /etc/docker/daemon.json
 
-      # - name: DEBUG nc in loop
-      #   run: docker-compose exec -T backend-part bash -c "until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;"
-
       - name: Wait for DB Connection
         run: LOC=exec ./devops.sh waitdb
 
