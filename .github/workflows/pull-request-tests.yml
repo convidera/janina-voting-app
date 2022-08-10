@@ -61,6 +61,9 @@ jobs:
       - name: DEBUG nc outside
         run: nc -zv 127.0.0.1 3306
 
+      - name: DEBUG check container status
+        run: docker ps
+
       - name: DEBUG BE container env
         run: docker-compose exec -T backend-part env | sort
 
