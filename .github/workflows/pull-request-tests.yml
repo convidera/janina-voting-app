@@ -61,8 +61,8 @@ jobs:
       - name: DEBUG nc outside
         run: nc -zv 127.0.0.1 3306
 
-      - name: DEBUG check container status
-        run: docker ps && ss -lntp && sudo iptables-save
+      - name: DEBUG
+        run: grep proxy /etc/docker/daemon.json
 
       - name: DEBUG nc in loop
         run: docker-compose exec -T backend-part bash -c "until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;"
