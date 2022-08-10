@@ -64,6 +64,9 @@ jobs:
       - name: DEBUG check container status
         run: docker ps
 
+      - name: DEBUG nc in loop
+        run: docker-compose exec -T backend-part bash -c "until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;"
+
       - name: DEBUG BE container env
         run: docker-compose exec -T backend-part env | sort
 
