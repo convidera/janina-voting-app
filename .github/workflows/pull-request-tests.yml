@@ -47,8 +47,11 @@ jobs:
           tags: alonimacaroni/vote-backend:ci
           target: dev-stage
 
-     - name: Start app
-       run: LOC=ci ./devops.sh
+      - name: Start Bash
+        run: bash
+
+      - name: Start app
+        run: LOC=ci ./devops.sh
       # - name: DEBUG
       #   run: grep proxy /etc/docker/daemon.json
 
