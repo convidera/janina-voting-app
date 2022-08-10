@@ -47,8 +47,16 @@ jobs:
           tags: alonimacaroni/vote-backend:ci
           target: dev-stage
 
+      - name: DEBUG copy docker-compose and settigns.py over
+        run: |
+          cp .deploy/ci/docker-compose.yml docker-compose.yml
+          cp .deploy/ci/settings.py vote_app_backend/vote_app_backend/settings.py
+
+#      - name: Start app
+#        run: LOC=ci ./devops.sh
+
       - name: Start app
-        run: LOC=ci ./devops.sh
+        run: docker-compose up -d
 
       - name: DEBUG nc outside
         run: nc -zv 127.0.0.1 3306
