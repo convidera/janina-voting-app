@@ -45,7 +45,7 @@ function waitForDBConnection() {
         echo "environment variables unset in .env file"
       else
         echo "Waiting for database connection ..."
-        until nc -z -v -w30 127.0.0.1 $MYSQL_PORT
+        until nc -z -v -w30 $MYSQL_HOST $MYSQL_PORT
         do
           echo "."
           sleep 2
@@ -150,6 +150,10 @@ then
         $COMPOSE down
         docker network rm proxy
         cleanUp
+      elif [ "$1" == "wait" ];then
+        $COMPOSE exec -T \
+          backend-part \
+          waitForDBConnection
       else
         $COMPOSE exec -T "$@"
       fi
@@ -159,7 +163,4 @@ then
 elif [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
   install
   $COMPOSE up -d
-  if [ "$LOC" == "ci" ];then
-    waitForDBConnection
-  fi
 fi
