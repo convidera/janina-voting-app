@@ -37,7 +37,6 @@ function cleanUp() {
 }
 
 function waitForDBConnection() {
-  bash
   if [ -f .env ]; then
     export $(cat .env | xargs)
     if grep -Fq MYSQL_PORT .env && grep -Fq MYSQL_HOST .env
