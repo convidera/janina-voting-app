@@ -49,7 +49,6 @@ jobs:
 
      - name: Start app
        run: LOC=ci ./devops.sh
-
       # - name: DEBUG
       #   run: grep proxy /etc/docker/daemon.json
 
