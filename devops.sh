@@ -39,9 +39,9 @@ function cleanUp() {
 function waitForDBConnection() {
   if [ -f .env ]; then
     export $(cat .env | xargs)
-    if grep -Fq MYSQL_PORT .env
+    if grep -Fq MYSQL_PORT .env && grep -Fq MYSQL_HOST .env
     then
-      if [ -z "$MYSQL_PORT" ];then
+      if [ -z "$MYSQL_PORT" ] && [ -z "$MYSQL_HOST" ];then
         echo "environment variables unset in .env file"
       else
         echo "Waiting for database connection ..."
@@ -150,7 +150,7 @@ then
         $COMPOSE down
         docker network rm proxy
         cleanUp
-      elif [ "$1" == "wait" ];then
+      elif [ "$1" == "waitdb" ];then
         $COMPOSE exec -T \
           backend-part \
           waitForDBConnection

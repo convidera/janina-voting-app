@@ -50,10 +50,13 @@ jobs:
       - name: Start app
         run: LOC=ci ./devops.sh
 
+      - name: Wait for DB Connection
+        run: LOC=exec ./devops.sh waitdb
+
       # - name: Inspect
       #   run: docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' janina-voting-app_vote-app-mysql_1
       - name: Run migrate command
-        run: LOC=ci ./devops.sh migrate
+        run: LOC=exec ./devops.sh migrate
 
       - name: Run tests against pull request
         run: |
