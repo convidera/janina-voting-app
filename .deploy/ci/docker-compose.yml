@@ -11,20 +11,17 @@ services:
       - mysql:/var/lib/mysql:delegated
       - ./db_assets:/docker-entrypoint-initdb.d/:delegated
 #copy mysql config in running container
-#list containers
+#list containers, container name is assigned by docker-compose
 #docker ps -aqf "name=^janina-voting-app_vote-app-mysql"
 #put upper command in second command (test):
     command: >
       sh -c 'docker ps -aqf "name=^janina-voting-app_vote-app-mysql" | xargs -I{} docker cp ./db_assets/mysqld.cnf {}:/var/lib/mysql/' 
-    # command: >
-    #   sh -c 'docker cp ./db_assets/mysqld.cnf janina-voting-app_vote-app-mysql_1:/var/lib/mysql/'
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_HOST=vote-app-mysql
-      #- MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_PORT=${MYSQL_PORT}
     security_opt:
       - no-new-privileges:true
@@ -44,8 +41,7 @@ services:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
       - DATABASE_PASS=${MYSQL_PASSWORD}
-      - MYSQL_HOST=vote-app-mysql
-      #- DATABASE_HOST=${MYSQL_HOST}
+      - DATABASE_HOST=${MYSQL_HOST}
       - DATABASE_PORT=${MYSQL_PORT}
       - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
       - URI_CSRF_PATH=${URI_CSRF_PATH}
