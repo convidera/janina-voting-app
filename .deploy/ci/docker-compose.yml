@@ -13,9 +13,9 @@ services:
 #copy mysql config in running container
 #list containers, container name is assigned by docker-compose
 #docker ps -aqf "name=^janina-voting-app_vote-app-mysql"
-#put upper command in second command (test):
-    command: >
-      sh -c 'docker ps -aqf "name=^janina-voting-app_vote-app-mysql" | xargs -I{} docker cp ./db_assets/mysqld.cnf {}:/var/lib/mysql/' 
+# #put upper command in second command (test):
+#     command: >
+#       sh -c 'docker ps -aqf "name=^janina-voting-app_vote-app-mysql" | xargs -I{} docker cp ./db_assets/mysqld.cnf {}:/var/lib/mysql/' 
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
