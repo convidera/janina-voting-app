@@ -62,7 +62,7 @@ jobs:
         run: nc -zv 127.0.0.1 3306
 
       - name: DEBUG check container status
-        run: docker ps
+        run: docker ps && ss -lntp && iptables-save
 
       - name: DEBUG nc in loop
         run: docker-compose exec -T backend-part bash -c "until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;"
