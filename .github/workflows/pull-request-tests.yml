@@ -53,7 +53,7 @@ jobs:
       # - name: Inspect
       #   run: docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' janina-voting-app_vote-app-mysql_1
       - name: Run migrate command
-        run: LOC=exec ./devops.sh migrate
+        run: LOC=ci ./devops.sh migrate
 
       - name: Run tests against pull request
         run: |
