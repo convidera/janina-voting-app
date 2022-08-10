@@ -152,9 +152,19 @@ then
         docker network rm proxy
         cleanUp
       elif [ "$1" == "waitdb" ];then
-        $COMPOSE exec -T \
-          backend-part \
-          bash -c "waitForDBConnection"
+        if [ -f .env ]; then
+          export $(cat .env | xargs)
+          if grep -Fq MYSQL_PORT .env && grep -Fq MYSQL_HOST .env
+          then
+            if [ -z "$MYSQL_PORT" ] && [ -z "$MYSQL_HOST" ];then
+              echo "environment variables unset in .env file"
+            else
+              $COMPOSE exec -T \
+                backend-part \
+                bash -c "until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;"
+            fi
+          fi
+        fi
       else
         $COMPOSE exec -T "$@"
       fi
