@@ -6,7 +6,7 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"
     volumes:
       - mysql:/var/lib/mysql:delegated
       - ./db_assets:/docker-entrypoint-initdb.d/:delegated
@@ -41,7 +41,7 @@ services:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
       - DATABASE_PASS=${MYSQL_PASSWORD}
-      - DATABASE_HOST=127.0.0.1
+      - DATABASE_HOST=${MYSQL_HOST}
       - DATABASE_PORT=${MYSQL_PORT}
       - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
       - URI_CSRF_PATH=${URI_CSRF_PATH}
