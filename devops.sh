@@ -154,7 +154,7 @@ then
       elif [ "$1" == "waitdb" ];then
         $COMPOSE exec -T \
           backend-part \
-          bash -c 'waitForDBConnection'
+          bash -c "waitForDBConnection"
       else
         $COMPOSE exec -T "$@"
       fi
