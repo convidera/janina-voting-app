@@ -45,7 +45,8 @@ function waitForDBConnection() {
         echo "environment variables unset in .env file"
       else
         echo "Waiting for database connection ..."
-        until nc -z -v -w30 $MYSQL_HOST $MYSQL_PORT
+        #until nc -z -v -w30 $MYSQL_HOST $MYSQL_PORT
+        until nc -zv $MYSQL_HOST $MYSQL_PORT
         do
           echo "."
           sleep 2
