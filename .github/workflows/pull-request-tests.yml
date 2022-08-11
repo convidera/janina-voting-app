@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
+   
       - name: Setup Docker Context for Buildx
         id: buildx-context
         run: docker context create builders
@@ -19,31 +19,53 @@ jobs:
         uses: docker/setup-buildx-action@v1
         with:
           endpoint: builders
-      
-      - name: Update Ubuntu package repositories
-        run: sudo apt-get update -y
 
-      - name: Install GnuPG
-        run: sudo apt-get install -y gnupg
-
-      - name: Install git-secret
-        run: sudo apt-get install -y git-secret
-
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v5
+      - name: Set up S3cmd CLI Tool
+        uses: s3-actions/s3cmd@v1.2.0
         with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          provider: digitalocean
+          region: 'fra1'
+          access_key: ${{ secrets.SPACES_ACCESS_KEY }}
+          secret_key: ${{ secrets.SPACES_SECRET_KEY }}
 
-      - name: Decrypt .env.ci files
-        run: git secret reveal
-      
-      - name: Build Docker images
+      - name: Get .env from web spaces
         run: |
-          cd vote_app_backend
-          docker buildx build --tag alonimacaroni/backend-part:ci --target dev-stage .
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-ci .env --force
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-ci vote_app_backend/.env --force
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.JANINA_DOCKER_HUB_USER }}
+          password: ${{ secrets.JANINA_DOCKER_HUB_ACCESS_KEY }}
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          context: ./vote_app_backend/
+          tags: alonimacaroni/vote-backend:ci
+          target: dev-stage
+
+      - name: Start app
+        run: LOC=ci ./devops.sh
+      # - name: DEBUG
+      #   run: grep proxy /etc/docker/daemon.json
+
+      - name: Wait for DB Connection
+        run: LOC=exec ./devops.sh waitdb
+
+      # - name: Inspect
+      #   run: docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' janina-voting-app_vote-app-mysql_1
+      - name: Run migrate command
+        run: LOC=exec ./devops.sh migrate
 
       - name: Run tests against pull request
         run: |
-          cd ..
-          LOC=ci ./devops.sh test
+          LOC=exec ./devops.sh test
+      
+      - name: Shutdown app
+        run: LOC=exec ./devops.sh exit
+
+      - name: Clean Docker Environment
+        run: LOC=op ./devops.sh clean

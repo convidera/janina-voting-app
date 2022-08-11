@@ -8,32 +8,61 @@ Rename all .env.example to .env and provide your passwords before running the up
 
 https://djecrety.ir/
 
-# Generate self-signed certificates with mkcert for local and ci environments and certificates signed by a CA with letsencrypt for stage environment.
+# Generate self-signed certificates with mkcert for local environment and Let's Encrypt certificates for stage environment.
 
 # Set up a local DNS like Dnsmasq (Mac OS) for local environment in order to direct traffic from test domain to localhost.
 
 https://passingcuriosity.com/2013/dnsmasq-dev-osx/
 
-# Build frontend and backend images:
+# Build frontend and backend images for local environment:
+Go to frontend and backend project folders.
 
 ```bash
-docker build --target prod-stage -t alonimacaroni/frontend-part:stage .
-docker build --target prod-stage -t alonimacaroni/backend-part:stage .
+docker build --target dev-stage -t alonimacaroni/vote-frontend:local .
+docker build --target dev-stage -t alonimacaroni/vote-backend:local .
 ```
 
-or
+or build from project root
 
 ```bash
-LOC=stage ./devops.sh build frontend-part
-LOC=stage ./devops.sh build backend-part
+./devops.sh build frontend-part
+./devops.sh build backend-part
 ```
 
-# Makemigrations and apply migrations (see devops.sh).
+or build all from project root:
+
+```bash
+./devops.sh build
+```
+
+# Build frontend and backend images for stage environment:
+
+```bash
+docker build --target prod-stage -t alonimacaroni/vote-frontend:stage .
+docker build --target prod-stage -t alonimacaroni/vote-backend:stage .
+```
+
+# Build backend image for ci environment:
+mysql:8.0 image needs to be pulled from Dockerhub.
+
+```bash
+docker build --target dev-stage -t alonimacaroni/vote-backend:ci .
+```
+
+# Apply migrations (here: local):
+
+```bash
+./devops.sh migrate
+```
 
 # Run command (use devops.sh) against service:
 
 ```bash
 LOC=stage ./devops.sh run --rm <service> <command>
+```
+
+```bash
+LOC=stage ./devops.sh exec --rm <service> <command>
 ```
 
 # Use devops.sh bash script for executing commands in a service in running app:
@@ -57,14 +86,6 @@ docker-compose up
 
 ## Script commands:
 
-Shut down app:
-
-```bash
-./devops exit
-```
-
-\
-\
 Run server in backend, more options for original command can be appended:
 
 ```bash

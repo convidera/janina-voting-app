@@ -5,7 +5,8 @@ node_modules
 
 # local env files
 .env
-vote_app_backend/vote_app_backend/.env
+vote_app_backend/.env
+vote_app_backend/.env.ci
 .env.local
 .env.*.local
 .env.ci

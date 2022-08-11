@@ -163,9 +163,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'Strict'
-#allow specific subdomain
-#CSRF_COOKIE_DOMAIN = "www." + str(os.environ.get('DOMAIN_URL'))
-#allow all subdomains:
-#CSRF_COOKIE_DOMAIN = "." + str(os.environ.get('DOMAIN_URL'))
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Strict'
