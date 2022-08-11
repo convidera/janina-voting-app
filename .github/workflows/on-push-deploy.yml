@@ -1,9 +1,11 @@
 name: 'Run Deploy Actions on push to main trigger'
 
 on:
-  push:
-    branches:
-      - 'main'
+  # push:
+  #   branches:
+  #     - 'main'
+#manually trigger a workflow for testing
+on: workflow_dispatch
 
 jobs:
   run-tests-on-pull-request:
