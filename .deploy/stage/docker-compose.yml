@@ -4,9 +4,6 @@ version: "3.9"
 services:
   frontend-part:
     image: alonimacaroni/vote-frontend:stage
-    build:
-      context: ./frontend-ui/
-      target: prod-stage
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-part.entrypoints=websecure"
@@ -16,8 +13,6 @@ services:
     restart: unless-stopped
     networks:
       - proxy
-    volumes:
-      - ./frontend-ui:/app
     security_opt:
       - no-new-privileges:true
   
@@ -33,22 +28,17 @@ services:
       - proxy
     volumes:
       - mysql:/var/lib/mysql:delegated
-      - ./db_assets:/docker-entrypoint-initdb.d/:delegated
+      #- ./db_assets:/docker-entrypoint-initdb.d/:delegated
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_HOST=${MYSQL_HOST}
-      - MYSQL_PORT=${MYSQL_PORT}
     security_opt:
       - no-new-privileges:true
   
   backend-part:
     image: alonimacaroni/vote-backend:stage
-    build:
-      context: ./vote_app_backend/
-      target: prod-stage
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
@@ -60,8 +50,6 @@ services:
       sh -c 'gunicorn vote_app_backend.wsgi:application --workers 3 --bind :80'
     networks:
       - proxy
-    volumes:
-      - ./vote_app_backend:/code
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
@@ -73,8 +61,6 @@ services:
       - DOMAIN_URL=${DOMAIN_URL}
     security_opt:
       - no-new-privileges:true
-    depends_on:
-      - vote-app-mysql
   
   proxy-part:
     image: traefik:v2.7
@@ -132,7 +118,7 @@ services:
     networks:
       - proxy
     volumes: 
-      - ./.deploy/stage/letsencrypt:/letsencrypt
+      #- ./.deploy/stage/letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:

@@ -62,15 +62,10 @@ jobs:
 
       - name: Run tests against pull request
         run: |
-<<<<<<< HEAD
-          LOC=ci ./devops.sh test
-          
-=======
           LOC=exec ./devops.sh test
       
->>>>>>> origin/main
       - name: Shutdown app
-        run: LOC=exec ./devops.sh exit
+        run: LOC=exec ./devops.sh exitci
 
       - name: Clean Docker Environment
         run: LOC=op ./devops.sh clean

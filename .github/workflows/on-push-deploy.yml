@@ -55,7 +55,7 @@ jobs:
       - name: SSH to server
         run: |
           LOC=op ./devops.sh sshserver
-          cd janina.devcon.team/janina-voting-app/
+          cd janina.devcon.team/
 
       - name: Get .env from web spaces
         run: |
@@ -66,11 +66,11 @@ jobs:
       - name: Start app
         run: LOC=stage ./devops.sh 
 
-      - name: Wait for app to setup
-        run: sleep 10
+      - name: Wait for DB Connection
+        run: LOC=exec ./devops.sh waitdb
 
       - name: Run migrate command
         run: LOC=exec ./devops.sh migrate
       
       - name: Shutdown app
-        run: LOC=exec ./devops.sh exit
+        run: LOC=exec ./devops.sh exitstage

@@ -122,21 +122,16 @@ then
         $COMPOSE exec -T \
           backend-part \
           pytest "$@"
-      #shutdown app correctly ci, stage
-      elif [ "$1" == "exit" ];then
-        if [ "$LOC" == "local" ] || [ "$LOC" == "ci" ];then
-          $COMPOSE down
-          cleanUp
-        elif [ "$LOC" == "stage" ];then
-          docker stack rm vote-app-stack
-          cleanUp
-        fi
+      #shutdown app correctly
+      elif [ "$1" == "exitci" ];then
         $COMPOSE down
         cleanUp
-      #shutdown app correctly local
-      elif [ "$1" == "exitlocal" ];then
+      elif [ "$1" == "exit" ];then
         $COMPOSE down
         docker network rm proxy
+        cleanUp
+      elif [ "$1" == "exitstage" ];then
+        docker stack rm vote-app-stack
         cleanUp
       elif [ "$1" == "waitdb" ];then
         if [ -f .env ]; then
