@@ -38,14 +38,14 @@ function cleanUp() {
 
 if [ $# -gt 0 ]
 then
-#################docker-compose dependent command options
+#################Docker dependent command options, all run commands create new containers
   if [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
     install
     if [ "$1" == "migrate" ];then
       $COMPOSE run --rm \
         backend-part \
         python manage.py migrate
-    elif [ "$1" == "makemigrations" ];then
+    elif [ "$1" == "makemig" ];then
       $COMPOSE run --rm \
         backend-part \
         python manage.py makemigrations showvotes
@@ -62,14 +62,14 @@ then
       $COMPOSE build
     fi
     cleanUp
-#################docker-compose independent command options
+#################administrative command options
   elif [ "$LOC" == "op" ];then
     if [ "$1" == "push" ];then 
       git add *
       git commit -m "$2"
       shift 2
       git push "$@"
-    elif [ "$1" == "pullserver" ];then
+    elif [ "$1" == "pull" ];then
       #check if .env exists
       if [ -f .env ]; then
         #import environment variables from .env
@@ -109,7 +109,7 @@ then
       docker container stop $(docker container ls -aq) && \
         docker system prune -af --volumes
     fi
-#################running containers command options
+#################execution in running Docker containers command options
   elif [ "$LOC" == "exec" ];then
     if [ -f docker-compose.yml ];then
       if [ "$1" == "migrate" ];then
@@ -117,6 +117,14 @@ then
         $COMPOSE exec -T \
           backend-part \
           python manage.py migrate
+      elif [ "$1" == "makemig" ];then
+        $COMPOSE run --rm \
+          backend-part \
+          python manage.py makemigrations showvotes
+      elif [ "$1" == "flush" ];then
+        $COMPOSE exec -T \
+          backend-part \
+          python manage.py flush
       elif [ "$1" == "test" ];then
         shift 1
         $COMPOSE exec -T \
@@ -133,7 +141,7 @@ then
       elif [ "$1" == "exitstage" ];then
         docker stack rm vote-app-stack
         cleanUp
-      elif [ "$1" == "waitdb" ];then
+      elif [ "$1" == "wait" ];then
         if [ -f .env ]; then
           export $(cat .env | xargs)
           if grep -Fq MYSQL_PORT .env && grep -Fq MYSQL_HOST .env

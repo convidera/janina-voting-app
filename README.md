@@ -2,15 +2,15 @@
 
 # Project setup
 
-Rename all .env.example to .env and provide your passwords before running the up command. MYSQL_ROOT_PASSWORD, MYSQL_DATABASE, MYSQL_USER and MYSQL_PASSWORD are not predefined and can be freely chosen by the user. SECRET_KEY should be genereted by Django. The GITHUB_ and SERVER_ environment variables are only needed by devops script commands pullserver and sshserver.
+Rename all .env.example to .env and provide your passwords before running the start app command. If you specify ci environment copy the .env files to a server space. MYSQL_ROOT_PASSWORD, MYSQL_DATABASE, MYSQL_USER and MYSQL_PASSWORD are not predefined and can be freely chosen by the user. SECRET_KEY should be genereted by Django. The GITHUB_ and SERVER_ environment variables are only needed by devops script commands pullserver and sshserver.
 
 ## Generate Django Secret Key
 
 https://djecrety.ir/
 
-## Generate self-signed certificates with mkcert for local environment and Let's Encrypt certificates for stage environment.
+Generate self-signed certificates with mkcert for local environment and Let's Encrypt certificates for stage environment.
 
-## Set up a local DNS like Dnsmasq (Mac OS) for local environment in order to direct traffic from test domain to localhost.
+Set up a local DNS like Dnsmasq (Mac OS) for local environment in order to direct traffic from test domain to localhost.
 
 https://passingcuriosity.com/2013/dnsmasq-dev-osx/
 
@@ -36,19 +36,22 @@ docker build --target prod-stage -t alonimacaroni/vote-backend:stage .
 select corresponding LOC parameter:
 
 ```bash
-./devops.sh setup
+LOC=stage ./devops.sh setup
 ```
 
-# Use devops.sh script for app management.
+# Use devops.sh script for app management:
 Set LOC parameter equal to local (default), ci, stage, op or exec.
 
 ## Start app correctly:
-
 ```bash
-./devops.sh
+LOC=stage ./devops.sh
 ```
-
-# Shutdown app correctly:
+Wait for database connection:
+```bash
+LOC=exec ./devops.sh wait
+```
+Apply migrations.
+## Shutdown app correctly:
 local: 
 ```bash
 LOC=exec ./devops.sh exit
@@ -61,88 +64,39 @@ ci:
 ```bash
 LOC=exec ./devops.sh exitci
 ```
-# Bring app up:
-
-Start app:
-
-```bash
-./devops.sh
-```
+## Docker dependent command options, executed in new container (local, ci, stage):
+All command options are also available by setting LOC=exec in order to execute commands in running container.
 
 Apply migrations:
-
-```bash
-LOC=exec ./devops.sh migrate
-```
-
-# Script commands:
-
-## one-time app commands (start and shutdown):
-
-All one-time commands work for local, stage and ci environments.
-
-Apply migrations:
-
 ```bash
 LOC=stage ./devops.sh migrate
 ```
-
 Make migrations:
-
 ```bash
-LOC=stage ./devops.sh makemigrations
+LOC=stage ./devops.sh makemig
 ```
-
-Empty database:
-
+Reset Database:
 ```bash
 LOC=stage ./devops.sh flush
 ```
-
-Run tests in backend:
-
+Run automated tests:
 ```bash
 LOC=stage ./devops.sh test
 ```
-
-## app independent commands:
-
-Choose LOC=op option:
-
-Push to github:
-
+## Administrative tasks on host:
+Push code to Github:
 ```bash
 LOC=op ./devops.sh push
 ```
-
-Pull github files to server:
-
+Pull code from Github:
 ```bash
-LOC=op ./devops.sh pullserver
+LOC=op ./devops.sh pull
 ```
-
-Log in to server via SSH:
-
+SSH to server:
 ```bash
 LOC=op ./devops.sh sshserver
 ```
-
-Reset app environment:
-
+Reset and clean Docker environment:
 ```bash
 LOC=op ./devops.sh clean
-```
-
-## running app commands:
-
-Apply migrations:
-
-```bash
-LOC=exec ./devops.sh migrate
-```
-
-Run tests in backend:
-
-```bash
-LOC=exec ./devops.sh test
 ```

@@ -67,7 +67,7 @@ jobs:
         run: LOC=stage ./devops.sh 
 
       - name: Wait for DB Connection
-        run: LOC=exec ./devops.sh waitdb
+        run: LOC=exec ./devops.sh wait
 
       - name: Run migrate command
         run: LOC=exec ./devops.sh migrate

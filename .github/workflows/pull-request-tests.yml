@@ -53,7 +53,7 @@ jobs:
       #   run: grep proxy /etc/docker/daemon.json
 
       - name: Wait for DB Connection
-        run: LOC=exec ./devops.sh waitdb
+        run: LOC=exec ./devops.sh wait
 
       # - name: Inspect
       #   run: docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' janina-voting-app_vote-app-mysql_1
