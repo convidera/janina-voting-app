@@ -61,6 +61,35 @@ services:
       - DOMAIN_URL=${DOMAIN_URL}
     security_opt:
       - no-new-privileges:true
+
+  backend-migrator:
+    image: alonimacaroni/vote-backend:stage
+    labels: 
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend-part.entrypoints=websecure"
+      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
+      - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
+    restart: unless-stopped
+    command: >
+      sh -c 'LOC=exec ./devops.sh wait
+      && LOC=exec ./devops.sh migrate'
+    networks:
+      - proxy
+    environment:
+      - DATABASE_NAME=${MYSQL_DATABASE}
+      - DATABASE_USER=${MYSQL_USER}
+      - DATABASE_PASS=${MYSQL_PASSWORD}
+      - DATABASE_HOST=${MYSQL_HOST}
+      - DATABASE_PORT=${MYSQL_PORT}
+      - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
+      - URI_CSRF_PATH=${URI_CSRF_PATH}
+      - DOMAIN_URL=${DOMAIN_URL}
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      restart_policy:
+        condition: none
   
   proxy-part:
     image: traefik:v2.7

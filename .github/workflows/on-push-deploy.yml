@@ -60,6 +60,8 @@ jobs:
           LOC=op ./devops.sh sshserver
           cd janina.devcon.team/
 
+      - name: Copy Code from Runner to Server
+
       - name: Start app
         run: |
           LOC=stage ./devops.sh 
@@ -79,3 +81,12 @@ jobs:
       
       - name: Shutdown app
         run: LOC=exec ./devops.sh exitstage
+
+      - uses: arwynfr/actions-docker-context@v2
+      with:
+        docker_host: 'ssh://someone@example.domain.tld'
+        context_name: 'dev-server'
+        ssh_cert: ${{ secrets.SSH_CERT }}
+        ssh_key: ${{ secrets.SSH_KEY }}
+
+    - run: docker --context dev-server stack deploy --compose-file stack/docker-compose.yml my-stack
