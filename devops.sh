@@ -36,26 +36,6 @@ function cleanUp() {
   fi
 }
 
-function waitForDBConnection() {
-  if [ -f .env ]; then
-    export $(cat .env | xargs)
-    if grep -Fq MYSQL_PORT .env && grep -Fq MYSQL_HOST .env
-    then
-      if [ -z "$MYSQL_PORT" ] && [ -z "$MYSQL_HOST" ];then
-        echo "environment variables unset in .env file"
-      else
-        echo "Waiting for database connection ..."
-        #until nc -zv $MYSQL_HOST $MYSQL_PORT
-        until nc -z -v -w30 $MYSQL_HOST $MYSQL_PORT
-        do
-          echo "."
-          sleep 1
-        done
-      fi
-    fi 
-  fi
-}
-
 if [ $# -gt 0 ]
 then
 #################docker-compose dependent command options
