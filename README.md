@@ -31,14 +31,6 @@ docker build --target prod-stage -t alonimacaroni/vote-frontend:stage .
 docker build --target prod-stage -t alonimacaroni/vote-backend:stage .
 ```
 
-## Build backend image for ci environment:
-
-mysql:8.0 image needs to be pulled from Dockerhub.
-
-```bash
-docker build --target dev-stage -t alonimacaroni/vote-backend:ci .
-```
-
 ## Build all images at once:
 
 select corresponding LOC parameter:
@@ -47,18 +39,28 @@ select corresponding LOC parameter:
 ./devops.sh setup
 ```
 
-# Start app correctly:
+# Use devops.sh script for app management.
+Set LOC parameter equal to local (default), ci, stage, op or exec.
+
+## Start app correctly:
 
 ```bash
 ./devops.sh
 ```
 
 # Shutdown app correctly:
-
+local: 
 ```bash
 LOC=exec ./devops.sh exit
 ```
-
+stage: 
+```bash
+LOC=exec ./devops.sh exitstage
+```
+ci: 
+```bash
+LOC=exec ./devops.sh exitci
+```
 # Bring app up:
 
 Start app:
