@@ -57,14 +57,16 @@ jobs:
           LOC=op ./devops.sh sshserver
           cd janina.devcon.team/
 
+      - name: Start app
+        run: |
+          LOC=stage ./devops.sh 
+          cd janina-voting-app/
+
       - name: Get .env from web spaces
         run: |
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage .env --force
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-stage vote_app_backend/.env --force
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-frontend-stage frontend-ui/.env --force
-
-      - name: Start app
-        run: LOC=stage ./devops.sh 
 
       - name: Wait for DB Connection
         run: LOC=exec ./devops.sh wait
