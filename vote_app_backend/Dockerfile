@@ -6,7 +6,8 @@ WORKDIR /code
 RUN python -m pip install --upgrade pip
 RUN apk update \
     && apk add --virtual build-deps gcc python3-dev musl-dev \
-    && apk add --no-cache mariadb-dev
+    && apk add --no-cache mariadb-dev 
+RUN apk add --no-cache bash netcat-openbsd 
 RUN pip install -r requirements.txt
 EXPOSE 8000 
 

@@ -29,9 +29,6 @@ function install() {
 
 function cleanUp() {
   $COMPOSE down
-  if [ "$LOC" == "local" ] || [ "$LOC" == "exec" ];then
-    docker network rm proxy
-  fi
   rm docker-compose.yml
   rm vote_app_backend/vote_app_backend/settings.py
   if [ -f frontend-ui/vue.config.js ];then
@@ -68,8 +65,8 @@ then
 #################docker-compose independent command options
   elif [ "$LOC" == "op" ];then
     if [ "$1" == "push" ];then 
-      git add * && \
-      git commit -m "$2" && \
+      git add *
+      git commit -m "$2"
       shift 2
       git push "$@"
     elif [ "$1" == "pullserver" ];then
@@ -116,15 +113,16 @@ then
   elif [ "$LOC" == "exec" ];then
     if [ -f docker-compose.yml ];then
       if [ "$1" == "migrate" ];then
-        $COMPOSE exec \
+        #-T disable pseudo-TTY allocation.
+        $COMPOSE exec -T \
           backend-part \
           python manage.py migrate
       elif [ "$1" == "test" ];then
         shift 1
-        $COMPOSE exec \
+        $COMPOSE exec -T \
           backend-part \
           pytest "$@"
-      #shutdown app correctly
+      #shutdown app correctly ci, stage
       elif [ "$1" == "exit" ];then
         if [ "$LOC" == "local" ] || [ "$LOC" == "ci" ];then
           $COMPOSE down
@@ -133,6 +131,29 @@ then
           docker stack rm vote-app-stack
           cleanUp
         fi
+        $COMPOSE down
+        cleanUp
+      #shutdown app correctly local
+      elif [ "$1" == "exitlocal" ];then
+        $COMPOSE down
+        docker network rm proxy
+        cleanUp
+      elif [ "$1" == "waitdb" ];then
+        if [ -f .env ]; then
+          export $(cat .env | xargs)
+          if grep -Fq MYSQL_PORT .env && grep -Fq MYSQL_HOST .env
+          then
+            if [ -z "$MYSQL_PORT" ] && [ -z "$MYSQL_HOST" ];then
+              echo "environment variables unset in .env file"
+            else
+              $COMPOSE exec -T \
+                backend-part \
+                bash -c "until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;"
+            fi
+          fi
+        fi
+      else
+        $COMPOSE exec -T "$@"
       fi
     fi
   fi
