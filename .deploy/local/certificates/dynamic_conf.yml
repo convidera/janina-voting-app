@@ -1,4 +1,0 @@
-tls:
-  certificates:
-    - certFile: "/usr/local/share/ca-certificates/janina/janina.test+3.pem"
-      keyFile: "/usr/local/share/ca-certificates/janina/janina.test+3-key.pem"
