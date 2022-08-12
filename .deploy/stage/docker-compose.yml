@@ -62,7 +62,7 @@ services:
     security_opt:
       - no-new-privileges:true
 
-  backend-migrator:
+  migrator:
     image: alonimacaroni/vote-backend:stage
     labels: 
       - "traefik.enable=true"
