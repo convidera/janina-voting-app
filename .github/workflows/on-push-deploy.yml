@@ -1,6 +1,6 @@
 name: 'Run Deploy Actions on push to main trigger'
 
-on:
+#on:
   # push:
   #   branches:
   #     - 'main'
