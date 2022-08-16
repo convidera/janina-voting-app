@@ -89,7 +89,7 @@ then
       else
         echo ".env file missing"
       fi
-    elif [ "$1" == "sshserver" ];then
+    elif [ "$1" == "ssh" ];then
       if [ -f .env ]; then
         export $(cat .env | xargs)
         if grep -Fq SERVER_USER .env && grep -Fq SERVER_IP .env && grep -Fq SERVER_PASSPHRASE .env
