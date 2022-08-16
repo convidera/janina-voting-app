@@ -65,8 +65,8 @@ then
 #################administrative command options
   elif [ "$LOC" == "op" ];then
     if [ "$1" == "push" ];then 
-      git add *
-      git commit -m "$2"
+      git add * && \
+      git commit -m "$2" && \
       shift 2
       git push "$@"
     elif [ "$1" == "pull" ];then
