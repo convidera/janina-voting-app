@@ -10,9 +10,7 @@ on:
 
 jobs:
   run-deploy-on-push-to-main:
-    #runs-on: ubuntu-18.04
     runs-on: ubuntu-latest
-    #runs-on: [self-hosted, ubuntu, k8s]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -72,4 +70,4 @@ jobs:
           ssh_key: ${{ secrets.SSH_KEY }}
 
       - name: Deploy App
-        run: docker --context stage-server stack deploy --compose-file janina-voting-app/docker-compose.yml janina-voting-app
+        run: docker --context stage-server stack deploy --compose-file janina-voting-app/.deploy/stage/docker-compose.yml janina-voting-app

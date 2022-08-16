@@ -6,7 +6,6 @@ on:
 jobs:
   run-tests-on-pull-request:
     runs-on: ubuntu-latest
-    #runs-on: [self-hosted, ubuntu, k8s]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -50,14 +49,10 @@ jobs:
 
       - name: Start app
         run: LOC=ci ./devops.sh
-      # - name: DEBUG
-      #   run: grep proxy /etc/docker/daemon.json
 
       - name: Wait for DB Connection
         run: LOC=exec ./devops.sh wait
 
-      # - name: Inspect
-      #   run: docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' janina-voting-app_vote-app-mysql_1
       - name: Run migrate command
         run: LOC=exec ./devops.sh migrate
 
