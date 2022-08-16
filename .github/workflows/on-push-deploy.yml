@@ -72,4 +72,4 @@ jobs:
           ssh_key: ${{ secrets.SSH_KEY }}
 
       - name: Deploy App
-        run: docker --context stage-server stack deploy --compose-file docker-compose.yml vote-app-stack
+        run: docker --context stage-server stack deploy --compose-file janina-voting-app/docker-compose.yml janina-voting-app
