@@ -119,13 +119,13 @@ ALLOWED_HOSTS = [
     str(os.environ.get('DOMAIN_URL')),
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://" + str(os.environ.get('DOMAIN_URL')),
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://" + str(os.environ.get('DOMAIN_URL')),
+# ]
 
 
 
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
