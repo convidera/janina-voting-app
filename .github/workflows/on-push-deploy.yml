@@ -9,7 +9,8 @@ on: workflow_dispatch
 
 jobs:
   run-deploy-on-push-to-main:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
+    #runs-on: ubuntu-latest
     #runs-on: [self-hosted, ubuntu, k8s]
     steps:
       - name: Checkout repository
