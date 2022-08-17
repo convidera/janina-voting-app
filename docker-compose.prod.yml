@@ -62,7 +62,7 @@ services:
       - no-new-privileges:true
 
   migrator:
-    image: alonimacaroni/vote-backend:stage
+    image: alonimacaroni/vote-backend:prod
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.backend-part.entrypoints=websecure"
