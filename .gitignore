@@ -30,8 +30,8 @@ vote_app_backend/projenv/
 vote_app_backend/static/
 
 # Frontend ignores
-frontend_ui/node_modules/
-frontend_ui/dist/
+frontend-ui/node_modules/
+frontend-ui/dist/
 
 # Local environment ignores
 certificates/janina.test+3-key.pem
