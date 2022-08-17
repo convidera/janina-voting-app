@@ -71,8 +71,8 @@ services:
       - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
     restart: unless-stopped
     command: >
-      sh -c 'LOC=exec ./devops.sh wait
-      && LOC=exec ./devops.sh migrate'
+      sh -c './devops.sh wait
+      && ./devops.sh migrate'
     networks:
       - proxy
     environment:
@@ -104,7 +104,7 @@ services:
       --certificatesresolvers.myresolver.acme.tlschallenge=true
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-      --providers.file.filename=./certificates/dynamic_conf.prod.yml
+      --providers.file.filename=/usr/local/share/ca-certificates/janina/dynamic_conf.prod.yml
     #dynamic configuration
     labels:
       - "traefik.enable=true"
@@ -145,6 +145,7 @@ services:
     networks:
       - proxy
     volumes: 
+      - ./certificates:/usr/local/share/ca-certificates/janina:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:

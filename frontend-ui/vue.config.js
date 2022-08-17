@@ -4,7 +4,7 @@ if (process.env.VUE_APP_DEPLOY == "prod") {
     module.exports = defineConfig({
         transpileDependencies: true,
     })
-} else if (process.env.VUE_APP_DEPLOY == "local") {
+} else if (process.env.VUE_APP_DEPLOY == "dev") {
     module.exports = defineConfig({
         transpileDependencies: true,
         devServer: {

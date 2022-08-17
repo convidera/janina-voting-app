@@ -7,16 +7,17 @@ export LOC=${LOC:-local}
 if [ $# -gt 0 ]
 then
     if [ "$1" == "setup" ];then
-        $COMPOSE build
+        $COMPOSE build frontend-part
+        $COMPOSE build backend-part
     elif [ "$1" == "start" ];then
-        if [ "$LOC" == "local" ];then
+        if [ "$LOC" == "dev" ];then
             docker network create proxy
-            $COMPOSE -f docker-compose.yml up -d
+            $COMPOSE -f docker-compose.yml up
         elif [ "$LOC" == "ci" ];then
             $COMPOSE -f docker-compose.ci.yml up -d
         fi
     elif [ "$1" == "exit" ];then
-        if [ "$LOC" == "local" ];then
+        if [ "$LOC" == "dev" ];then
             $COMPOSE down
             docker network rm proxy
         elif [ "$LOC" == "ci" ];then
