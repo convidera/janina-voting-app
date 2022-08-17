@@ -18,13 +18,6 @@ function install() {
       cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
     fi
   fi
-  if [ "$LOC" == "stage" ];then
-    if [ ! -f docker-compose.yml ] && [ ! -f frontend-ui/vue.config.js ] && [ ! -f vote_app_backend/vote_app_backend/settings.py ];then
-      cp .deploy/${LOC}/docker-compose.yml docker-compose.yml || true
-      cp .deploy/${LOC}/vue.config.js frontend-ui/vue.config.js || true
-      cp .deploy/${LOC}/settings.py vote_app_backend/vote_app_backend/settings.py || true
-    fi
-  fi
 }
 
 function cleanUp() {
@@ -39,26 +32,9 @@ function cleanUp() {
 if [ $# -gt 0 ]
 then
 #################Docker dependent command options, all run commands create new containers
-  if [ "$LOC" == "local" ] || [ "$LOC" == "ci" ] || [ "$LOC" == "stage" ];then
+  if [ "$LOC" == "local" ];then
     install
-    if [ "$1" == "migrate" ];then
-      $COMPOSE run --rm \
-        backend-part \
-        python manage.py migrate
-    elif [ "$1" == "makemig" ];then
-      $COMPOSE run --rm \
-        backend-part \
-        python manage.py makemigrations showvotes
-    elif [ "$1" == "flush" ];then
-      $COMPOSE run --rm \
-        backend-part \
-        python manage.py flush
-    elif [ "$1" == "test" ];then
-      shift 1
-      $COMPOSE run --rm \
-        backend-part \
-        pytest "$@"
-    elif [ "$1" == "setup" ];then
+    if [ "$1" == "setup" ];then
       $COMPOSE build
     fi
     cleanUp
@@ -70,14 +46,10 @@ then
       shift 2
       git push "$@"
     elif [ "$1" == "pull" ];then
-      #check if .env exists
       if [ -f .env ]; then
-        #import environment variables from .env
         export $(cat .env | xargs)
-        #check if GITHUB_USER and GITHUB_TOKEN strings exist in .env
         if grep -Fq GITHUB_USER .env && grep -Fq GITHUB_TOKEN .env
         then
-          #check if variables are unset
           if [ -z "$GITHUB_USER" ] && [ -z "$GITHUB_TOKEN" ];then
             echo "environment variables unset in .env file"
           else
@@ -97,18 +69,9 @@ then
   elif [ "$LOC" == "exec" ];then
     if [ -f docker-compose.yml ];then
       if [ "$1" == "migrate" ];then
-        #-T disable pseudo-TTY allocation.
         $COMPOSE exec -T \
           backend-part \
           python manage.py migrate
-      elif [ "$1" == "makemig" ];then
-        $COMPOSE run --rm \
-          backend-part \
-          python manage.py makemigrations showvotes
-      elif [ "$1" == "flush" ];then
-        $COMPOSE exec -T \
-          backend-part \
-          python manage.py flush
       elif [ "$1" == "test" ];then
         shift 1
         $COMPOSE exec -T \
@@ -121,9 +84,6 @@ then
       elif [ "$1" == "exit" ];then
         $COMPOSE down
         docker network rm proxy
-        cleanUp
-      elif [ "$1" == "exitstage" ];then
-        docker stack rm vote-app-stack
         cleanUp
       elif [ "$1" == "wait" ];then
         if [ -f .env ]; then
@@ -148,7 +108,4 @@ then
 elif [ "$LOC" == "local" ] || [ "$LOC" == "ci" ];then
   install
   $COMPOSE up -d
-elif [ "$LOC" == "stage" ];then
-  install
-  docker stack deploy --compose-file docker-compose.yml vote-app-stack
 fi  
