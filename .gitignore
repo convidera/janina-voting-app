@@ -27,7 +27,6 @@ vote_app_backend/vote_app_backend/__pycache__/
 vote_app_backend/tests/__pycache__/
 vote_app_backend/.pytest_cache/
 vote_app_backend/projenv/
-vote_app_backend/static/
 
 # Frontend ignores
 frontend-ui/node_modules/

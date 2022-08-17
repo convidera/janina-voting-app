@@ -104,8 +104,7 @@ services:
       --certificatesresolvers.myresolver.acme.tlschallenge=true
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-      --providers.file.filename=/letsencrypt/dynamic_conf.yml
-#      --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory  
+      --providers.file.filename=./certificates/dynamic_conf.prod.yml
     #dynamic configuration
     labels:
       - "traefik.enable=true"

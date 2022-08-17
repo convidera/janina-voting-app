@@ -97,7 +97,7 @@ services:
       --providers.docker.exposedbydefault=false
       --entrypoints.web.address=:80
       --entrypoints.websecure.address=:443
-      --providers.file.filename=/usr/local/share/ca-certificates/janina/dynamic_conf.yml
+      --providers.file.filename=/certificates/janina/dynamic_conf.yml
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.proxy-part-http.entrypoints=web"
@@ -127,7 +127,7 @@ services:
     networks:
       - proxy
     volumes: 
-      - ./.deploy/local/certificates:/usr/local/share/ca-certificates/janina:ro
+      - ./certificates:/certificates:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
