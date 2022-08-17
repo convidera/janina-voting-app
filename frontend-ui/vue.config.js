@@ -1,6 +1,6 @@
 const { defineConfig } = require('@vue/cli-service')
 
-if (process.env.VUE_APP_DEPLOY == "stage") {
+if (process.env.VUE_APP_DEPLOY == "prod") {
     module.exports = defineConfig({
         transpileDependencies: true,
     })

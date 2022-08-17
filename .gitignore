@@ -1,15 +1,10 @@
+# Mac OS files
 .DS_Store
-node_modules
-/dist
 
-
-# local env files
+# Local env files
 .env
 vote_app_backend/.env
-vote_app_backend/.env.ci
-.env.local
-.env.*.local
-.env.ci
+frontend-ui/.env
 
 # Log files
 npm-debug.log*
@@ -26,15 +21,18 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-# Custom ignores:
+# Backend ignores:
 vote_app_backend/showvotes/__pycache__/
 vote_app_backend/vote_app_backend/__pycache__/
 vote_app_backend/tests/__pycache__/
 vote_app_backend/.pytest_cache/
 vote_app_backend/projenv/
 vote_app_backend/static/
+
+# Frontend ignores
 frontend_ui/node_modules/
-frontend_ui/.env.production
-.deploy/stage/letsencrypt/acme.json
-.deploy/local/certificates/janina.test+3-key.pem
-.deploy/local/certificates/janina.test+3.pem
+frontend_ui/dist/
+
+# Local environment ignores
+certificates/janina.test+3-key.pem
+certificates/janina.test+3.pem

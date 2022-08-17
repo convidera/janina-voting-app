@@ -36,7 +36,7 @@ jobs:
         with:
           push: true
           context: ./vote_app_backend/
-          tags: alonimacaroni/vote-backend:stage
+          tags: alonimacaroni/vote-backend:prod
           target: prod-stage
 
       - name: Build Docker frontend image
@@ -44,7 +44,7 @@ jobs:
         with:
           push: true
           context: ./frontend-ui/
-          tags: alonimacaroni/vote-frontend:stage
+          tags: alonimacaroni/vote-frontend:prod
           target: prod-stage
 
       - name: Set up S3cmd CLI Tool
@@ -65,9 +65,9 @@ jobs:
         uses: arwynfr/actions-docker-context@v2
         with:
           docker_host: 'ssh://$SERVER_USER@SERVER_IP'
-          context_name: 'stage-server'
+          context_name: 'production'
           ssh_cert: ${{ secrets.SSH_CERT }}
           ssh_key: ${{ secrets.SSH_KEY }}
 
       - name: Deploy App
-        run: docker --context stage-server stack deploy --compose-file janina-voting-app/.deploy/stage/docker-compose.yml janina-voting-app
+        run: docker --context production stack deploy --compose-file janina-voting-app/docker-compose.prod.yml janina-voting-app

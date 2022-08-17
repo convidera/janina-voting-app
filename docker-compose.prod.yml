@@ -1,0 +1,157 @@
+#prod
+version: "3.9"
+
+services:
+  frontend-part:
+    image: alonimacaroni/vote-frontend:prod
+    labels: 
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend-part.entrypoints=websecure"
+      - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
+      - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
+      - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
+    restart: unless-stopped
+    networks:
+      - proxy
+    security_opt:
+      - no-new-privileges:true
+  
+  vote-app-mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    ports:
+      - target: ${MYSQL_PORT}
+        published: ${MYSQL_PORT}
+        protocol: tcp
+        mode: host
+    networks:
+      - proxy
+    volumes:
+      - mysql:/var/lib/mysql:delegated
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    security_opt:
+      - no-new-privileges:true
+  
+  backend-part:
+    image: alonimacaroni/vote-backend:prod
+    labels: 
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend-part.entrypoints=websecure"
+      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
+      - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
+    restart: unless-stopped
+    command: >
+      sh -c 'gunicorn vote_app_backend.wsgi:application --workers 3 --bind :80'
+    networks:
+      - proxy
+    environment:
+      - DATABASE_NAME=${MYSQL_DATABASE}
+      - DATABASE_USER=${MYSQL_USER}
+      - DATABASE_PASS=${MYSQL_PASSWORD}
+      - DATABASE_HOST=${MYSQL_HOST}
+      - DATABASE_PORT=${MYSQL_PORT}
+      - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
+      - URI_CSRF_PATH=${URI_CSRF_PATH}
+      - DOMAIN_URL=${DOMAIN_URL}
+    security_opt:
+      - no-new-privileges:true
+
+  migrator:
+    image: alonimacaroni/vote-backend:stage
+    labels: 
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend-part.entrypoints=websecure"
+      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+      - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
+      - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
+    restart: unless-stopped
+    command: >
+      sh -c 'LOC=exec ./devops.sh wait
+      && LOC=exec ./devops.sh migrate'
+    networks:
+      - proxy
+    environment:
+      - DATABASE_NAME=${MYSQL_DATABASE}
+      - DATABASE_USER=${MYSQL_USER}
+      - DATABASE_PASS=${MYSQL_PASSWORD}
+      - DATABASE_HOST=${MYSQL_HOST}
+      - DATABASE_PORT=${MYSQL_PORT}
+      - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
+      - URI_CSRF_PATH=${URI_CSRF_PATH}
+      - DOMAIN_URL=${DOMAIN_URL}
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      restart_policy:
+        condition: none
+  
+  proxy-part:
+    image: traefik:v2.7
+    restart: unless-stopped
+    command: >-
+      --log.level=DEBUG
+      --providers.docker=true
+      --providers.docker.exposedbydefault=false
+      --entrypoints.web.address=:80
+      --entrypoints.web.http.redirections.entrypoint.to=websecure
+      --entrypoints.web.http.redirections.entrypoint.scheme=https
+      --entrypoints.websecure.address=:443
+      --certificatesresolvers.myresolver.acme.tlschallenge=true
+      --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
+      --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      --providers.file.filename=/letsencrypt/dynamic_conf.yml
+#      --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory  
+    #dynamic configuration
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
+      - "traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)"
+      - "traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true"
+      ##  disable TLS version 1.0 and 1.1
+      - "traefik.tls.options.default.minversion=VersionTLS12"
+      - "traefik.tls.options.default.sniStrict=true"
+      #configure encryption methods
+      - "traefik.http.middlewares.secureheaders.headers.browserxssfilter=true"
+      - "traefik.http.middlewares.secureheaders.headers.contenttypenosniff=true"
+      # #SSL config
+      - "traefik.http.middlewares.secureheaders.headers.framedeny=true"
+      - "traefik.http.middlewares.secureheaders.headers.sslredirect=true"
+      # #HSTS config
+      - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
+      - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
+      - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
+      - "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
+      # #CORS config
+      - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
+      - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
+      - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+    networks:
+      - proxy
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+networks:
+  proxy:
+    driver: bridge
+
+volumes:
+  mysql:
+    driver: local

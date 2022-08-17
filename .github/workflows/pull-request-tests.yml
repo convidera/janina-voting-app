@@ -48,20 +48,19 @@ jobs:
           target: dev-stage
 
       - name: Start app
-        run: LOC=ci ./devops.sh
+        run: LOC=ci ./devops.sh start
 
       - name: Wait for DB Connection
-        run: LOC=exec ./devops.sh wait
+        run: ./devops.sh wait
 
       - name: Run migrate command
-        run: LOC=exec ./devops.sh migrate
+        run: ./devops.sh migrate
 
       - name: Run tests against pull request
-        run: |
-          LOC=exec ./devops.sh test
+        run: ./devops.sh test
       
       - name: Shutdown app
-        run: LOC=exec ./devops.sh exitci
+        run: LOC=ci ./devops.sh exit
 
       - name: Clean Docker Environment
-        run: LOC=op ./devops.sh clean
+        run: ./devops.sh clean
