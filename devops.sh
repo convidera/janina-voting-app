@@ -40,28 +40,7 @@ then
     cleanUp
 #################administrative command options
   elif [ "$LOC" == "op" ];then
-    if [ "$1" == "push" ];then 
-      git add * && \
-      git commit -m "$2" && \
-      shift 2
-      git push "$@"
-    elif [ "$1" == "pull" ];then
-      if [ -f .env ]; then
-        export $(cat .env | xargs)
-        if grep -Fq GITHUB_USER .env && grep -Fq GITHUB_TOKEN .env
-        then
-          if [ -z "$GITHUB_USER" ] && [ -z "$GITHUB_TOKEN" ];then
-            echo "environment variables unset in .env file"
-          else
-            ./pullserverbot.exp $GITHUB_USER $GITHUB_TOKEN
-          fi
-        else
-          echo "environment variables missing in .env file"
-        fi
-      else
-        echo ".env file missing"
-      fi
-    elif [ "$1" == "clean" ];then
+    if [ "$1" == "clean" ];then
       docker container stop $(docker container ls -aq) && \
         docker system prune -af --volumes
     fi
