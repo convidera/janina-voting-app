@@ -2,7 +2,7 @@
 .DS_Store
 
 # Local env files
-.deploy/.env
+.deploy/env
 vote_app_backend/.env
 frontend-ui/.env
 
