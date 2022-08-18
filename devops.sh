@@ -16,13 +16,13 @@ fi
 if [ $# -gt 0 ]
 then
     if [ "$1" == "setup" ];then
-        $COMPOSE -f ./.deploy/$UPFILE build frontend-part
-        $COMPOSE -f ./.deploy/$UPFILE build backend-part
+        $COMPOSE -f .deploy/$UPFILE build frontend-part
+        $COMPOSE -f .deploy/$UPFILE build backend-part
     elif [ "$1" == "start" ];then
         if [ "$LOC" == "dev" ];then
             docker network create proxy
         fi
-            $COMPOSE -f ./.deploy/$UPFILE up -d
+            $COMPOSE -f .deploy/$UPFILE up -d
     elif [ "$1" == "exit" ];then
         $COMPOSE -f ./.deploy/$UPFILE down
         if [ "$LOC" == "dev" ];then
@@ -48,7 +48,7 @@ then
                 if [ -z "$MYSQL_PORT" ] && [ -z "$MYSQL_HOST" ];then
                     echo "environment variables unset in .env file"
                 else
-                    $COMPOSE -f ./.deploy/$UPFILE exec -T \
+                    $COMPOSE -f .deploy/$UPFILE exec -T \
                         backend-part \
                         bash -c "until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;"
                 fi
