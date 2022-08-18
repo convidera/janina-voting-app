@@ -41,12 +41,12 @@ then
             backend-part \
             pytest "$@"
     elif [ "$1" == "wait" ];then
-        if [ -f .env ]; then
+        if [ -f .deploy/env* ]; then
             export $(cat .env | xargs)
-            if grep -Fq MYSQL_PORT .env && grep -Fq MYSQL_HOST .env
+            if grep -Fq MYSQL_PORT .deploy/env* && grep -Fq MYSQL_HOST .deploy/env*
             then
                 if [ -z "$MYSQL_PORT" ] && [ -z "$MYSQL_HOST" ];then
-                    echo "environment variables unset in .env file"
+                    echo "environment variables unset in env file"
                 else
                     $COMPOSE -f .deploy/$UPFILE exec -T \
                         backend-part \
