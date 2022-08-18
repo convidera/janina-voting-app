@@ -127,7 +127,7 @@ services:
     networks:
       - proxy
     volumes: 
-      - ./certificates:/usr/local/share/ca-certificates/janina:ro
+      - ./.deploy/certificates:/usr/local/share/ca-certificates/janina:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:

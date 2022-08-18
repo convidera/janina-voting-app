@@ -1,7 +1,8 @@
 name: 'Run pull-request tests'
 
-on:
-  pull_request:
+# on:
+#   pull_request:
+on: [pull_request, push]
 
 jobs:
   run-tests-on-pull-request:
@@ -51,13 +52,13 @@ jobs:
         run: LOC=ci ./devops.sh start
 
       - name: Wait for DB Connection
-        run: ./devops.sh wait
+        run: LOC=ci ./devops.sh wait
 
       - name: Run migrate command
-        run: ./devops.sh migrate
+        run: LOC=ci ./devops.sh migrate
 
       - name: Run tests against pull request
-        run: ./devops.sh test
+        run: LOC=ci ./devops.sh test
       
       - name: Shutdown app
         run: LOC=ci ./devops.sh exit
