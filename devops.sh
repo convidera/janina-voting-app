@@ -3,6 +3,7 @@ set -euo pipefail
 COMPOSE="docker compose"
 export LOC=${LOC:-dev}
 UPFILE="docker-compose.yml"
+ENVPATH=.deploy/env*
 
 if [ "$LOC" == "ci" ];then
     UPFILE="docker-compose.ci.yml"
@@ -41,9 +42,9 @@ then
             backend-part \
             pytest "$@"
     elif [ "$1" == "wait" ];then
-        if [ -f .deploy/env* ]; then
-            export $(cat .deploy/env* | xargs)
-            if grep -Fq MYSQL_PORT .deploy/env* && grep -Fq MYSQL_HOST .deploy/env*
+        if [ -f "$ENVPATH" ];then
+            export $(cat "$ENVPATH" | xargs)
+            if grep -Fq MYSQL_PORT "$ENVPATH" && grep -Fq MYSQL_HOST "$ENVPATH"
             then
                 if [ -z "$MYSQL_PORT" ] && [ -z "$MYSQL_HOST" ];then
                     echo "environment variables unset in env file"
