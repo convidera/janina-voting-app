@@ -35,8 +35,6 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     security_opt:
       - no-new-privileges:true
-    env_file:
-      - .env.prod
   
   backend-part:
     image: alonimacaroni/vote-backend:prod
@@ -62,8 +60,6 @@ services:
       - DOMAIN_URL=${DOMAIN_URL}
     security_opt:
       - no-new-privileges:true
-    env_file:
-      - .env.prod
 
   migrator:
     image: alonimacaroni/vote-backend:prod
@@ -93,8 +89,6 @@ services:
     deploy:
       restart_policy:
         condition: none
-    env_file:
-      - .env.prod
   
   proxy-part:
     image: traefik:v2.7
