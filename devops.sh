@@ -23,7 +23,7 @@ then
         if [ "$LOC" == "dev" ];then
             docker network create proxy
         fi
-            $COMPOSE -f .deploy/"${upfile}" up -d
+            $COMPOSE -f .deploy/"${upfile}" up
     elif [ "$1" == "exit" ];then
         $COMPOSE -f .deploy/"${upfile}" down
         if [ "$LOC" == "dev" ];then
@@ -42,7 +42,7 @@ then
             backend-part \
             pytest "$@"
     elif [ "$1" == "wait" ];then
-        if [ -f "${envpath}" ]; then
+        if [ -f "${envpath}" ];then
             export $(cat "${envpath}" | xargs)
             if grep -Fq MYSQL_PORT "${envpath}" && grep -Fq MYSQL_HOST "${envpath}"
             then
