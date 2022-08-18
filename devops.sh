@@ -47,7 +47,7 @@ then
             if grep -Fq MYSQL_PORT "${envpath}" && grep -Fq MYSQL_HOST "${envpath}"
             then
                 if [ -z "$MYSQL_PORT" ] && [ -z "$MYSQL_HOST" ];then
-                    echo "environment variables unset in .env file"
+                    echo "environment variables unset in env file"
                 else
                     $COMPOSE -f .deploy/"${upfile}" exec -T \
                         backend-part \
