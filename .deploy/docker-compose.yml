@@ -49,6 +49,8 @@ services:
       - MYSQL_PORT=${MYSQL_PORT}
     security_opt:
       - no-new-privileges:true
+    env_file:
+      - .env
   
   backend-part:
     image: alonimacaroni/vote-backend:dev
@@ -85,6 +87,8 @@ services:
       - no-new-privileges:true
     depends_on:
       - vote-app-mysql
+    env_file:
+      - .env
   
   proxy-part:
     image: traefik:v2.7

@@ -24,7 +24,7 @@ then
         fi
             $COMPOSE -f .deploy/$UPFILE up -d
     elif [ "$1" == "exit" ];then
-        $COMPOSE -f ./.deploy/$UPFILE down
+        $COMPOSE -f .deploy/$UPFILE down
         if [ "$LOC" == "dev" ];then
             docker network rm proxy
         fi
@@ -32,12 +32,12 @@ then
         docker container stop $(docker container ls -aq) && \
             docker system prune -af --volumes
     elif [ "$1" == "migrate" ];then
-        $COMPOSE -f ./.deploy/$UPFILE exec -T \
+        $COMPOSE -f .deploy/$UPFILE exec -T \
             backend-part \
             python manage.py migrate
     elif [ "$1" == "test" ];then
         shift 1
-        $COMPOSE -f ./.deploy/$UPFILE exec -T \
+        $COMPOSE -f .deploy/$UPFILE exec -T \
             backend-part \
             pytest "$@"
     elif [ "$1" == "wait" ];then
