@@ -31,7 +31,7 @@ jobs:
 
       - name: Get .env from web spaces
         run: |
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-ci .deploy/.env --force
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-ci .env --force
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-ci vote_app_backend/.env --force
 
       - name: Login to Docker Hub

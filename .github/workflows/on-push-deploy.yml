@@ -57,7 +57,7 @@ jobs:
 
       - name: Get .env from web spaces
         run: |
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage .deploy/.env --force
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage .env --force
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-stage vote_app_backend/.env --force
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-frontend-stage frontend-ui/.env --force
 
@@ -70,4 +70,4 @@ jobs:
           ssh_key: ${{ secrets.SSH_KEY }}
 
       - name: Deploy App
-        run: docker --context production stack deploy --compose-file .deploy/docker-compose.prod.yml janina-voting-app
+        run: docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app
