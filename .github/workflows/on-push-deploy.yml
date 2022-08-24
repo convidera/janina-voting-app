@@ -69,5 +69,8 @@ jobs:
           ssh_cert: ${{ secrets.SSH_CERT }}
           ssh_key: ${{ secrets.SSH_KEY }}
 
+      - name: Show envs
+        run: env
+
       - name: Deploy App
         run: docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app
