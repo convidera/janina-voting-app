@@ -50,7 +50,8 @@ then
                 else
                     $COMPOSE -f "${upfile}" exec -T \
                         backend-part \
-                        bash -c "until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;"
+                        bash -c "until nc -z -v -w30 "$MYSQL_HOST" "$MYSQL_PORT"; do sleep 2; done;"
+#                        bash -c "until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;"
                 fi
             fi
         fi
