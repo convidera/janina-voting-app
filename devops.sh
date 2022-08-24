@@ -22,7 +22,7 @@ then
         if [ "$LOC" == "dev" ];then
             docker network create proxy
         fi
-            $COMPOSE -f "${upfile}" up
+            $COMPOSE -f "${upfile}" up -d
     elif [ "$1" == "exit" ];then
         $COMPOSE -f "${upfile}" down
         if [ "$LOC" == "dev" ];then
