@@ -76,4 +76,4 @@ jobs:
           echo "FE env: " && cat frontend-ui/.env
 
       - name: Deploy App
-        run: docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app
+        run: docker --context production stack deploy --compose-file janina-voting-app/docker-compose.prod.yml janina-voting-app
