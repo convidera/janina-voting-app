@@ -80,6 +80,7 @@ jobs:
 
       - name: Deploy App
         run: |
+          cd janina-voting-app
           docker compose -f docker-compose.prod.yml config | docker --context production stack deploy -c docker-compose.prod.yml janina-voting-app
 
 
