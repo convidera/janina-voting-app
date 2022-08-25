@@ -67,32 +67,9 @@ jobs:
           path: ./
           mode: 
 
-      - name: path test on server
+      - name: Copy compose file from Runner to App with SCP
         run: |
-          echo "runner loc: " 
-          pwd 
-          echo "\n"
-
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ env.SERVER_IP }}
-          username: ${{ env.SERVER_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          script: |
-            echo "server loc: " 
-            pwd
-
-      - name: Copy file via SSH password using SCP command
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ env.SERVER_IP }}
-          username: ${{ env.SERVER_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          source: "^docker-compose*.yml"
-          target: "./"
+          scp docker-compose.prod.yml ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:janina-voting-app
 
       #SSH key of runner has no passphrase
       - name: Setup Docker Context
@@ -103,7 +80,6 @@ jobs:
           ssh_cert: ${{ secrets.SSH_CERT }}
           ssh_key: ${{ secrets.SSH_KEY }}
 
-#          docker --context production stack deploy -c <(echo -e "version: '3.9'\n"; docker compose -f docker-compose.prod.yml config) --compose-file docker-compose.prod.yml janina-voting-app
       - name: Deploy App
         run: |
           docker compose -f docker-compose.prod.yml config | docker --context production stack deploy -c docker-compose.prod.yml janina-voting-app
