@@ -71,10 +71,20 @@ jobs:
       - name: Setup Docker Context
         uses: arwynfr/actions-docker-context@v2
         with:
-          docker_host: 'ssh://${{ env.SERVER_USER }}@$${{ env.SERVER_IP }}'
+          docker_host: 'ssh://${{ env.SERVER_USER }}@${{ env.SERVER_IP }}'
           context_name: 'production'
           ssh_cert: ${{ secrets.SSH_CERT }}
           ssh_key: ${{ secrets.SSH_KEY }}
+
+    - name: Copy file via SSH password using SCP command
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ env.SERVER_IP }}
+        username: ${{ env.SERVER_USER }}
+        password: 
+        port: 22
+        source: "^docker-compose*.yml"
+        target: "janina-voting-app"
 
 #          docker --context production stack deploy -c <(echo -e "version: '3.9'\n"; docker compose -f docker-compose.prod.yml config) --compose-file docker-compose.prod.yml janina-voting-app
       - name: Deploy App
