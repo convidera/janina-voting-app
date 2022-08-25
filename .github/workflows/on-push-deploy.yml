@@ -60,12 +60,16 @@ jobs:
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage .env --force
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-stage vote_app_backend/.env --force
           s3cmd -c ~/.s3cfg get s3://janina-test-space/env-frontend-stage frontend-ui/.env --force
+      
+      - name: Import root .env into Workflow
+        id: dotenv
+        uses: ./.github/actions/dotenv-action
 
       #SSH key of runner has no passphrase
       - name: Setup Docker Context
         uses: arwynfr/actions-docker-context@v2
         with:
-          docker_host: 'ssh://$SERVER_USER@SERVER_IP'
+          docker_host: 'ssh://${{ steps.dotenv.outputs.server_user }}@${{ steps.dotenv.outputs.server_ip }}'
           context_name: 'production'
           ssh_cert: ${{ secrets.SSH_CERT }}
           ssh_key: ${{ secrets.SSH_KEY }}
@@ -74,7 +78,7 @@ jobs:
 
       - name: Deploy App
         run: |
-          docker compose -f docker-compose.prod.yml config | docker --context production stack deploy -c docker-compose.prod.yml --with-registry-auth janina-voting-app
+          docker compose -f docker-compose.prod.yml config | docker --context production stack deploy -c docker-compose.prod.yml janina-voting-app
 
 
           
