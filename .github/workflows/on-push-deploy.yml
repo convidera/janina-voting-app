@@ -65,7 +65,7 @@ jobs:
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: ./
-          mode: production
+          mode: 
 
       #SSH key of runner has no passphrase
       - name: Setup Docker Context
