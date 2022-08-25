@@ -67,6 +67,11 @@ jobs:
           path: ./
           mode: 
 
+      - name: Import SSH private key
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
       - name: Copy compose file from Runner to App with SCP
         run: |
           scp docker-compose.prod.yml ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:janina-voting-app
