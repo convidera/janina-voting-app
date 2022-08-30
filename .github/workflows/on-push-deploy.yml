@@ -68,6 +68,11 @@ jobs:
           mode: 
 
 #WORKS:
+
+    #Put the public key in .ssh/authorized_keys2
+    #Change the permissions of .ssh to 700
+    #Change the permissions of .ssh/authorized_keys2 to 640
+
       # - name: copy file via ssh password
       #   uses: appleboy/scp-action@master
       #   with:
