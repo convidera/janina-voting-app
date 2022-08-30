@@ -98,6 +98,7 @@ jobs:
         with:
           docker_host: 'ssh://${{ env.SERVER_USER }}@${{ env.SERVER_IP }}'
           context_name: 'production'
+          use_context: true
           ssh_cert: ${{ secrets.SSH_CERT }}
           ssh_key: ${{ secrets.SSH_KEY }}
 
