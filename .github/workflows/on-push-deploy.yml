@@ -82,15 +82,15 @@ jobs:
       #   run: |
       #     scp docker-compose.prod.yml ${{ env.SERVER_USER }}@${{ env.SERVER_IP }}:janina-voting-app
 
-      - name: copy file via ssh password
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ env.SERVER_IP }}
-          username: ${{ env.SERVER_USER }}
-          port: 22
-          key: ${{ secrets.SSH_KEY }}
-          source: "docker-compose.prod.yml"
-          target: "janina-voting-app"
+      # - name: copy file via ssh password
+      #   uses: appleboy/scp-action@master
+      #   with:
+      #     host: ${{ env.SERVER_IP }}
+      #     username: ${{ env.SERVER_USER }}
+      #     port: 22
+      #     key: ${{ secrets.SSH_KEY }}
+      #     source: "docker-compose.prod.yml"
+      #     target: "janina-voting-app"
 
       #SSH key of runner has no passphrase
       - name: Setup Docker Context
