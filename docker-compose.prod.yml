@@ -112,7 +112,6 @@ services:
       --certificatesresolvers.myresolver.acme.tlschallenge=true
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-      --providers.file.filename=/usr/local/share/ca-certificates/janina/dynamic_conf.prod.yml
     #dynamic configuration
     labels:
       - "traefik.enable=true"
