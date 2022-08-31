@@ -77,10 +77,9 @@ services:
     command: >
       sh -c 'docker compose -f docker-compose.prod.yml exec -T \
         backend-part \
-        bash -c "until nc -z -v -w30 "$MYSQL_HOST" "$MYSQL_PORT"; do sleep 2; done;" \
-        && docker compose -f docker-compose.prod.yml exec -T \
-          backend-part \
-          python manage.py migrate'
+        bash -c "until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;" && \
+        docker compose -f docker-compose.prod.yml exec -T \
+        backend-part python manage.py migrate'
     networks:
       - proxy
     environment:
