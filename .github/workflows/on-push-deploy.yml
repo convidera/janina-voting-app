@@ -83,6 +83,12 @@ jobs:
       #     source: "docker-compose.prod.yml"
       #     target: "janina-voting-app"
 
+      - nam: Configure known_hosts file for external server access
+        uses: kielabokkie/ssh-key-and-known-hosts-action@v1
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+          ssh-host: ${{ env.SERVER_IP }}
+
       #SSH key of runner has no passphrase
       - name: Setup Docker Context
         uses: arwynfr/actions-docker-context@v2
