@@ -111,8 +111,7 @@ services:
       --entrypoints.websecure.address=:443
       --certificatesresolvers.myresolver.acme.tlschallenge=true
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
-
-#      --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     #dynamic configuration
     labels:
       - "traefik.enable=true"
@@ -153,7 +152,7 @@ services:
     networks:
       - proxy
     volumes: 
-      - /var/traefik/certificates:/usr/local/share/ca-certificates/janina
+      - /var/traefik/certificates:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
