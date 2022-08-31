@@ -11,8 +11,6 @@ services:
       - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
       - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
     restart: unless-stopped
-    command: >
-      sh -c 'gunicorn vote_app_backend.wsgi:application --workers 3 --bind :80'
     networks:
       - proxy
     security_opt:
