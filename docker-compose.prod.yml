@@ -74,9 +74,12 @@ services:
       - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
       - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
     restart: unless-stopped
-    command: >
-      sh -c 'until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done; && \
-        python manage.py migrate'
+    command:
+      - /bin/sh
+      - -c
+      - |
+        until nc -z -v -w30 vote-app-mysql 3306; do sleep 2; done;
+        python manage.py migrate
     networks:
       - proxy
     environment:
