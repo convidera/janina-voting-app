@@ -153,7 +153,7 @@ services:
     networks:
       - proxy
     volumes: 
-      - ./certificates:/usr/local/share/ca-certificates/janina
+      - $PWD/certificates:/usr/local/share/ca-certificates/janina:cached
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
