@@ -153,7 +153,7 @@ services:
     networks:
       - proxy
     volumes: 
-      - /var/traefik/certificates:/usr/local/share/ca-certificates/janina:cached
+      - /var/traefik/certificates:/usr/local/share/ca-certificates/janina
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
@@ -161,4 +161,6 @@ networks:
 
 volumes:
   mysql:
+    driver: local
+  traefik:
     driver: local
