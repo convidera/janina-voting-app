@@ -83,7 +83,7 @@ jobs:
       #     source: "docker-compose.prod.yml"
       #     target: "janina-voting-app"
 
-      - nam: Configure known_hosts file for external server access
+      - name: Configure known_hosts file for external server access
         uses: kielabokkie/ssh-key-and-known-hosts-action@v1
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
