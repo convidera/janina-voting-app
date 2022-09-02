@@ -122,9 +122,6 @@ services:
       - --accesslog
       - --log.level=debug
     deploy:
-      expose:
-        - "80"
-        - "443"
       #dynamic configuration
       labels:
         # - "traefik.enable=true"
@@ -156,6 +153,7 @@ services:
         - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
         - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
         - traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true
+        - traefik.port=80
         # # Global redirection: HTTP to HTTPS
         # - traefik.http.routers.http-redirects.entrypoints=web
         # - traefik.http.routers.http-redirects.rule=hostregexp(`{host:(www\.)?.+}`)
