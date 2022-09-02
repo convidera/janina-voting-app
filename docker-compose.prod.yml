@@ -4,17 +4,17 @@ version: "3.9"
 services:
   frontend-part:
     image: alonimacaroni/vote-frontend:prod
-    labels: 
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend-part.entrypoints=websecure"
-      - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
-      - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
-      - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
     networks:
       - proxy
     security_opt:
       - no-new-privileges:true
     deploy:
+      labels: 
+        - "traefik.enable=true"
+        - "traefik.http.routers.frontend-part.entrypoints=websecure"
+        - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
+        - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
+        - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
       restart_policy:
         condition: on-failure
         delay: 3s
@@ -52,12 +52,6 @@ services:
   
   backend-part:
     image: alonimacaroni/vote-backend:prod
-    labels: 
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend-part.entrypoints=websecure"
-      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
-      - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
-      - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
     command: >
       sh -c 'gunicorn vote_app_backend.wsgi:application --workers 3 --bind :80'
     networks:
@@ -74,6 +68,12 @@ services:
     security_opt:
       - no-new-privileges:true
     deploy:
+      labels: 
+        - "traefik.enable=true"
+        - "traefik.http.routers.backend-part.entrypoints=websecure"
+        - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+        - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
+        - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
       restart_policy:
         condition: on-failure
         delay: 3s
@@ -82,12 +82,6 @@ services:
 
   migrator:
     image: alonimacaroni/vote-backend:prod
-    labels: 
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend-part.entrypoints=websecure"
-      - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
-      - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
-      - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
     restart: unless-stopped
     command:
       - /bin/sh
@@ -109,6 +103,12 @@ services:
     security_opt:
       - no-new-privileges:true
     deploy:
+      labels: 
+        - "traefik.enable=true"
+        - "traefik.http.routers.backend-part.entrypoints=websecure"
+        - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+        - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
+        - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
       restart_policy:
         condition: none
   
