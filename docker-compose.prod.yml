@@ -102,7 +102,6 @@ services:
     restart: unless-stopped
     command: >-
       --log.level=DEBUG
-      --providers.docker=true
       --providers.docker.swarmMode=true
       --providers.docker.exposedbydefault=false
       --entrypoints.web.address=:80
@@ -113,6 +112,7 @@ services:
       --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     #dynamic configuration
+    #      #--providers.docker=true
     labels:
       - "traefik.enable=true"
       # - "traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)"
