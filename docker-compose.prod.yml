@@ -13,6 +13,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.frontend-part.entrypoints=websecure"
         - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
+        - "traefik.http.services.frontend-part.loadbalancer.server.port=8080"
         - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
         - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
       restart_policy:
@@ -72,6 +73,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.backend-part.entrypoints=websecure"
         - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+        - "traefik.http.services.frontend-part.loadbalancer.server.port=8000"
         - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
         - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
       restart_policy:
@@ -107,6 +109,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.backend-part.entrypoints=websecure"
         - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+        - "traefik.http.services.frontend-part.loadbalancer.server.port=8000"
         - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
         - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
       restart_policy:
@@ -166,6 +169,7 @@ services:
         # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
         # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
         - traefik.enable=true
+        - traefik.http.services.frontend-part.loadbalancer.server.port=443
         #- "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
         - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
         - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
