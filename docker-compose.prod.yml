@@ -7,6 +7,8 @@ services:
     networks:
       - proxy
     deploy:
+      expose:
+        - "8080"
       labels: 
         - "traefik.enable=true"
         - "traefik.http.routers.frontend-part.entrypoints=websecure"
@@ -22,13 +24,6 @@ services:
   
   vote-app-mysql:
     image: mysql:8.0
-    ports:
-      # - target: ${MYSQL_PORT}
-      #   published: ${MYSQL_PORT}
-      - target: 3306
-        published: 3306
-        protocol: tcp
-        mode: host
     networks:
       - proxy
     volumes:
@@ -41,6 +36,8 @@ services:
       # - MYSQL_HOST=${MYSQL_HOST}
       # - MYSQL_PORT=${MYSQL_PORT}
     deploy:
+      expose:
+        - "3306"
       restart_policy:
         condition: on-failure
         delay: 3s
@@ -63,6 +60,8 @@ services:
       - URI_CSRF_PATH=${URI_CSRF_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
     deploy:
+      expose:
+        - "8000"
       labels: 
         - "traefik.enable=true"
         - "traefik.http.routers.backend-part.entrypoints=websecure"
@@ -97,6 +96,8 @@ services:
       - URI_CSRF_PATH=${URI_CSRF_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
     deploy:
+      expose:
+        - "8000"
       labels: 
         - "traefik.enable=true"
         - "traefik.http.routers.backend-part.entrypoints=websecure"
@@ -123,16 +124,10 @@ services:
       # Logging
       - --accesslog
       - --log.level=debug
-    ports:
-      - target: 80
-        published: 80
-        protocol: tcp
-        mode: host
-      - target: 443
-        published: 443
-        protocol: tcp
-        mode: host
     deploy:
+      expose:
+        - "80"
+        - "443"
       #dynamic configuration
       labels:
         # - "traefik.enable=true"
@@ -159,8 +154,8 @@ services:
         # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
         # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
         - traefik.enable=true
-        - traefik.http.services.frontend-part.loadbalancer.server.port=80
-        #- "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
+        - traefik.http.services.frontend-part.loadbalancer.server.port=443
+        - traefik.http.routers.proxy-part.middlewares=wwwtohttps
         - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
         - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
         - traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true
