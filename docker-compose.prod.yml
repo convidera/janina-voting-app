@@ -13,7 +13,7 @@ services:
         - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
         - "traefik.http.services.frontend-part.loadbalancer.server.port=8080"
         - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
-        - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
+        #- "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
       restart_policy:
         condition: on-failure
         delay: 3s
@@ -67,7 +67,7 @@ services:
         - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
         - "traefik.http.services.backend-part.loadbalancer.server.port=8000"
         - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
-        - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
+        #- "traefik.http.routers.backend-part.middlewares=wwwtohttps"
       restart_policy:
         condition: on-failure
         delay: 3s
@@ -101,7 +101,7 @@ services:
         - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
         - "traefik.http.services.backend-part.loadbalancer.server.port=8000"
         - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
-        - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
+        #- "traefik.http.routers.backend-part.middlewares=wwwtohttps"
       restart_policy:
         condition: none
   
@@ -158,10 +158,10 @@ services:
         # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
         - traefik.enable=true
         - traefik.http.services.proxy-part.loadbalancer.server.port=443
-        - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
-        - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
-        - traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true
-        - traefik.http.routers.proxy-part.middlewares=wwwtohttps
+        # - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
+        # - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
+        # - traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true
+        # - traefik.http.routers.proxy-part.middlewares=wwwtohttps
         #- traefik.port=80
         # # Global redirection: HTTP to HTTPS
         # - traefik.http.routers.http-redirects.entrypoints=web
