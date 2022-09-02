@@ -65,7 +65,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.backend-part.entrypoints=websecure"
         - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
-        - "traefik.http.services.frontend-part.loadbalancer.server.port=8000"
+        - "traefik.http.services.backend-part.loadbalancer.server.port=8000"
         - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
         - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
       restart_policy:
@@ -99,7 +99,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.backend-part.entrypoints=websecure"
         - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
-        - "traefik.http.services.frontend-part.loadbalancer.server.port=8000"
+        - "traefik.http.services.backend-part.loadbalancer.server.port=8000"
         - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
         - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
       restart_policy:
@@ -157,11 +157,11 @@ services:
         # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
         # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
         - traefik.enable=true
-        - traefik.http.services.frontend-part.loadbalancer.server.port=443
-        - traefik.http.routers.proxy-part.middlewares=wwwtohttps
+        - traefik.http.services.proxy-part.loadbalancer.server.port=443
         - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
         - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
         - traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true
+        - traefik.http.routers.proxy-part.middlewares=wwwtohttps
         #- traefik.port=80
         # # Global redirection: HTTP to HTTPS
         # - traefik.http.routers.http-redirects.entrypoints=web
