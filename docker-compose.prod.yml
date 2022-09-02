@@ -7,8 +7,6 @@ services:
     networks:
       - proxy
     deploy:
-      expose:
-        - "8080"
       labels: 
         - "traefik.enable=true"
         - "traefik.http.routers.frontend-part.entrypoints=websecure"
@@ -35,9 +33,12 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       # - MYSQL_HOST=${MYSQL_HOST}
       # - MYSQL_PORT=${MYSQL_PORT}
+    ports:
+      - target: ${MYSQL_PORT}
+        published: ${MYSQL_PORT}
+        protocol: tcp
+        mode: host
     deploy:
-      expose:
-        - "3306"
       restart_policy:
         condition: on-failure
         delay: 3s
@@ -60,8 +61,6 @@ services:
       - URI_CSRF_PATH=${URI_CSRF_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
     deploy:
-      expose:
-        - "8000"
       labels: 
         - "traefik.enable=true"
         - "traefik.http.routers.backend-part.entrypoints=websecure"
@@ -96,8 +95,6 @@ services:
       - URI_CSRF_PATH=${URI_CSRF_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
     deploy:
-      expose:
-        - "8000"
       labels: 
         - "traefik.enable=true"
         - "traefik.http.routers.backend-part.entrypoints=websecure"
@@ -154,7 +151,7 @@ services:
         # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
         # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
         - traefik.enable=true
-        - traefik.http.services.frontend-part.loadbalancer.server.port=443
+        #- traefik.http.services.frontend-part.loadbalancer.server.port=443
         - traefik.http.routers.proxy-part.middlewares=wwwtohttps
         - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
         - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
