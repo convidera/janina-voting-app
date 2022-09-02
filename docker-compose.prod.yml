@@ -6,8 +6,6 @@ services:
     image: alonimacaroni/vote-frontend:prod
     networks:
       - proxy
-    security_opt:
-      - no-new-privileges:true
     deploy:
       labels: 
         - "traefik.enable=true"
@@ -42,8 +40,6 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       # - MYSQL_HOST=${MYSQL_HOST}
       # - MYSQL_PORT=${MYSQL_PORT}
-    security_opt:
-      - no-new-privileges:true
     deploy:
       restart_policy:
         condition: on-failure
@@ -66,8 +62,6 @@ services:
       - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
       - URI_CSRF_PATH=${URI_CSRF_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
-    security_opt:
-      - no-new-privileges:true
     deploy:
       labels: 
         - "traefik.enable=true"
@@ -102,8 +96,6 @@ services:
       - URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
       - URI_CSRF_PATH=${URI_CSRF_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
-    security_opt:
-      - no-new-privileges:true
     deploy:
       labels: 
         - "traefik.enable=true"
@@ -131,8 +123,6 @@ services:
       # Logging
       - --accesslog
       - --log.level=debug
-    security_opt:
-      - no-new-privileges:true
     ports:
       - target: 80
         published: 80
@@ -169,7 +159,7 @@ services:
         # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
         # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
         - traefik.enable=true
-        - traefik.http.services.frontend-part.loadbalancer.server.port=443
+        - traefik.http.services.frontend-part.loadbalancer.server.port=80
         #- "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
         - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
         - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
@@ -205,6 +195,4 @@ networks:
 
 volumes:
   mysql:
-    driver: local
-  traefik:
     driver: local
