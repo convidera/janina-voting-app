@@ -128,50 +128,6 @@ services:
       # Logging
       - --accesslog
       - --log.level=debug
-    #dynamic configuration
-    labels:
-      # - "traefik.enable=true"
-      # # - "traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)"
-      # # - "traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}"
-      # # - "traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true"
-      # ##  disable TLS version 1.0 and 1.1
-      # - "traefik.tls.options.default.minversion=VersionTLS12"
-      # - "traefik.tls.options.default.sniStrict=true"
-      # #configure encryption methods
-      # - "traefik.http.middlewares.secureheaders.headers.browserxssfilter=true"
-      # - "traefik.http.middlewares.secureheaders.headers.contenttypenosniff=true"
-      # # #SSL config
-      # - "traefik.http.middlewares.secureheaders.headers.framedeny=true"
-      # - "traefik.http.middlewares.secureheaders.headers.sslredirect=true"
-      # # #HSTS config
-      # - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
-      # - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
-      # - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
-      # - "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
-      # # #CORS config
-      # - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
-      # - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
-      # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
-      # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
-      - traefik.enable=true
-      #- "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
-      - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
-      - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
-      - traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true
-      # # Global redirection: HTTP to HTTPS
-      # - traefik.http.routers.http-redirects.entrypoints=web
-      # - traefik.http.routers.http-redirects.rule=hostregexp(`{host:(www\.)?.+}`)
-      # - traefik.http.routers.http-redirects.middlewares=redirect-to-non-www-https
-      # # Global redirection: HTTPS www to HTTPS non-www
-      # - traefik.http.routers.www-redirects.entrypoints=websecure
-      # - traefik.http.routers.www-redirects.rule=hostregexp(`{host:(www\.).+}`)
-      # - traefik.http.routers.www-redirects.tls=true
-      # - traefik.http.routers.www-redirects.tls.options=default
-      # - traefik.http.routers.www-redirects.middlewares=redirect-to-non-www-https
-      # # Middleware to redirect to bare https
-      # - traefik.http.middlewares.redirect-to-non-www-https.redirectregex.regex=^https?://(?:www\.)?(.+)
-      # - traefik.http.middlewares.redirect-to-non-www-https.redirectregex.replacement=https://$${1}
-      # - traefik.http.middlewares.redirect-to-non-www-https.redirectregex.permanent=true
     security_opt:
       - no-new-privileges:true
     ports:
@@ -184,6 +140,50 @@ services:
         protocol: tcp
         mode: host
     deploy:
+      #dynamic configuration
+      labels:
+        # - "traefik.enable=true"
+        # # - "traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)"
+        # # - "traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}"
+        # # - "traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true"
+        # ##  disable TLS version 1.0 and 1.1
+        # - "traefik.tls.options.default.minversion=VersionTLS12"
+        # - "traefik.tls.options.default.sniStrict=true"
+        # #configure encryption methods
+        # - "traefik.http.middlewares.secureheaders.headers.browserxssfilter=true"
+        # - "traefik.http.middlewares.secureheaders.headers.contenttypenosniff=true"
+        # # #SSL config
+        # - "traefik.http.middlewares.secureheaders.headers.framedeny=true"
+        # - "traefik.http.middlewares.secureheaders.headers.sslredirect=true"
+        # # #HSTS config
+        # - "traefik.http.middlewares.secureheaders.headers.stsincludesubdomains=true"
+        # - "traefik.http.middlewares.secureheaders.headers.stspreload=true"
+        # - "traefik.http.middlewares.secureheaders.headers.stsseconds=31536000"
+        # - "traefik.http.middlewares.secureheaders.headers.customframeoptionsvalue=SAMEORIGIN"
+        # # #CORS config
+        # - "traefik.http.middlewares.secureheaders.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
+        # - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
+        # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
+        # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
+        - traefik.enable=true
+        #- "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
+        - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
+        - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
+        - traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true
+        # # Global redirection: HTTP to HTTPS
+        # - traefik.http.routers.http-redirects.entrypoints=web
+        # - traefik.http.routers.http-redirects.rule=hostregexp(`{host:(www\.)?.+}`)
+        # - traefik.http.routers.http-redirects.middlewares=redirect-to-non-www-https
+        # # Global redirection: HTTPS www to HTTPS non-www
+        # - traefik.http.routers.www-redirects.entrypoints=websecure
+        # - traefik.http.routers.www-redirects.rule=hostregexp(`{host:(www\.).+}`)
+        # - traefik.http.routers.www-redirects.tls=true
+        # - traefik.http.routers.www-redirects.tls.options=default
+        # - traefik.http.routers.www-redirects.middlewares=redirect-to-non-www-https
+        # # Middleware to redirect to bare https
+        # - traefik.http.middlewares.redirect-to-non-www-https.redirectregex.regex=^https?://(?:www\.)?(.+)
+        # - traefik.http.middlewares.redirect-to-non-www-https.redirectregex.replacement=https://$${1}
+        # - traefik.http.middlewares.redirect-to-non-www-https.redirectregex.permanent=true
       restart_policy:
         condition: on-failure
         delay: 3s
