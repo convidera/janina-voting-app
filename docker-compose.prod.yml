@@ -9,18 +9,20 @@ services:
       - "traefik.http.routers.frontend-part.entrypoints=websecure"
       - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
       - "traefik.http.routers.frontend-part.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.frontend-part.tls=true"
-      - "traefik.http.routers.frontend-part.tls.options=default"
       - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
-    restart: unless-stopped
     networks:
       - proxy
     security_opt:
       - no-new-privileges:true
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 60s
   
   vote-app-mysql:
     image: mysql:8.0
-    restart: unless-stopped
     ports:
       # - target: ${MYSQL_PORT}
       #   published: ${MYSQL_PORT}
@@ -41,6 +43,12 @@ services:
       # - MYSQL_PORT=${MYSQL_PORT}
     security_opt:
       - no-new-privileges:true
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 60s
   
   backend-part:
     image: alonimacaroni/vote-backend:prod
@@ -49,10 +57,7 @@ services:
       - "traefik.http.routers.backend-part.entrypoints=websecure"
       - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.backend-part.tls=true"
-      - "traefik.http.routers.backend-part.tls.options=default"
       - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
-    restart: unless-stopped
     command: >
       sh -c 'gunicorn vote_app_backend.wsgi:application --workers 3 --bind :80'
     networks:
@@ -68,6 +73,12 @@ services:
       - DOMAIN_URL=${DOMAIN_URL}
     security_opt:
       - no-new-privileges:true
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 60s
 
   migrator:
     image: alonimacaroni/vote-backend:prod
@@ -76,8 +87,6 @@ services:
       - "traefik.http.routers.backend-part.entrypoints=websecure"
       - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
       - "traefik.http.routers.backend-part.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.backend-part.tls=true"
-      - "traefik.http.routers.backend-part.tls.options=default"
       - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
     restart: unless-stopped
     command:
@@ -106,12 +115,13 @@ services:
   proxy-part:
     image: traefik:v2.7
     command: 
-      - --providers.docker
+      - --providers.docker=true
       - --providers.docker.exposedByDefault=false
       - --providers.docker.swarmMode=true
       - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.websecure.address=:443
-      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
       - --certificatesresolvers.letsencrypt.acme.email=schroeder@convidera.com
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
@@ -144,7 +154,7 @@ services:
       # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
       # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
       - traefik.enable=true
-      - traefik.docker.network=proxy
+      #- "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
       - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)
       - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
       - traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true
@@ -187,7 +197,7 @@ services:
 
 networks:
   proxy:
-    external: true
+    driver: overlay
 
 volumes:
   mysql:
