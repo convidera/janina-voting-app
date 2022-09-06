@@ -16,7 +16,7 @@ services:
         - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
         #- "traefik.http.services.frontend-part.service=frontend-part"
         - "traefik.http.routers.frontend-part.entrypoints=websecure"
-        - "traefik.http.services.frontend-part.loadbalancer.server.port=8080"
+        - "traefik.http.services.frontend-part.loadbalancer.server.port=80"
         - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
       mode: replicated
       replicas: 1
@@ -64,7 +64,7 @@ services:
         - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
         #- "traefik.http.services.backend-part.service=backend-part"
         - "traefik.http.routers.backend-part.entrypoints=websecure"
-        - "traefik.http.services.backend-part.loadbalancer.server.port=8000"
+        - "traefik.http.services.backend-part.loadbalancer.server.port=80"
         - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
       mode: replicated
       replicas: 1
@@ -98,7 +98,7 @@ services:
         - "traefik.http.routers.migrator.middlewares=wwwtohttps"
         #- "traefik.http.services.migrator.service=migrator"
         - "traefik.http.routers.migrator.entrypoints=websecure"
-        - "traefik.http.services.migrator.loadbalancer.server.port=8000"
+        - "traefik.http.services.migrator.loadbalancer.server.port=80"
         - "traefik.http.routers.migrator.tls.certresolver=myresolver"
       mode: replicated
       replicas: 1
@@ -142,7 +142,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.proxy-part.entrypoints=websecure"
         - "traefik.http.routers.proxy-part.tls=true"
-        - "traefik.http.services.proxy-part.loadbalancer.server.port=443" # In swarm mode, traefik requires a dummy Port
+        - "traefik.http.services.proxy-part.loadbalancer.server.port=80" # In swarm mode, traefik requires a dummy Port
         - "traefik.http.routers.proxy-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
         - "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
         # - "traefik.http.routers.api.entrypoints=api"
