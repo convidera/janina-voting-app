@@ -23,8 +23,6 @@ import LangSelect from './components/LangSelect.vue'
 import ErrorModal from './components/ErrorModal.vue'
 import axios from 'axios'
 
-
-require("dotenv").config()
 axios.defaults.xsrfHeaderName = 'X-csrftoken';
 axios.defaults.xsrfCookieName = 'csrftoken';
 
