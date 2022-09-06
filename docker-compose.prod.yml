@@ -141,8 +141,10 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.proxy-part.entrypoints=websecure"
-        - "traefik.http.routers.proxy-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
+        - "traefik.http.routers.proxy-part.tls=true"
         - "traefik.http.services.proxy-part.loadbalancer.server.port=443" # In swarm mode, traefik requires a dummy Port
+        - "traefik.http.routers.proxy-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
+        - "traefik.http.routers.proxy-part.middlewares=wwwtohttps"
         # - "traefik.http.routers.api.entrypoints=api"
         # - "traefik.http.routers.api.rule=Host(`dash.${DOMAIN_URL}`) || Host(`www.dash.${DOMAIN_URL}`)"
         # - "traefik.http.routers.api.service=api@internal"
