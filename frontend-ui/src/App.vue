@@ -66,7 +66,8 @@ export default {
   },
   methods: {
     getCSRF() {
-      axios.get('https://' + process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH)
+        console.log(process.env.VUE_APP_DOMAIN_URL);
+        axios.get('https://' + process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH)
     },
 
     nameChanged(name) {
