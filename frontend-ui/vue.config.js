@@ -1,4 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
+require("dotenv").config()
 
 if (process.env.VUE_APP_DEPLOY === "prod") {
     module.exports = defineConfig({
