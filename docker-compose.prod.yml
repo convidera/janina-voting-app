@@ -31,8 +31,6 @@ services:
         delay: 3s
         max_attempts: 5
         window: 60s
-      mode: replicated
-      replicas: 1
     ports:
       - target: ${MYSQL_PORT}
         published: ${MYSQL_PORT}
