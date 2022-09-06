@@ -34,6 +34,7 @@ export default {
   name: 'App',
   components: { WhoIs, LangSelect, ErrorModal },
   mounted() {
+    console.log(process.env.VUE_APP_DOMAIN_URL);
     document.onreadystatechange = () => {
       if(document.readyState == "complete") {
         this.getCSRF();
