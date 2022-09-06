@@ -12,11 +12,14 @@ services:
         window: 60s
       labels: 
         - "traefik.enable=true"
-        - "traefik.http.routers.frontend-part.entrypoints=websecure"
         - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
+        - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
+        - "traefik.http.services.frontend-part.service=frontend-part"
+        - "traefik.http.routers.frontend-part.entrypoints=websecure"
         - "traefik.http.services.frontend-part.loadbalancer.server.port=8080"
         - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
-        #- "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
+      mode: replicated
+      replicas: 1
     networks:
       - proxy
   
@@ -28,6 +31,8 @@ services:
         delay: 3s
         max_attempts: 5
         window: 60s
+      mode: replicated
+      replicas: 1
     ports:
       - target: ${MYSQL_PORT}
         published: ${MYSQL_PORT}
@@ -57,11 +62,14 @@ services:
         window: 60s
       labels: 
         - "traefik.enable=true"
-        - "traefik.http.routers.backend-part.entrypoints=websecure"
         - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+        - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
+        - "traefik.http.services.backend-part.service=backend-part"
+        - "traefik.http.routers.backend-part.entrypoints=websecure"
         - "traefik.http.services.backend-part.loadbalancer.server.port=8000"
         - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
-        #- "traefik.http.routers.backend-part.middlewares=wwwtohttps" 
+      mode: replicated
+      replicas: 1
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
@@ -88,11 +96,14 @@ services:
         condition: none
       labels: 
         - "traefik.enable=true"
-        - "traefik.http.routers.backend-part.entrypoints=websecure"
         - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+        - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
+        - "traefik.http.services.backend-part.service=backend-part"
+        - "traefik.http.routers.backend-part.entrypoints=websecure"
         - "traefik.http.services.backend-part.loadbalancer.server.port=8000"
         - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
-        #- "traefik.http.routers.backend-part.middlewares=wwwtohttps"
+      mode: replicated
+      replicas: 1
     environment:
       - DATABASE_NAME=${MYSQL_DATABASE}
       - DATABASE_USER=${MYSQL_USER}
@@ -108,33 +119,41 @@ services:
   proxy-part:
     image: traefik:v2.7
     command: 
-      - --providers.docker=true
-      - --providers.docker.exposedByDefault=false
+      - --providers.docker
       - --providers.docker.swarmMode=true
+      - --providers.docker.exposedByDefault=false
       - --entrypoints.web.address=:80
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.websecure.address=:443
-      - --entrypoints.api.address=:8000
+      # - --entrypoints.api.address=:8000
       - --certificatesresolvers.myresolver.acme.tlschallenge=true
       - --certificatesresolvers.myresolver.acme.email=schroeder@convidera.com
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
       # Logging
       - --accesslog
       - --log.level=debug
-      - --api
+      #- --api
     deploy:
       restart_policy:
         condition: on-failure
         delay: 3s
         max_attempts: 5
         window: 60s
-      #dynamic configuration
       labels:
-        # - "traefik.enable=true"
-        # # - "traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)"
-        # # - "traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}"
-        # # - "traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true"
+        - "traefik.enable=true"
+        - "traefik.http.routers.proxy-part.entrypoints=websecure"
+        - "traefik.http.routers.proxy-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
+        - "traefik.http.services.proxy-part.loadbalancer.server.port=443" # In swarm mode, traefik requires a dummy Port
+        # - "traefik.http.routers.api.entrypoints=api"
+        # - "traefik.http.routers.api.rule=Host(`dash.${DOMAIN_URL}`) || Host(`www.dash.${DOMAIN_URL}`)"
+        # - "traefik.http.routers.api.service=api@internal"
+        # - "traefik.http.routers.api.tls=true"
+        # #- "traefik.http.routers.api.tls.options=default"
+        # - "traefik.http.routers.api.tls.certresolver=myresolver"
+        - "traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://www\\.(.+)"
+        - "traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}"
+        - "traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true"
         # ##  disable TLS version 1.0 and 1.1
         # - "traefik.tls.options.default.minversion=VersionTLS12"
         # - "traefik.tls.options.default.sniStrict=true"
@@ -154,15 +173,8 @@ services:
         # - "traefik.http.middlewares.secureheaders.headers.accesscontrolalloworigin=origin-list-or-null"
         # - "traefik.http.middlewares.secureheaders.headers.accesscontrolmaxage=100"
         # - "traefik.http.middlewares.secureheaders.headers.addvaryheader=true"
-        - "traefik.enable=true"
-        #- "traefik.http.services.proxy-part.loadbalancer.server.port=443"
-        - "traefik.http.routers.api.entrypoints=api"
-        - "traefik.http.routers.api.rule=Host(`dash.${DOMAIN_URL}`) || Host(`www.dash.${DOMAIN_URL}`)"
-        - "traefik.http.routers.api.service=api@internal"
-        - "traefik.http.routers.api.tls=true"
-        #- "traefik.http.routers.api.tls.options=default"
-        - "traefik.http.routers.api.tls.certresolver=myresolver"
-        - "traefik.http.services.dummyservice.loadbalancer.server.port=1111" # In swarm mode, traefik requires a dummy Port
+      mode: replicated
+      replicas: 1
     ports:
       - target: 80
         published: 80
@@ -172,10 +184,10 @@ services:
         published: 443
         protocol: tcp
         mode: host
-      - target: 8000
-        published: 8000
-        protocol: tcp
-        mode: host
+      # - target: 8000
+      #   published: 8000
+      #   protocol: tcp
+      #   mode: host
     volumes: 
       - /var/traefik/certificates:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
