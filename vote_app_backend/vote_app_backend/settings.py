@@ -157,7 +157,7 @@ STATIC_URL = '/static/'
 
 ###########prod
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-APPEND_SLASH = False
+#APPEND_SLASH = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -171,7 +171,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Strict'
 
 ###########prod
-SECURE_SSL_REDIRECT = False
+#SECURE_SSL_REDIRECT = False
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_PRELOAD = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
