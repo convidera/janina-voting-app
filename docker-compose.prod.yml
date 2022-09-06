@@ -160,8 +160,9 @@ services:
         - "traefik.http.routers.api.rule=Host(`dash.${DOMAIN_URL}`) || Host(`www.dash.${DOMAIN_URL}`)"
         - "traefik.http.routers.api.service=api@internal"
         - "traefik.http.routers.api.tls=true"
-        - "traefik.http.routers.api.tls.options=default"
+        #- "traefik.http.routers.api.tls.options=default"
         - "traefik.http.routers.api.tls.certresolver=myresolver"
+        - "traefik.http.services.dummyservice.loadbalancer.server.port=1111" # In swarm mode, traefik requires a dummy Port
     ports:
       - target: 80
         published: 80
