@@ -94,12 +94,12 @@ services:
         condition: none
       labels: 
         - "traefik.enable=true"
-        - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
-        - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
-        - "traefik.http.services.backend-part.service=backend-part"
-        - "traefik.http.routers.backend-part.entrypoints=websecure"
-        - "traefik.http.services.backend-part.loadbalancer.server.port=8000"
-        - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
+        - "traefik.http.routers.migrator.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
+        - "traefik.http.routers.migrator.middlewares=wwwtohttps"
+        - "traefik.http.services.migrator.service=migrator"
+        - "traefik.http.routers.migrator.entrypoints=websecure"
+        - "traefik.http.services.migrator.loadbalancer.server.port=8000"
+        - "traefik.http.routers.migrator.tls.certresolver=myresolver"
       mode: replicated
       replicas: 1
     environment:
