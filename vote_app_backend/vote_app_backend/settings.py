@@ -134,7 +134,6 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-
 CORS_ALLOW_CREDENTIALS = True
 
 # Internationalization
@@ -157,7 +156,7 @@ STATIC_URL = '/static/'
 
 ###########prod
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-#APPEND_SLASH = False
+APPEND_SLASH = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
