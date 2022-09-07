@@ -100,7 +100,9 @@ jobs:
           ssh_key: ${{ secrets.SSH_KEY }}
           
           #docker compose config | docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app   
+          #docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app
       - name: Deploy App
         run: |
-          docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app   
+          docker --context production stack deploy --compose-file <(docker compose -f docker-compose.prod.yml config) janina-voting-app  
+           
           
