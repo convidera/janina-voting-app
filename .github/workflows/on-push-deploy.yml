@@ -57,9 +57,9 @@ jobs:
 
       - name: Get .env from web spaces
         run: |
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage /.env --force
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-stage /code/.env --force
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-frontend-stage /app/.env --force
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage ./.env --force
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-stage ./code/.env --force
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-frontend-stage ./app/.env --force
 
       - name: Load .env file in Github environment variables
         uses: xom9ikk/dotenv@v1.0.2
