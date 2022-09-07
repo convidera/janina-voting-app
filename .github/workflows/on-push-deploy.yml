@@ -101,8 +101,8 @@ jobs:
           
           #docker compose config | docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app   
           #docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app
+          #docker --context production stack deploy --compose-file <(echo -e "version: '3.9'\n";  docker compose -f docker-compose.prod.yml config) janina-voting-app  
       - name: Deploy App
         run: |
-          docker --context production stack deploy --compose-file <(echo -e "version: '3.9'\n";  docker compose -f docker-compose.prod.yml config) janina-voting-app  
-           
+          docker compose -f docker-compose.prod.yml config | docker --context production stack deploy janina-voting-app              
           
