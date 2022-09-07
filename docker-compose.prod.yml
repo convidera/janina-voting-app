@@ -24,6 +24,11 @@ services:
     #   - ./.env
     # env_file:
     #   - ./frontend-ui/.env
+    environment:
+      - VUE_APP_URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
+      - VUE_APP_URI_CSRF_PATH=${URI_CSRF_PATH}
+      - VUE_APP_DOMAIN_URL=${DOMAIN_URL}
+      - VUE_APP_DEPLOY=prod
     networks:
       - proxy
   
