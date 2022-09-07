@@ -98,7 +98,9 @@ jobs:
           use_context: true
           ssh_cert: ${{ secrets.SSH_CERT }}
           ssh_key: ${{ secrets.SSH_KEY }}
-
+          
+          #docker compose config | docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app   
       - name: Deploy App
         run: |
-          docker compose config | docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app   
+          docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app   
+          
