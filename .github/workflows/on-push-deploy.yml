@@ -33,12 +33,6 @@ jobs:
           access_key: ${{ secrets.SPACES_ACCESS_KEY }}
           secret_key: ${{ secrets.SPACES_SECRET_KEY }}
 
-      - name: Get .env from web spaces
-        run: |
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage .env --force
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-stage vote_app_backend/.env --force
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-frontend-stage frontend-ui/.env --force
-
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -61,6 +55,12 @@ jobs:
           tags: alonimacaroni/vote-frontend:prod
           target: prod-stage
 
+      - name: Get .env from web spaces
+        run: |
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage .env --force
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-stage vote_app_backend/.env --force
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-frontend-stage frontend-ui/.env --force
+
       - name: Load .env file in Github environment variables
         uses: xom9ikk/dotenv@v1.0.2
         with:
@@ -68,7 +68,6 @@ jobs:
           mode: 
 
 #WORKS:
-
     #Put the public key in .ssh/authorized_keys2
     #Change the permissions of .ssh to 700
     #Change the permissions of .ssh/authorized_keys2 to 640
@@ -99,10 +98,6 @@ jobs:
           ssh_cert: ${{ secrets.SSH_CERT }}
           ssh_key: ${{ secrets.SSH_KEY }}
           
-          #docker compose config | docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app   
-          #docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app
-          #docker --context production stack deploy --compose-file <(echo -e "version: '3.9'\n";  docker compose -f docker-compose.prod.yml config) janina-voting-app  
-          #docker compose -f docker-compose.prod.yml config | docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app
       - name: Deploy App
         run: |
           docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app                  
