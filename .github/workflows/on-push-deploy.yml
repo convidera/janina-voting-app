@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          context: ./code/
+          context: code/
           tags: alonimacaroni/vote-backend:prod
           target: prod-stage
 
@@ -43,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          context: ./app/
+          context: app/
           tags: alonimacaroni/vote-frontend:prod
           target: prod-stage
 
