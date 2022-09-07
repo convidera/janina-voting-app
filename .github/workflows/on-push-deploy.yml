@@ -43,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          context: ./frontend.ui
+          context: ./frontend-ui
           tags: alonimacaroni/vote-frontend:prod
           target: prod-stage
 
