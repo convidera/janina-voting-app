@@ -25,6 +25,7 @@ jobs:
         with:
           endpoint: builders
 
+#envs need to be pulled before images are built
       - name: Set up S3cmd CLI Tool
         uses: s3-actions/s3cmd@v1.2.0
         with:
@@ -32,6 +33,12 @@ jobs:
           region: 'fra1'
           access_key: ${{ secrets.SPACES_ACCESS_KEY }}
           secret_key: ${{ secrets.SPACES_SECRET_KEY }}
+
+      - name: Get .env from web spaces
+        run: |
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage .env --force
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-stage vote_app_backend/.env --force
+          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-frontend-stage frontend-ui/.env --force
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -54,12 +61,6 @@ jobs:
           context: ./frontend-ui
           tags: alonimacaroni/vote-frontend:prod
           target: prod-stage
-
-      - name: Get .env from web spaces
-        run: |
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-stage .env --force
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-backend-stage vote_app_backend/.env --force
-          s3cmd -c ~/.s3cfg get s3://janina-test-space/env-frontend-stage frontend-ui/.env --force
 
       - name: Load .env file in Github environment variables
         uses: xom9ikk/dotenv@v1.0.2
