@@ -21,7 +21,7 @@ services:
       mode: replicated
       replicas: 1
     env_file:
-      - ./frontend-ui/.env
+      - ./.env
     networks:
       - proxy
   
@@ -80,7 +80,7 @@ services:
       - URI_CSRF_PATH=${URI_CSRF_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
     env_file:
-      - ./vote_app_backend/.env
+      - ./.env
     networks:
       - proxy
 
@@ -116,7 +116,7 @@ services:
       - URI_CSRF_PATH=${URI_CSRF_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
     env_file:
-      - ./vote_app_backend/.env
+      - ./.env
     networks:
       - proxy
   
