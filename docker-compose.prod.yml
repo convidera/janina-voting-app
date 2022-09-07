@@ -14,7 +14,6 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.frontend-part.rule=Host(`${DOMAIN_URL}`) || Host(`www.${DOMAIN_URL}`)"
         - "traefik.http.routers.frontend-part.middlewares=wwwtohttps"
-        #- "traefik.http.services.frontend-part.service=frontend-part"
         - "traefik.http.routers.frontend-part.entrypoints=websecure"
         - "traefik.http.services.frontend-part.loadbalancer.server.port=80"
         - "traefik.http.routers.frontend-part.tls.certresolver=myresolver"
@@ -22,13 +21,8 @@ services:
       replicas: 1
     # env_file:
     #   - ./.env
-    # env_file:
-    #   - ./frontend-ui/.env
-    environment:
-      - VUE_APP_URI_ENTRYP_PATH=${URI_ENTRYP_PATH}
-      - VUE_APP_URI_CSRF_PATH=${URI_CSRF_PATH}
-      - VUE_APP_DOMAIN_URL=${DOMAIN_URL}
-      - VUE_APP_DEPLOY=prod
+    env_file:
+      - ./frontend-ui/.env
     networks:
       - proxy
   
@@ -50,8 +44,6 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      # - MYSQL_HOST=${MYSQL_HOST}
-      # - MYSQL_PORT=${MYSQL_PORT}
     volumes:
       - mysql:/var/lib/mysql:delegated
     networks:
@@ -71,7 +63,6 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.backend-part.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
         - "traefik.http.routers.backend-part.middlewares=wwwtohttps"
-        #- "traefik.http.services.backend-part.service=backend-part"
         - "traefik.http.routers.backend-part.entrypoints=websecure"
         - "traefik.http.services.backend-part.loadbalancer.server.port=80"
         - "traefik.http.routers.backend-part.tls.certresolver=myresolver"
@@ -109,7 +100,6 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.migrator.rule=Host(`${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`) || Host(`www.${DOMAIN_URL}`) && PathPrefix(`/${URI_ENTRYP_PATH}`)"
         - "traefik.http.routers.migrator.middlewares=wwwtohttps"
-        #- "traefik.http.services.migrator.service=migrator"
         - "traefik.http.routers.migrator.entrypoints=websecure"
         - "traefik.http.services.migrator.loadbalancer.server.port=80"
         - "traefik.http.routers.migrator.tls.certresolver=myresolver"
