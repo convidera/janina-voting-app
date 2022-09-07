@@ -21,8 +21,8 @@ services:
       replicas: 1
     # env_file:
     #   - ./.env
-    env_file:
-      - ./frontend-ui/.env
+    # env_file:
+    #   - ./frontend-ui/.env
     networks:
       - proxy
   
