@@ -102,4 +102,3 @@ jobs:
       - name: Deploy App
         run: |
           docker --context production stack deploy --compose-file docker-compose.prod.yml janina-voting-app                  
-          
