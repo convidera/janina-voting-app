@@ -2,19 +2,21 @@
 
 # Project setup
 
-Rename all .env.example to .env and provide your passwords before running the up command. MYSQL_ROOT_PASSWORD, MYSQL_DATABASE, MYSQL_USER and MYSQL_PASSWORD are not predefined and can be freely chosen by the user. SECRET_KEY should be genereted by Django. The GITHUB_ and SERVER_ environment variables are only needed by devops script commands pullserver and sshserver.
+Rename all .env.example to .env and provide your passwords before running the start app command. If you specify ci environment copy the .env files to a server space. MYSQL_ROOT_PASSWORD, MYSQL_DATABASE, MYSQL_USER and MYSQL_PASSWORD are not predefined and can be freely chosen by the user. SECRET_KEY should be genereted by Django. The GITHUB_ and SERVER_ environment variables are only needed by devops script commands pullserver and sshserver.
 
 ## Generate Django Secret Key
 
 https://djecrety.ir/
 
-# Generate self-signed certificates with mkcert for local environment and Let's Encrypt certificates for stage environment.
+Generate self-signed certificates with mkcert for local environment and Let's Encrypt certificates for stage environment.
 
-# Set up a local DNS like Dnsmasq (Mac OS) for local environment in order to direct traffic from test domain to localhost.
+Set up a local DNS like Dnsmasq (Mac OS) for local environment in order to direct traffic from test domain to localhost.
 
 https://passingcuriosity.com/2013/dnsmasq-dev-osx/
 
-# Build frontend and backend images for local environment:
+# Build images:
+
+## Build frontend and backend images for local environment:
 Go to frontend and backend project folders.
 
 ```bash
@@ -22,144 +24,79 @@ docker build --target dev-stage -t alonimacaroni/vote-frontend:local .
 docker build --target dev-stage -t alonimacaroni/vote-backend:local .
 ```
 
-or build from project root
-
-```bash
-./devops.sh build frontend-part
-./devops.sh build backend-part
-```
-
-or build all from project root:
-
-```bash
-./devops.sh build
-```
-
-# Build frontend and backend images for stage environment:
+## Build frontend and backend images for stage environment:
 
 ```bash
 docker build --target prod-stage -t alonimacaroni/vote-frontend:stage .
 docker build --target prod-stage -t alonimacaroni/vote-backend:stage .
 ```
 
-# Build backend image for ci environment:
-mysql:8.0 image needs to be pulled from Dockerhub.
+## Build all images at once:
+
+select corresponding LOC parameter:
 
 ```bash
-docker build --target dev-stage -t alonimacaroni/vote-backend:ci .
+LOC=stage ./devops.sh setup
 ```
 
-# Apply migrations (here: local):
+# Use devops.sh script for app management:
+Set LOC parameter equal to local (default), ci, stage, op or exec.
 
+## Start app correctly:
 ```bash
-./devops.sh migrate
+LOC=stage ./devops.sh
 ```
-
-# Run command (use devops.sh) against service:
-
+Wait for database connection:
 ```bash
-LOC=stage ./devops.sh run --rm <service> <command>
+LOC=exec ./devops.sh wait
 ```
-
+Apply migrations.
+## Shutdown app correctly:
+local: 
 ```bash
-LOC=stage ./devops.sh exec --rm <service> <command>
+LOC=exec ./devops.sh exit
 ```
-
-# Use devops.sh bash script for executing commands in a service in running app:
-
-Make devops.sh executable (Mac OS, Linux):
-
+stage: 
 ```bash
-chmod +x devops.sh
+LOC=exec ./devops.sh exitstage
 ```
-
-Execute script:
-
+ci: 
 ```bash
-./devops.sh
+LOC=exec ./devops.sh exitci
 ```
-Without command options script runs:
+## Docker dependent command options, executed in new container (local, ci, stage):
+All command options are also available by setting LOC=exec in order to execute commands in running container.
 
+Apply migrations:
 ```bash
-docker-compose up
+LOC=stage ./devops.sh migrate
 ```
-
-## Script commands:
-
-Run server in backend, more options for original command can be appended:
-
+Make migrations:
 ```bash
-./devops runserver
+LOC=stage ./devops.sh makemig
 ```
-
-This is the same as:
-
+Reset Database:
 ```bash
-gunicorn vote_app_backend.wsgi:application
+LOC=stage ./devops.sh flush
 ```
-
-\
-\
-Apply changes to database:
-
+Run automated tests:
 ```bash
-./devops migrate
+LOC=stage ./devops.sh test
 ```
-
-Create migrations:
-
+## Administrative tasks on host:
+Push code to Github:
 ```bash
-./devops makemigrations
+LOC=op ./devops.sh push
 ```
-
-Reset database:
-
+Pull code from Github:
 ```bash
-./devops flush
+LOC=op ./devops.sh pull
 ```
-
-\
-\
-Run server in frontend, more options for original command can be appended:
-
+SSH to server:
 ```bash
-./devops npm
+LOC=op ./devops.sh sshserver
 ```
-
-This is the same as:
-
+Reset and clean Docker environment:
 ```bash
-npm run serve
-```
-
-\
-\
-Execute tests on backend-part:
-
-```bash
-./devops test
-```
-
-\
-\
-Push changes to github:
-
-```bash
-./devops push "<message>"
-```
-
-\
-\
-Pull changes from github to server:
-
-```bash
-./devops pullserver
-```
-
-\
-\
-Login to server via SSH:
-
-```bash
-./devops sshserver
+LOC=op ./devops.sh clean
 ```

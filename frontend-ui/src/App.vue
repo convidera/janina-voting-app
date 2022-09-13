@@ -23,8 +23,6 @@ import LangSelect from './components/LangSelect.vue'
 import ErrorModal from './components/ErrorModal.vue'
 import axios from 'axios'
 
-
-
 axios.defaults.xsrfHeaderName = 'X-csrftoken';
 axios.defaults.xsrfCookieName = 'csrftoken';
 
@@ -66,7 +64,7 @@ export default {
   },
   methods: {
     getCSRF() {
-      axios.get('https://' + process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH)
+        axios.get('https://' + process.env.VUE_APP_DOMAIN_URL + '/' + process.env.VUE_APP_URI_ENTRYP_PATH + process.env.VUE_APP_URI_CSRF_PATH)
     },
 
     nameChanged(name) {

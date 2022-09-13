@@ -3,7 +3,7 @@ version: "3.9"
 
 services:
   frontend-part:
-    image: alonimacaroni/vote-frontend:local
+    image: alonimacaroni/vote-frontend:dev
     build:
       context: ./frontend-ui/
       target: dev-stage
@@ -51,7 +51,7 @@ services:
       - no-new-privileges:true
   
   backend-part:
-    image: alonimacaroni/vote-backend:local
+    image: alonimacaroni/vote-backend:dev
     build:
       context: ./vote_app_backend/
       target: dev-stage
@@ -127,7 +127,7 @@ services:
     networks:
       - proxy
     volumes: 
-      - ./.deploy/local/certificates:/usr/local/share/ca-certificates/janina:ro
+      - ./certificates:/usr/local/share/ca-certificates/janina:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:

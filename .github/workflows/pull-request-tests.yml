@@ -1,11 +1,12 @@
 name: 'Run pull-request tests'
 
-on:
-  pull_request:
+# on:
+#   pull_request:
+on: [pull_request, push]
 
 jobs:
   run-tests-on-pull-request:
-    runs-on: [self-hosted, ubuntu, k8s]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -43,29 +44,24 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          context: ./vote_app_backend/
+          context: ./vote_app_backend
           tags: alonimacaroni/vote-backend:ci
           target: dev-stage
 
       - name: Start app
-        run: LOC=ci ./devops.sh
-      # - name: DEBUG
-      #   run: grep proxy /etc/docker/daemon.json
+        run: LOC=ci ./devops.sh start
 
       - name: Wait for DB Connection
-        run: LOC=exec ./devops.sh waitdb
+        run: LOC=ci ./devops.sh wait
 
-      # - name: Inspect
-      #   run: docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' janina-voting-app_vote-app-mysql_1
       - name: Run migrate command
-        run: LOC=exec ./devops.sh migrate
+        run: LOC=ci ./devops.sh migrate
 
       - name: Run tests against pull request
-        run: |
-          LOC=exec ./devops.sh test
+        run: LOC=ci ./devops.sh test
       
       - name: Shutdown app
-        run: LOC=exec ./devops.sh exit
+        run: LOC=ci ./devops.sh exit
 
       - name: Clean Docker Environment
-        run: LOC=op ./devops.sh clean
+        run: ./devops.sh clean
